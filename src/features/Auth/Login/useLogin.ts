@@ -7,8 +7,11 @@ export type LoginFormTypeValues = yup.InferType<typeof loginSchema>
 
 export const useLogin = () => {
   const methods = useForm<LoginFormTypeValues>({
-    mode: 'onChange',
-    resolver: yupResolver(loginSchema)
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
   })
 
   const handleSubmitForm = (values: LoginFormTypeValues) => {
