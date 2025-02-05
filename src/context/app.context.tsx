@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react'
+import { Event } from 'src/@types/event.type'
 import { User } from 'src/@types/users.type'
 
 import {

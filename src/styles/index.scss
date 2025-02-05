@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'vars';
+@import 'typo';
+@import 'fonts';
+@import 'elements';
+@import 'global';
+@layer components {
+  .container-xs {
+    @apply w-full mx-auto max-w-[820px];
+  }
+  .container-xl {
+    @apply w-full mx-auto max-w-[1024px];
+  }
+  .container-2xl {
+    @apply w-full mx-auto max-w-[1280px];
+  }
+
+  .chat-content{
+    height: calc(100% - 61px);
+  }
+  .chat-messages{
+    height: calc(100% - 54px);
+  }
+}

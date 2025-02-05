@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import axios, { AxiosError } from 'axios'
+import { RegisterSucces } from 'src/@types/event.type'
 import { ErrorResponse } from 'src/@types/utils.type'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
 
@@ -38,7 +39,19 @@ export function isResponseNoFormHasPaymentType(
   return 'url' in obj && typeof 'url' === 'string'
 }
 
-
+export function isReponseNoPaymentNoForm(obj: unknown): obj is RegisterSucces {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    '_id' in obj &&
+    'event_id' in obj &&
+    'visitor_id' in obj &&
+    'status_check_in' in obj &&
+    'otp_check_in' in obj &&
+    'time_register' in obj &&
+    'status_register' in obj
+  )
+}
 
 export function isAxiosErrorConflictAndNotPermisson<T>(
   error: unknown
