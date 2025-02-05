@@ -10,6 +10,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import 'react-toastify/dist/ReactToastify.css'
 // import { ToastContainer } from 'react-toastify'
 import App from './App'
+import { ThemeProvider } from './context/theme.context'
+import { AppProvider } from './context/app.context'
+import { ToastContainer } from 'react-toastify'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +27,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <AppProvider>
+        <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+          <App />
+        </ThemeProvider>
+        <ToastContainer />
+      </AppProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </BrowserRouter>

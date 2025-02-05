@@ -13,19 +13,17 @@ function App() {
 
   return (
     <StrictMode>
-  
-        <AppProvider>
-          <ToastContainer autoClose={2000} style={{ padding: '20px' }} />
-          {layout.includes('navbar') && <NavBar />}
-          <div className=''>
-            <div className='main'>
-              <Router />
-            </div>
+      <AppProvider>
+        <ToastContainer autoClose={2000} style={{ padding: '20px' }} />
+        {layout.includes('navbar') && <NavBar />}
+        <div className=''>
+          <div className='main'>
+            <Router />
           </div>
-          {layout.includes('footer') && <Footer />}
-          {layout.includes('chat') && ''}
-        </AppProvider>
-
+        </div>
+        {layout.includes('footer') && <Footer />}
+        {layout.includes('chat') && ''}
+      </AppProvider>
     </StrictMode>
   )
 }
