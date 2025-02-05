@@ -5,9 +5,11 @@ import { CalendarDays, Bell, Search } from 'lucide-react'
 import { Avatar, AvatarImage, AvatarFallback } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
 import { AppContext } from 'src/context/app.context'
+import { AuthDialog } from 'src/components/Auth/AuthDialog'
+import { ModeToggle } from 'src/components/ModeToggle'
 const NavBar = () => {
   const { isAuthenticated, setProfile, profile, setIsStaff } = useContext(AppContext)
-  
+
   return (
     <div className='container-xl '>
       <div className='flex justify-start items-center py-4'>
@@ -33,13 +35,14 @@ const NavBar = () => {
           <Bell size={16} className='mr-[20px]' />
           <Search size={16} className='mr-[20px]' />
           {isAuthenticated ? (
-            <p>Login</p>
+            <AuthDialog />
           ) : (
             <Avatar>
               <AvatarImage src='https://github.com/shadcn.png' />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           )}
+          <ModeToggle />
         </div>
       </div>
     </div>
