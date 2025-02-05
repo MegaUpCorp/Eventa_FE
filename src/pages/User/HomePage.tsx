@@ -3,7 +3,7 @@
 const HomePage = () =>{
   return (
     <div className="container-xl">
-      
+        
     </div>
   )
 }
