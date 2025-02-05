@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context';
-import { Home } from 'src/pages/Home'
+import { HomePageUser } from 'src/pages';
 
 type RouteType ={
   path: string;
@@ -11,7 +11,7 @@ type RouteType ={
 const publicRoutes: RouteType[] = [
   {
     path: '/',
-    element: <Home />
+    element: <HomePageUser />
   }
 ]
 //

@@ -1,0 +1,1 @@
+export { default as HomePageUser } from './User/HomePage';
