@@ -32,12 +32,7 @@ export const LoginForm = () => {
             <FormLabel className='font-semibold'>Password</FormLabel>
             <FormControl>
               <div className='relative'>
-                <Input
-                  {...field}
-                  type={passwordVisibility ? 'text' : 'password'}
-                  autoComplete='on'
-                  spellCheck={false}
-                />
+                <Input {...field} type={passwordVisibility ? 'text' : 'password'} spellCheck={false} />
                 <div
                   className='absolute inset-y-0 right-0 flex cursor-pointer items-center p-3 text-muted-foreground'
                   onClick={() => setPasswordVisibility(!passwordVisibility)}
