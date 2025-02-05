@@ -7,11 +7,11 @@ import { RegisterTab } from './RegisterTab'
 
 const AUTH_TABS = ['login', 'register']
 
-export const LoginDialog = () => {
+export const AuthDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button size='sm'>
           <CircleUserRound />
           Join us now
         </Button>
