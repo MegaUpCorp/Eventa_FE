@@ -1,4 +1,4 @@
-import { LoginDialog } from 'src/components/Auth/AuthDialog'
+import { LoginDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
 
 export const Home = () => {

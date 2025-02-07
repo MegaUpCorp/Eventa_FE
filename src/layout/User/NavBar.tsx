@@ -1,12 +1,10 @@
-import React, { useContext } from 'react'
-import { Compass } from 'lucide-react'
-import { Ticket } from 'lucide-react'
-import { CalendarDays, Bell, Search } from 'lucide-react'
-import { Avatar, AvatarImage, AvatarFallback } from 'src/components/ui/avatar'
+import { Bell, CalendarDays, Compass, Search, Ticket } from 'lucide-react'
+import { useContext } from 'react'
+import { AuthDialog } from 'src/components/AuthDialog'
+import { ModeToggle } from 'src/components/ModeToggle'
+import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
 import { AppContext } from 'src/context/app.context'
-import { AuthDialog } from 'src/components/Auth/AuthDialog'
-import { ModeToggle } from 'src/components/ModeToggle'
 const NavBar = () => {
   const { isAuthenticated, setProfile, profile, setIsStaff } = useContext(AppContext)
 
