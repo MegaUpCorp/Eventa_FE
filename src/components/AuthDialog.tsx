@@ -37,8 +37,8 @@ export const AuthDialog = () => {
         </VisuallyHidden>
         {authState === 'email' ? (
           <div className='flex flex-col'>
-            <Label className='block text-2xl font-bold mb-2'>Welcome to Eventa</Label>
-            <p className='text-muted-foreground mb-8'>Sign in or sign up continue</p>
+            <Label className='block text-2xl font-bold mb-1'>Welcome to Eventa</Label>
+            <p className='text-muted-foreground mb-6'>Sign in or sign up to continue</p>
             <Button variant='outline'>
               <Icons.google className='mr-2' style={{ width: 18, height: 18 }} />
               <p>Continue with Google</p>
@@ -53,15 +53,15 @@ export const AuthDialog = () => {
         ) : null}
         {authState === 'otp' ? (
           <div className='flex flex-col'>
-            <Button variant='secondary' className='rounded-full w-8 h-8 mb-6' onClick={() => setAuthState('email')}>
+            <Button variant='secondary' className='rounded-full w-8 h-8 mb-8' onClick={() => setAuthState('email')}>
               <ChevronLeft />
             </Button>
-            <Label className='block text-2xl font-bold mb-2'>Enter OTP</Label>
+            <Label className='block text-2xl font-bold mb-1'>Enter OTP</Label>
             <p className='text-muted-foreground mb-6'>
               Type in the 6-digit code we sent to <p className='font-semibold'>example@gmail.com</p>
             </p>
             <OtpAuthForm />
-            <Button variant='ghost' className='mt-8 mx-auto text-muted-foreground'>
+            <Button variant='ghost' className='my-8 mx-auto text-muted-foreground'>
               Resend Code
             </Button>
           </div>
