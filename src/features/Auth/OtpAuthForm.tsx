@@ -13,7 +13,7 @@ export const OtpAuthForm = () => {
         <InputOTPSeparator />
         <InputOTPGroup>
           <InputOTPSlot index={3} className='w-12 h-12' />
-          <InputOTPSlot index={2} className='w-12 h-12' />
+          <InputOTPSlot index={4} className='w-12 h-12' />
           <InputOTPSlot index={5} className='w-12 h-12' />
         </InputOTPGroup>
       </InputOTP>
