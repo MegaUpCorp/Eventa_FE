@@ -3,8 +3,7 @@ import { CreateEventForm } from './CreateEventForm'
 import { FormValues, useCreateEvent } from './useCreateEvent'
 import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
-import { Drawer, DrawerContent, DrawerTrigger } from 'src/components/ui/drawer'
-import { Palette } from 'lucide-react'
+import { EventCoverForm } from './EventCoverForm'
 
 export const CreateEventFormProvider = () => {
   const { methods } = useCreateEvent()
@@ -24,21 +23,7 @@ export const CreateEventFormProvider = () => {
             </Button>
           </div>
           <div className='col-span-5'>
-            <div className='rounded-lg overflow-hidden'>
-              <img
-                src='https://media.istockphoto.com/id/1208815143/vector/retro-future-abstract-vector-pattern.jpg?s=612x612&w=0&k=20&c=XjZfU-foIcym_ziey0eaRhADQ3d0_KDuIgU2oiNOffQ='
-                className='w-full h-96'
-              />
-            </div>
-            <Drawer>
-              <DrawerTrigger asChild>
-                <Button variant='outline' size='lg' className='my-4 w-full'>
-                  <Palette />
-                  Choose a theme
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>Choose theme content</DrawerContent>
-            </Drawer>
+            <EventCoverForm />
           </div>
         </div>
       </form>
