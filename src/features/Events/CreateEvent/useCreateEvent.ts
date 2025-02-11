@@ -11,6 +11,7 @@ export type FormValues = {
   eventCapacity: string
   eventTheme: string
   eventCover: string
+  eventDescription: string
 }
 
 export const useCreateEvent = () => {
@@ -24,7 +25,8 @@ export const useCreateEvent = () => {
       eventApprovalRequired: false,
       eventCapacity: '50',
       eventTheme: 'default',
-      eventCover: ''
+      eventCover: '',
+      eventDescription: ''
     }
   })
 

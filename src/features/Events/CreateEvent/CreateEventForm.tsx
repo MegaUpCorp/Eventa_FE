@@ -1,16 +1,38 @@
 import DatePicker from 'src/components/DatePicker'
 import TimePicker from 'src/components/TimePicker'
+import Tiptap from 'src/components/TipTap/TipTap'
 import { addHours } from 'date-fns'
-import { CircleDollarSign, Database, DoorOpen, Globe, GlobeLock, MapPin, Ticket, UserRoundCheck } from 'lucide-react'
+import {
+  CircleDollarSign,
+  Database,
+  DoorOpen,
+  Globe,
+  GlobeLock,
+  MapPin,
+  NotepadText,
+  Ticket,
+  UserRoundCheck
+} from 'lucide-react'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Card } from 'src/components/ui/card'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from 'src/components/ui/dialog'
 import { FormControl, FormField, FormItem } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
 import { FormValues } from './useCreateEvent'
+import { Button } from 'src/components/ui/button'
 
 export const CreateEventForm = () => {
   const { control } = useFormContext<FormValues>()
@@ -127,13 +149,46 @@ export const CreateEventForm = () => {
             <TimePicker date={endDate} onTimeChange={handleTimeChange} setDate={setEndDate} />
           </div>
         </Card>
-        <Card className='flex gap-3 p-4'>
+        <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
           <MapPin size={18} className='mt-0.5 text-muted-foreground' />
           <div className='flex flex-col'>
             <p className='font-medium'>Add Event Location</p>
             <p className='text-muted-foreground text-sm'>Online or Offline Event</p>
           </div>
         </Card>
+        <Dialog>
+          <DialogTrigger>
+            <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
+              <NotepadText size={18} className='mt-0.5 text-muted-foreground' />
+              <p className='font-medium'>Add Event Description</p>
+            </Card>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Event Description</DialogTitle>
+              <DialogDescription>Overview of the event</DialogDescription>
+            </DialogHeader>
+            <FormField
+              control={control}
+              name='eventDescription'
+              render={({ field: { onChange } }) => (
+                <FormItem>
+                  <FormControl>
+                    <Tiptap onChange={onChange} className='min-h-40' />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type='button' variant='secondary'>
+                  Done
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Card className='flex flex-col gap-3 p-4'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
@@ -171,7 +226,7 @@ export const CreateEventForm = () => {
             />
             {/* TODO: Add the input for fee event ticket type */}
           </div>
-          <Separator />
+          <Separator className='my-1' />
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <UserRoundCheck size={18} className='text-muted-foreground' />
@@ -190,7 +245,7 @@ export const CreateEventForm = () => {
             />
             {/* TODO: Add the input for fee event ticket type */}
           </div>
-          <Separator />
+          <Separator className='my-1' />
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <Database size={18} className='text-muted-foreground' />

@@ -77,3 +77,112 @@
     font-family: 'Archivo', sans-serif;
   }
 }
+
+/* Tiptap */
+.tiptap {
+  padding: 0px;
+}
+
+.tiptap p {
+  margin: 10px auto;
+  font-size: 1rem;
+  line-height: 1;
+  margin: 0.75em 0;
+}
+
+.tiptap a {
+  color: #338ef7;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap p.is-empty::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap h1 {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin: 0.75em 0;
+  line-height: 1;
+}
+
+.tiptap h2 {
+  font-size: 1.25em;
+  font-weight: 500;
+  margin: 0.75em 0;
+  line-height: 1;
+}
+
+.tiptap ul {
+  margin: 15px 0;
+  padding-left: 1em;
+}
+
+.tiptap ul li {
+  position: relative;
+  padding-left: 1.25em;
+}
+
+.tiptap ul li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  font-weight: bolder;
+}
+
+.tiptap ol {
+  margin: 15px 0;
+  padding-left: 1em;
+  counter-reset: list-counter;
+}
+
+.tiptap ol li {
+  position: relative;
+  padding-left: 1.25em;
+  list-style: none;
+}
+
+.tiptap ol li:before {
+  content: counter(list-counter) '.';
+  counter-increment: list-counter;
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  font-weight: bolder;
+}
+
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+  border-radius: 15px;
+}
+
+.tiptap iframe {
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  margin: 15px 0;
+}
+
+.tiptap iframe {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
