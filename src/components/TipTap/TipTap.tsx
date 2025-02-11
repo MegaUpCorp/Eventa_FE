@@ -6,6 +6,7 @@ import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import TiptapMenu from './TipTapMenu'
 import { EditorContent, useEditor } from '@tiptap/react'
+import { useLocalStorage } from 'src/hooks/useLocalStorage'
 
 // NOTE: the Image extension only support uploading images via URL, if you want to upload to your server use FileHandler
 // https://tiptap.dev/docs/editor/extensions/functionality/filehandler
@@ -20,12 +21,14 @@ const extensions = [
 ]
 
 interface RichTextEditorProps {
-  // lsSectionName: string
+  lsSectionName: string
   className?: string
   onChange: (event: any) => void
 }
 
-export default function Tiptap({ className, onChange }: RichTextEditorProps) {
+export default function Tiptap({ className, onChange, lsSectionName }: RichTextEditorProps) {
+  const [content, setContent, removeContent] = useLocalStorage(lsSectionName, '')
+
   const editor = useEditor({
     extensions,
     onFocus: ({ editor }) => editor.commands.focus('end'),
@@ -38,16 +41,16 @@ export default function Tiptap({ className, onChange }: RichTextEditorProps) {
     onUpdate: ({ editor }) => {
       setTimeout(() => {
         if (editor.getHTML() === '<p></p>') {
-          // removeContent()
+          removeContent()
           onChange('')
         } else {
-          // setContent({ [lsSectionName]: editor.getHTML() })
+          setContent(editor.getHTML())
           onChange(editor.getHTML())
         }
       }, 5000)
     },
     onCreate({ editor }) {
-      // editor.commands.setContent(content[lsSectionName] || '')
+      editor.commands.setContent(content || '')
     }
   })
 

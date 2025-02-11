@@ -174,7 +174,7 @@ export const CreateEventForm = () => {
               render={({ field: { onChange } }) => (
                 <FormItem>
                   <FormControl>
-                    <Tiptap onChange={onChange} className='min-h-40' />
+                    <Tiptap onChange={onChange} className='min-h-40' lsSectionName='event-desc' />
                   </FormControl>
                 </FormItem>
               )}
