@@ -8,3 +8,7 @@ export const convertIntToEnum = (enumType: any, value: number) => {
       return enumType[0]
   }
 }
+
+export const formatPrice = (num: number) => {
+  return num.toLocaleString('de-DE')
+}
