@@ -1,8 +1,9 @@
 import DatePicker from 'src/components/DatePicker'
 import TimePicker from 'src/components/TimePicker'
 import Tiptap from 'src/components/TipTap/TipTap'
-import { addHours } from 'date-fns'
+import { addHours, format } from 'date-fns'
 import {
+  CalendarIcon,
   CircleDollarSign,
   Database,
   DoorOpen,
@@ -33,6 +34,7 @@ import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
 import { FormValues } from './useCreateEvent'
 import { Button } from 'src/components/ui/button'
+import { cn } from 'src/lib/utils'
 
 export const CreateEventForm = () => {
   const { control } = useFormContext<FormValues>()
@@ -140,12 +142,38 @@ export const CreateEventForm = () => {
         <Card className='flex flex-col gap-3 p-4'>
           <div className='flex items-center gap-3'>
             <p className='w-56 font-medium'>Start</p>
-            <DatePicker date={startDate} onDateChange={setStartDate} className='w-full' />
+            <DatePicker
+              date={startDate}
+              onDateChange={setStartDate}
+              className='w-full'
+              trigger={
+                <Button
+                  variant='outline'
+                  className={cn('justify-start text-left font-normal w-full', !startDate && 'text-muted-foreground')}
+                >
+                  <CalendarIcon className='mr-2 h-4 w-4' />
+                  {startDate ? format(startDate, 'EEEE, dd MMMM yyyy') : <span>Choose date</span>}
+                </Button>
+              }
+            />
             <TimePicker date={startDate} onTimeChange={handleTimeChange} setDate={setStartDate} />
           </div>
           <div className='flex items-center gap-3'>
             <p className='w-56 font-medium'>End</p>
-            <DatePicker date={endDate} onDateChange={setEndDate} className='w-full' />
+            <DatePicker
+              date={endDate}
+              onDateChange={setEndDate}
+              className='w-full'
+              trigger={
+                <Button
+                  variant='outline'
+                  className={cn('justify-start text-left font-normal w-full', !endDate && 'text-muted-foreground')}
+                >
+                  <CalendarIcon className='mr-2 h-4 w-4' />
+                  {endDate ? format(endDate, 'EEEE, dd MMMM yyyy') : <span>Choose date</span>}
+                </Button>
+              }
+            />
             <TimePicker date={endDate} onTimeChange={handleTimeChange} setDate={setEndDate} />
           </div>
         </Card>
