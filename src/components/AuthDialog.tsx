@@ -1,5 +1,6 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { ChevronLeft, CircleUserRound } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,26 +9,24 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
-import { Button } from './ui/button'
-import { Label } from './ui/label'
-import { Icons } from './Icons'
-import { useState } from 'react'
 import { EmailAuthForm } from 'src/features/Auth/EmailAuthForm'
 import { OtpAuthForm } from 'src/features/Auth/OtpAuthForm'
+import { Icons } from './Icons'
+import { Button } from './ui/button'
+import { Label } from './ui/label'
 
 export type AuthState = 'email' | 'otp'
 
-export const AuthDialog = () => {
+interface AuthDialogProps {
+  trigger: React.ReactNode
+}
+
+export const AuthDialog = ({ trigger }: AuthDialogProps) => {
   const [authState, setAuthState] = useState<AuthState>('email')
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button size='sm'>
-          <CircleUserRound />
-          Join us now
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='[&>button]:hidden min-h-44 max-w-sm'>
         <VisuallyHidden>
           <DialogHeader>
