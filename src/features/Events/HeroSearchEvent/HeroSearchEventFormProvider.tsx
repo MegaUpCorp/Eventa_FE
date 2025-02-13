@@ -25,7 +25,7 @@ export const HeroSearchEventFormProvider = () => {
 
   return (
     <Form {...methods}>
-      <div className='grid grid-cols-12 gap-2 items-center'>
+      <div className='grid grid-cols-12 items-center'>
         <div className='col-span-3'>
           <Combobox<HeroSearchEventFormValues>
             data={location}
