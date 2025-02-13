@@ -25,7 +25,7 @@ export const HeroSearchEventFormProvider = () => {
 
   return (
     <Form {...methods}>
-      <div className='grid grid-cols-12 gap-4 items-center'>
+      <div className='grid grid-cols-12 gap-2 items-center'>
         <div className='col-span-3'>
           <Combobox<HeroSearchEventFormValues>
             data={location}
@@ -59,7 +59,7 @@ export const HeroSearchEventFormProvider = () => {
             trigger={
               <HeroSearchTrigger
                 label='Price'
-                value={`${formatPrice(priceRanges[0])} to ${formatPrice(priceRanges[1])}`}
+                value={`${formatPrice(priceRanges[0])} to ${formatPrice(priceRanges[1])} VND`}
               />
             }
           />

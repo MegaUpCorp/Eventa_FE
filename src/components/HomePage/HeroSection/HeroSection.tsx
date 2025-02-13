@@ -6,17 +6,17 @@ export const HeroSection = () => {
     <div className='flex items-center justify-between relative'>
       {/* Slogan */}
       <div className='flex flex-col justify-start gap-2'>
-        <p className='text-6xl font-bold'>Let's</p>
-        <p className='text-6xl font-bold'>
+        <p className='text-7xl font-semibold'>Let's</p>
+        <p className='text-7xl font-semibold'>
           <span className='underline decoration-primary decoration-8 underline-offset-[12px]'>create</span> your
         </p>
-        <p className='text-6xl font-bold'>own event</p>
+        <p className='text-7xl font-semibold'>own event</p>
         <p className='text-muted-foreground mr-14'>
           Bring your vision to life! We provide the tools and support to make your event uniquely yours. Let’s create
           your own event!
         </p>
         {/* Search box */}
-        <Card className='absolute w-[720px] bottom-0 p-4'>
+        <Card className='absolute w-[700px] bottom-4 p-4 glass'>
           <HeroSearchEventFormProvider />
         </Card>
       </div>
@@ -30,7 +30,7 @@ export const HeroSection = () => {
               className='w-full h-full object-cover rounded-lg'
             />
           </Card>
-          <Card className='p-0.5 w-60 h-64'>
+          <Card className='p-0.5 w-60 h-72'>
             <img
               src='https://as1.ftcdn.net/v2/jpg/05/21/80/52/1000_F_521805294_qSWsJCaI4dHPsSJelJFxuQW4TA7p04lq.jpg'
               alt=''
