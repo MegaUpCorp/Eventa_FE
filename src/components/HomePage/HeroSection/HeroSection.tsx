@@ -25,14 +25,14 @@ export const HeroSection = () => {
         <div className='flex flex-col gap-5'>
           <Card className='p-0.5 w-60 h-56'>
             <img
-              src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWJzdHJhY3R8ZW58MHx8MHx8fDA%3D'
+              src='https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,background=white,quality=75,width=400,height=400/event-covers/et/c50ed22a-27fd-4c0c-a48d-8727c4fee8c8.jpg'
               alt=''
               className='w-full h-full object-cover rounded-lg'
             />
           </Card>
           <Card className='p-0.5 w-60 h-72'>
             <img
-              src='https://as1.ftcdn.net/v2/jpg/05/21/80/52/1000_F_521805294_qSWsJCaI4dHPsSJelJFxuQW4TA7p04lq.jpg'
+              src='https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,background=white,quality=75,width=400,height=400/event-covers/w6/7d36fe28-b709-4202-ba0a-0cdaefd1d0f7.png'
               alt=''
               className='w-full h-full object-cover rounded-lg'
             />
@@ -40,7 +40,7 @@ export const HeroSection = () => {
         </div>
         <Card className='w-60 h-80 p-0.5 mt-16'>
           <img
-            src='https://cdn.fs.teachablecdn.com/eYKAprpPRbO4AWvLPf5g'
+            src='https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,background=white,quality=75,width=400,height=400/event-covers/ns/4abdf646-ba26-4c42-a819-079cc3d6bdec.jpg'
             alt=''
             className='w-full h-full object-cover rounded-lg'
           />
