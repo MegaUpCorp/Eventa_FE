@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type State = 'sign-in' | 'sign-up' | 'check-email' | 'forgot-password' | 'reset-password'
+type State = 'sign-in' | 'sign-up' | 'check-email' | 'forgot-password' | 'reset-password' | 'enter-information'
 
 interface AuthStoreState {
   isOpenDialog: boolean

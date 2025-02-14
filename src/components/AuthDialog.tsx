@@ -1,4 +1,5 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { Mailbox } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -7,15 +8,13 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
-import { EmailPasswordFormProvider } from 'src/features/Auth/EmailPasswordFormProvider'
+import { useAuthStore } from 'src/config/zustand/auth-store'
+import { SignInFormProvider } from 'src/features/Auth/SignIn/SignInFormProvider'
+import { AccountInfoFormProvider } from 'src/features/Auth/SignUp/AccountInfoFormProvider'
+import { EmailFormProvider } from 'src/features/Auth/SignUp/EmailFormProvider'
 import { Icons } from './Icons'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
-import { useAuthStore } from 'src/config/zustand/auth-store'
-import { EmailFormProvider } from 'src/features/Auth/EmailFormProvider'
-import { Mailbox } from 'lucide-react'
-
-export type AuthState = 'email' | 'otp'
 
 interface AuthDialogProps {
   trigger: React.ReactNode
@@ -82,13 +81,22 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
         </>
       )
       break
+    case 'enter-information':
+      dialogContent = (
+        <>
+          <Label className='block text-2xl font-bold mb-1'>Almost there!</Label>
+          <p className='text-muted-foreground mb-6'>Please fill your account detail below</p>
+          <AccountInfoFormProvider />
+        </>
+      )
+      break
     default:
       dialogContent = (
         <>
           <Label className='block text-2xl font-bold mb-1'>Welcome to Eventa</Label>
           <p className='text-muted-foreground mb-6'>Sign in or sign up to continue</p>
           <SocialButton className='flex flex-col' />
-          <EmailPasswordFormProvider />
+          <SignInFormProvider />
           <p
             className='text-sm text-center mt-10 mb-2 hover:underline cursor-pointer'
             onClick={() => setState('sign-up')}
@@ -102,7 +110,7 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
   return (
     <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className='[&>button]:hidden min-h-44 max-w-sm'>
+      <DialogContent className='[&>button]:hidden min-h-72 max-w-96'>
         <VisuallyHidden>
           <DialogHeader>
             <DialogTitle>Auth</DialogTitle>

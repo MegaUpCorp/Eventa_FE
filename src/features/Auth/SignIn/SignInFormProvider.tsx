@@ -1,15 +1,12 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
-import { signInSchema, SignInSchema } from 'src/schemas/authSchema'
+import { SignInSchema } from 'src/schemas/authSchema'
+import { useSignIn } from './useSignIn'
 
-export const EmailPasswordFormProvider = () => {
-  const methods = useForm<SignInSchema>({
-    defaultValues: { email: '', password: '' },
-    resolver: yupResolver(signInSchema)
-  })
+export const SignInFormProvider = () => {
+  const { methods } = useSignIn()
 
   const onSubmit: SubmitHandler<SignInSchema> = (data) => {
     console.log(data)
