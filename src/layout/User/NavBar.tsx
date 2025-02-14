@@ -1,11 +1,14 @@
-import { Bell, CalendarDays, Compass, Search, Ticket } from 'lucide-react'
+import { Bell, CalendarDays, Compass, ExternalLink, Search, Ticket } from 'lucide-react'
 import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
 import { AppContext } from 'src/context/app.context'
+
 const NavBar = () => {
+  const navigate = useNavigate()
   const { isAuthenticated, setProfile, profile, setIsStaff } = useContext(AppContext)
 
   return (
@@ -27,19 +30,28 @@ const NavBar = () => {
           </div>
         </div>
         <div className='flex items-center justify-end w-1/2 h-10'>
-          <Button size='sm' className='mr-[20px]'>
+          <Button size='sm' className='mr-[20px] text-white' onClick={() => navigate('/events/create')}>
             Create Event
           </Button>
           <Bell size={16} className='mr-[20px]' />
           <Search size={16} className='mr-[20px]' />
-          {isAuthenticated ? (
-            <AuthDialog />
-          ) : (
-            <Avatar>
-              <AvatarImage src='https://github.com/shadcn.png' />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          )}
+          <div className='mr-[20px]'>
+            {isAuthenticated ? (
+              <AuthDialog
+                trigger={
+                  <Button size='sm' className='text-white'>
+                    <ExternalLink size={16} />
+                    Join us now!
+                  </Button>
+                }
+              />
+            ) : (
+              <Avatar>
+                <AvatarImage src='https://github.com/shadcn.png' />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            )}
+          </div>
           <ModeToggle />
         </div>
       </div>
