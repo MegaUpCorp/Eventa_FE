@@ -3,18 +3,16 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
-import { emailSchema, EmailSchemaType } from 'src/schemas/authSchema'
+import { useAuthStore } from 'src/config/zustand/auth-store'
+import { emailSchema, EmailSchema } from 'src/schemas/authSchema'
 
-interface EmailAuthFormProps {
-  setAuthState: (state: 'email' | 'otp') => void
-}
+export const EmailFormProvider = () => {
+  const { setState } = useAuthStore()
+  const methods = useForm<EmailSchema>({ defaultValues: { email: '' }, resolver: yupResolver(emailSchema) })
 
-export const EmailAuthForm = ({ setAuthState }: EmailAuthFormProps) => {
-  const methods = useForm<EmailSchemaType>({ defaultValues: { email: '' }, resolver: yupResolver(emailSchema) })
-
-  const onSubmit: SubmitHandler<EmailSchemaType> = (data) => {
+  const onSubmit: SubmitHandler<EmailSchema> = (data) => {
     console.log(data)
-    setAuthState('otp')
+    setState('check-email')
   }
 
   return (
@@ -27,13 +25,13 @@ export const EmailAuthForm = ({ setAuthState }: EmailAuthFormProps) => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='example@gmail.com' {...field} />
+                <Input placeholder='example@gmail.com' {...field} autoFocus />
               </FormControl>
               <FormMessage className='absolute' />
             </FormItem>
           )}
         />
-        <Button type='submit' className='w-full'>
+        <Button type='submit' className='w-full text-white'>
           Continue with Email
         </Button>
       </form>

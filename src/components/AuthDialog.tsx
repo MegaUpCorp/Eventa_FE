@@ -1,6 +1,4 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { ChevronLeft } from 'lucide-react'
-import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -9,11 +7,13 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
-import { EmailAuthForm } from 'src/features/Auth/EmailAuthForm'
-import { OtpAuthForm } from 'src/features/Auth/OtpAuthForm'
+import { EmailPasswordFormProvider } from 'src/features/Auth/EmailPasswordFormProvider'
 import { Icons } from './Icons'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
+import { useAuthStore } from 'src/config/zustand/auth-store'
+import { EmailFormProvider } from 'src/features/Auth/EmailFormProvider'
+import { Mailbox } from 'lucide-react'
 
 export type AuthState = 'email' | 'otp'
 
@@ -21,11 +21,86 @@ interface AuthDialogProps {
   trigger: React.ReactNode
 }
 
+const SocialButton = ({ className }: { className: string }) => {
+  return (
+    <div className={className}>
+      <Button variant='outline'>
+        <Icons.google className='mr-2' style={{ width: 18, height: 18 }} />
+        <p>Continue with Google</p>
+      </Button>
+      <div className='flex items-center justify-center w-full my-4'>
+        <div className='w-full border-b bg-border' />
+        <p className='text-muted-foreground text-xs mx-3'>or</p>
+        <div className='w-full border-b bg-border' />
+      </div>
+    </div>
+  )
+}
+
 export const AuthDialog = ({ trigger }: AuthDialogProps) => {
-  const [authState, setAuthState] = useState<AuthState>('email')
+  const { state, setState, isOpenDialog, setIsOpenDialog } = useAuthStore()
+
+  let dialogContent = null
+
+  const resetDialog = () => {
+    setIsOpenDialog(false)
+    setTimeout(() => {
+      setState('sign-in')
+    }, 500)
+  }
+
+  switch (state) {
+    case 'sign-up':
+      dialogContent = (
+        <>
+          <Label className='block text-2xl font-bold mb-1'>Welcome to Eventa</Label>
+          <p className='text-muted-foreground mb-6'>Enter your email below</p>
+          <EmailFormProvider />
+          <SocialButton className='flex flex-col-reverse' />
+          <p
+            className='text-sm text-center mt-10 mb-2 hover:underline cursor-pointer'
+            onClick={() => setState('sign-in')}
+          >
+            Already have an account? <span className='font-semibold text-primary'>Sign in</span>
+          </p>
+        </>
+      )
+      break
+    case 'check-email':
+      dialogContent = (
+        <>
+          <div className='p-6 rounded-full bg-primary-foreground mx-auto'>
+            <Mailbox size={56} className='text-primary' />
+          </div>
+          <p className='text-center font-medium mt-4 mb-2 text-2xl'>A magic link is on the way!</p>
+          <p className='text-center text-muted-foreground text-sm mb-6'>
+            For security reasons, we've sent you an email that contains a link to verify your email
+          </p>
+          <Button variant='secondary' onClick={resetDialog}>
+            Close
+          </Button>
+        </>
+      )
+      break
+    default:
+      dialogContent = (
+        <>
+          <Label className='block text-2xl font-bold mb-1'>Welcome to Eventa</Label>
+          <p className='text-muted-foreground mb-6'>Sign in or sign up to continue</p>
+          <SocialButton className='flex flex-col' />
+          <EmailPasswordFormProvider />
+          <p
+            className='text-sm text-center mt-10 mb-2 hover:underline cursor-pointer'
+            onClick={() => setState('sign-up')}
+          >
+            Don't have an account? <span className='font-semibold text-primary'>Sign up, it's free!</span>
+          </p>
+        </>
+      )
+  }
 
   return (
-    <Dialog>
+    <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='[&>button]:hidden min-h-44 max-w-sm'>
         <VisuallyHidden>
@@ -34,37 +109,7 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
             <DialogDescription>Fixed the warning</DialogDescription>
           </DialogHeader>
         </VisuallyHidden>
-        {authState === 'email' ? (
-          <div className='flex flex-col'>
-            <Label className='block text-2xl font-bold mb-1'>Welcome to Eventa</Label>
-            <p className='text-muted-foreground mb-6'>Sign in or sign up to continue</p>
-            <Button variant='outline'>
-              <Icons.google className='mr-2' style={{ width: 18, height: 18 }} />
-              <p>Continue with Google</p>
-            </Button>
-            <div className='flex items-center justify-center w-full my-4'>
-              <div className='w-full border-b bg-border' />
-              <p className='text-muted-foreground text-xs mx-3'>or</p>
-              <div className='w-full border-b bg-border' />
-            </div>
-            <EmailAuthForm setAuthState={setAuthState} />{' '}
-          </div>
-        ) : null}
-        {authState === 'otp' ? (
-          <div className='flex flex-col'>
-            <Button variant='secondary' className='rounded-full w-8 h-8 mb-8' onClick={() => setAuthState('email')}>
-              <ChevronLeft />
-            </Button>
-            <Label className='block text-2xl font-bold mb-1'>Enter OTP</Label>
-            <p className='text-muted-foreground mb-6'>
-              Type in the 6-digit code we sent to <p className='font-semibold'>example@gmail.com</p>
-            </p>
-            <OtpAuthForm />
-            <Button variant='ghost' className='my-8 mx-auto text-muted-foreground'>
-              Resend Code
-            </Button>
-          </div>
-        ) : null}
+        <div className='flex flex-col'>{dialogContent}</div>
       </DialogContent>
     </Dialog>
   )
