@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import { HomePageUser } from 'src/pages'
 import { AccountVerification } from 'src/pages/Auth/AccountVerification'
+import { EventCreation } from 'src/pages/Event/EventCreation'
 
 type RouteType = {
   path: string
@@ -20,7 +21,12 @@ const publicRoutes: RouteType[] = [
   }
 ]
 //
-const authenicatedRoutes: RouteType[] = []
+const authenicatedRoutes: RouteType[] = [
+  {
+    path: '/events/create',
+    element: <EventCreation />
+  }
+]
 //
 const unAuthenticatedRoute: RouteType[] = []
 //admin Route

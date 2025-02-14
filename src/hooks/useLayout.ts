@@ -10,6 +10,8 @@ const useLayout = () => {
       setLayout(['admin'])
     } else if (['/verify-account', '/404'].includes(path)) {
       setLayout(['none'])
+    } else if (['/events/create', '/404'].includes(path)) {
+      setLayout(['navbar'])
     } else {
       setLayout(['navbar', 'footer', 'chat'])
       path !== '/' &&

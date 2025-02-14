@@ -18,7 +18,7 @@ export const CreateEventFormProvider = () => {
         <div className='grid grid-cols-12 gap-10'>
           <div className='flex flex-col col-span-7'>
             <CreateEventForm />
-            <Button type='submit' className='mt-10'>
+            <Button type='submit' className='mt-8 text-white'>
               Create Event
             </Button>
           </div>
