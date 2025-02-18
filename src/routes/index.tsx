@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
-import { HomePageUser } from 'src/pages'
 import { AccountVerification } from 'src/pages/Auth/AccountVerification'
 import { EventCreation } from 'src/pages/Event/EventCreation'
+import { EventDetailPageUser, HomePageUser } from 'src/pages';
 
 type RouteType = {
   path: string
@@ -18,6 +18,10 @@ const publicRoutes: RouteType[] = [
   {
     path: 'verify-account',
     element: <AccountVerification />
+  },
+  {
+    path: "/event-detail",
+    element: <EventDetailPageUser/>
   }
 ]
 //
