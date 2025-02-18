@@ -20,8 +20,12 @@ const publicRoutes: RouteType[] = [
     element: <AccountVerification />
   },
   {
-    path: "/event-detail",
+    path: "events/event-detail",
     element: <EventDetailPageUser/>
+  },
+  {
+    path: '/events/create',
+    element: <EventCreation />
   }
 ]
 //

@@ -3,7 +3,8 @@ import { Heading, Img, Text } from 'src/components'
 import { Button } from 'src/components/ui/button'
 import { Instagram, Youtube, Facebook, MapPin } from 'lucide-react'
 interface Props {
-  event: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  event: any,
   renderProps: ReactNode
 }
 const EventDetailPage = ({ event, renderProps }: Props, className: string) => {
