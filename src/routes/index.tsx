@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context';
-import { HomePageUser } from 'src/pages';
+import { EventDetailPageUser, HomePageUser } from 'src/pages';
 
 type RouteType ={
   path: string;
@@ -12,6 +12,10 @@ const publicRoutes: RouteType[] = [
   {
     path: '/',
     element: <HomePageUser />
+  },
+  {
+    path: "/event-detail",
+    element: <EventDetailPageUser/>
   }
 ]
 //

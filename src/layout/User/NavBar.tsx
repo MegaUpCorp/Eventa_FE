@@ -33,7 +33,7 @@ const NavBar = () => {
           <Bell size={16} className='mr-[20px]' />
           <Search size={16} className='mr-[20px]' />
           {isAuthenticated ? (
-            <AuthDialog />
+            <AuthDialog trigger={<Button size='sm'>Login</Button>} />
           ) : (
             <Avatar>
               <AvatarImage src='https://github.com/shadcn.png' />
