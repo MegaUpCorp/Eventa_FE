@@ -6,10 +6,10 @@ import { SignInSchema } from 'src/schemas/authSchema'
 import { useSignIn } from './useSignIn'
 
 export const SignInFormProvider = () => {
-  const { methods } = useSignIn()
+  const { methods, loginMutation } = useSignIn()
 
   const onSubmit: SubmitHandler<SignInSchema> = (data) => {
-    console.log(data)
+    loginMutation.mutate(data)
   }
 
   return (
@@ -22,7 +22,7 @@ export const SignInFormProvider = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='example@gmail.com' {...field} autoFocus autoComplete='on' />
+                <Input placeholder='example@gmail.com' {...field} autoFocus autoComplete='off' />
               </FormControl>
               <FormMessage className='absolute' />
             </FormItem>
@@ -35,13 +35,13 @@ export const SignInFormProvider = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type='password' {...field} autoComplete='on' />
+                <Input type='password' {...field} autoComplete='off' />
               </FormControl>
               <FormMessage className='absolute' />
             </FormItem>
           )}
         />
-        <Button type='submit' className='w-full text-white'>
+        <Button type='submit' className='w-full text-white' isLoading={loginMutation.isPending}>
           Continue
         </Button>
       </form>

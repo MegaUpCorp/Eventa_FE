@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
-import { useAuthStore } from 'src/config/zustand/auth-store'
+import { useAuthStore } from 'src/config/zustand/AuthStore'
 import { SignInFormProvider } from 'src/features/Auth/SignIn/SignInFormProvider'
 import { AccountInfoFormProvider } from 'src/features/Auth/SignUp/AccountInfoFormProvider'
 import { EmailFormProvider } from 'src/features/Auth/SignUp/EmailFormProvider'
@@ -73,7 +73,7 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
           </div>
           <p className='text-center font-medium mt-4 mb-2 text-2xl'>A magic link is on the way!</p>
           <p className='text-center text-muted-foreground text-sm mb-6'>
-            For security reasons, we've sent you an email that contains a link to verify your email
+            For security reasons, we&apos;ve sent you an email that contains a link to verify your email
           </p>
           <Button variant='secondary' onClick={resetDialog}>
             Close
@@ -101,7 +101,7 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
             className='text-sm text-center mt-10 mb-2 hover:underline cursor-pointer'
             onClick={() => setState('sign-up')}
           >
-            Don't have an account? <span className='font-semibold text-primary'>Sign up, it's free!</span>
+            Don&apos;t have an account? <span className='font-semibold text-primary'>Sign up, it&apos;s free!</span>
           </p>
         </>
       )

@@ -1,15 +1,14 @@
 import { Bell, CalendarDays, Compass, ExternalLink, Search, Ticket } from 'lucide-react'
-import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
-import { AppContext } from 'src/context/app.context'
+import { useUserStore } from 'src/config/zustand/UserStore'
 
 const NavBar = () => {
   const navigate = useNavigate()
-  const { isAuthenticated, setProfile, profile, setIsStaff } = useContext(AppContext)
+  const { isAuthenticated } = useUserStore()
 
   return (
     <div className='container-xl '>
@@ -36,7 +35,7 @@ const NavBar = () => {
           <Bell size={16} className='mr-[20px]' />
           <Search size={16} className='mr-[20px]' />
           <div className='mr-[20px]'>
-            {isAuthenticated ? (
+            {!isAuthenticated ? (
               <AuthDialog
                 trigger={
                   <Button size='sm' className='text-white'>

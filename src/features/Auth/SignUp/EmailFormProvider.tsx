@@ -2,7 +2,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
-import { useAuthStore } from 'src/config/zustand/auth-store'
+import { useAuthStore } from 'src/config/zustand/AuthStore'
 import { EmailSchema } from 'src/schemas/authSchema'
 import { useSignUp } from './useSignUp'
 
