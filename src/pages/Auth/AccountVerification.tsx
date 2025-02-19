@@ -1,6 +1,6 @@
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useAuthStore } from 'src/config/zustand/auth-store'
+import { useAuthStore } from 'src/config/zustand/AuthStore'
 
 export const AccountVerification = () => {
   const { setIsOpenDialog, setState } = useAuthStore()

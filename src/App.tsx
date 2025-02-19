@@ -1,4 +1,3 @@
-import { AppProvider } from './context/app.context'
 import { ToastContainer } from 'react-toastify'
 import useLayout from './hooks/useLayout'
 // import { useNavigate } from 'react-router-dom'
@@ -13,17 +12,15 @@ function App() {
 
   return (
     <StrictMode>
-      <AppProvider>
-        <ToastContainer autoClose={2000} style={{ padding: '20px' }} />
-        {layout.includes('navbar') && <NavBar />}
-        <div className=''>
-          <div className='main'>
-            <Router />
-          </div>
+      <ToastContainer autoClose={2000} style={{ padding: '20px' }} />
+      {layout.includes('navbar') && <NavBar />}
+      <div className=''>
+        <div className='main'>
+          <Router />
         </div>
-        {layout.includes('footer') && <Footer />}
-        {layout.includes('chat') && ''}
-      </AppProvider>
+      </div>
+      {layout.includes('footer') && <Footer />}
+      {layout.includes('chat') && ''}
     </StrictMode>
   )
 }

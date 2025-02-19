@@ -1,9 +1,6 @@
 import { User } from 'src/@types/users.type'
 
-export const setTokenToLS = (
-  access_token: string,
-  refresh_token: string
-): void => {
+export const setTokenToLS = (access_token: string, refresh_token: string): void => {
   localStorage.setItem('access_token', access_token)
   localStorage.setItem('refresh_token', refresh_token)
 }
@@ -15,11 +12,9 @@ export const clearLocalStorage = (): void => {
   localStorage.removeItem('isStaff')
 }
 
-export const getAccessTokenFromLS = (): string =>
-  localStorage.getItem('access_token') || ''
+export const getAccessTokenFromLS = (): string => localStorage.getItem('access_token') || ''
 
-export const getRefreshTokenFromLS = (): string =>
-  localStorage.getItem('refresh_token') || ''
+export const getRefreshTokenFromLS = (): string => localStorage.getItem('refresh_token') || ''
 
 export const getProfileFormLS = (): User | null => {
   const profile = localStorage.getItem('profile')
@@ -43,8 +38,7 @@ export const setEventIdToLS = (eventId: string): void => {
   localStorage.setItem('eventId', eventId)
 }
 
-export const getEventIdFromLS = (): string =>
-  localStorage.getItem('eventId') || ''
+export const getEventIdFromLS = (): string => localStorage.getItem('eventId') || ''
 
 export const clearEventIdFromLS = (): void => {
   localStorage.removeItem('eventId')

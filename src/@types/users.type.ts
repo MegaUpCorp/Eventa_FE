@@ -14,14 +14,15 @@ export interface User {
   role: UserRole
 }
 
-export type UserList = Pick<
-  User,
-  '_id' | 'user_name' | 'email' | 'role' | 'status'
->
+export type UserList = Pick<User, '_id' | 'user_name' | 'email' | 'role' | 'status'>
 
 export type ProfileUpdate = {
   user_name: string
   email: string
   phone_number: string
   date_of_birth: string
+}
+
+export type LoginAPIResponse = {
+  token: string
 }

@@ -5,7 +5,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
-import { useAuthStore } from 'src/config/zustand/auth-store'
+import { useAuthStore } from 'src/config/zustand/AuthStore'
 import { cn } from 'src/lib/utils'
 import { SignUpSchema } from 'src/schemas/authSchema'
 import { useSignUp } from './useSignUp'
@@ -97,7 +97,7 @@ export const AccountInfoFormProvider = () => {
           </div>
         </div>
         <Button type='submit' className='text-white'>
-          Let's Go
+          Let&apos;s Go
         </Button>
       </form>
     </Form>

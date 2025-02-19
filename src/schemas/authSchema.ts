@@ -5,7 +5,7 @@ export const emailSchema = yup.object().shape({
 })
 
 const passwordSchema = yup.object().shape({
-  password: yup.string().min(8, 'Password must be at least 8 characters').required('Please enter your password')
+  password: yup.string().min(6, 'Password must be at least 6 characters').required('Please enter your password')
 })
 
 const strongPasswordSchema = yup.object().shape({

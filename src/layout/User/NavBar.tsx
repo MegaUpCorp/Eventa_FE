@@ -1,15 +1,23 @@
-import { Bell, CalendarDays, Compass, ExternalLink, Search, Ticket } from 'lucide-react'
-import { useContext } from 'react'
+import { Bell, CalendarDays, Compass, ExternalLink, LogOut, Search, SquareUserRound, Ticket } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
-import { AppContext } from 'src/context/app.context'
+import { useUserStore } from 'src/config/zustand/UserStore'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from 'src/components/ui/dropdown-menu'
 
 const NavBar = () => {
   const navigate = useNavigate()
-  const { isAuthenticated, setProfile, profile, setIsStaff } = useContext(AppContext)
+  const { isAuthenticated, logout } = useUserStore()
 
   return (
     <div className='container-xl '>
@@ -36,7 +44,7 @@ const NavBar = () => {
           <Bell size={16} className='mr-[20px]' />
           <Search size={16} className='mr-[20px]' />
           <div className='mr-[20px]'>
-            {isAuthenticated ? (
+            {!isAuthenticated ? (
               <AuthDialog
                 trigger={
                   <Button size='sm' className='text-white'>
@@ -46,10 +54,28 @@ const NavBar = () => {
                 }
               />
             ) : (
-              <Avatar>
-                <AvatarImage src='https://github.com/shadcn.png' />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar>
+                    <AvatarImage src='https://github.com/shadcn.png' />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem className='cursor-pointer'>
+                      <SquareUserRound />
+                      <p className='font-medium'>Profile</p>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className='cursor-pointer' onClick={logout}>
+                    <LogOut className='text-red-500' />
+                    <p className='text-red-500 font-medium'>Log out</p>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
           <ModeToggle />

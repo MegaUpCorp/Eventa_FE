@@ -1,15 +1,10 @@
-import axios, { AxiosError, AxiosInstance } from 'axios'
-import {
-  clearLocalStorage,
-  getAccessTokenFromLS,
-  setTokenToLS,
-  setProfileToLS,
-  getRefreshTokenFromLS
-} from './auth'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
+import axios, { AxiosError, AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 import { ErrorResponse, SuccessResponse } from 'src/@types/utils.type'
+import { clearLocalStorage, getRefreshTokenFromLS, setTokenToLS } from './auth'
 import { isAxiosErrorJWTExpired, isUnAuthorized } from './utils'
+import { useUserStore } from 'src/config/zustand/UserStore'
 
 //
 //https://showbiz-booking-event-be.onrender.com
@@ -19,42 +14,39 @@ class Http {
   private refreshTokenRequest: Promise<string> | null
   private refreshToken: string
   constructor() {
-    this.accessToken = getAccessTokenFromLS()
+    this.accessToken = useUserStore.getState().token
     this.refreshTokenRequest = null
     this.refreshToken = getRefreshTokenFromLS()
-    ;(this.instance = axios.create({
-      baseURL: 'http://localhost:4000',
+    this.instance = axios.create({
+      baseURL: 'http://139.59.101.63:8080/api',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
       }
-    })),
-      this.instance.interceptors.request.use(
-        (config) => {
-          this.accessToken = this.accessToken
-            ? this.accessToken
-            : getAccessTokenFromLS()
-          if (this.accessToken) {
-            config.headers.Authorization = `Bearer ${this.accessToken}`
-            return config
-          }
+    })
+    this.instance.interceptors.request.use(
+      (config) => {
+        this.accessToken = this.accessToken ? this.accessToken : useUserStore.getState().token
+        if (this.accessToken) {
+          config.headers.Authorization = `Bearer ${this.accessToken}`
           return config
-        },
-        (error) => {
-          return Promise.reject(error)
         }
-      )
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
     this.instance.interceptors.response.use(
       (response) => {
         const endPoint = response.config.url?.split('/').pop()
         if (endPoint === 'login') {
-          this.accessToken = response.data.data.result.access_token
+          this.accessToken = response.data.token
 
-          setTokenToLS(
-            this.accessToken,
-            response.data.data.result.refresh_token
-          )
-          setProfileToLS(response.data.data.user)
+          useUserStore.getState().login(this.accessToken)
+
+          // setTokenToLS(this.accessToken)
+          // setProfileToLS(response.data.data.user)
         } else if (endPoint === 'logout') {
           this.accessToken = ''
           clearLocalStorage()
@@ -64,22 +56,17 @@ class Http {
       (error: AxiosError) => {
         //nếu là lỗi unprocessable entity hoặc unauthorized thì không hiện toast
         if (
-          ![
-            HttpStatusCode.UnprocessableEntity,
-            HttpStatusCode.Unauthorized
-          ].includes(error.response?.status as number)
+          ![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Unauthorized].includes(error.response?.status as number)
         ) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data: any | undefined = error.response?.data
           const message = data.message || error.message
           toast.error(message)
         }
 
-        if (isUnAuthorized<ErrorResponse<{}>>(error)) {
+        if (isUnAuthorized<ErrorResponse<object>>(error)) {
           const config = error.response?.config || { headers: {}, url: '' }
-          if (
-            isAxiosErrorJWTExpired(error) &&
-            config.url != '/users/refresh-token'
-          ) {
+          if (isAxiosErrorJWTExpired(error) && config.url != '/users/refresh-token') {
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
               : this.handleRefreshToken().finally(() => {
@@ -99,7 +86,7 @@ class Http {
           clearLocalStorage()
           this.accessToken = ''
           this.refreshToken = ''
-          window.location.reload()
+          // window.location.reload()
         }
 
         return Promise.reject(error)
@@ -109,12 +96,9 @@ class Http {
 
   private handleRefreshToken() {
     return this.instance
-      .post<SuccessResponse<{ access_token: string; refresh_token: string }>>(
-        '/users/refresh-token',
-        {
-          refresh_token: this.refreshToken
-        }
-      )
+      .post<SuccessResponse<{ access_token: string; refresh_token: string }>>('/users/refresh-token', {
+        refresh_token: this.refreshToken
+      })
       .then((res) => {
         const { access_token, refresh_token } = res.data.data
         setTokenToLS(access_token, refresh_token)

@@ -1,9 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { useContext } from 'react'
-import { AppContext } from 'src/context/app.context'
+import { useUserStore } from 'src/config/zustand/UserStore'
+import { EventDetailPageUser, HomePageUser } from 'src/pages'
 import { AccountVerification } from 'src/pages/Auth/AccountVerification'
 import { EventCreation } from 'src/pages/Event/EventCreation'
-import { EventDetailPageUser, HomePageUser } from 'src/pages';
 
 type RouteType = {
   path: string
@@ -20,12 +19,8 @@ const publicRoutes: RouteType[] = [
     element: <AccountVerification />
   },
   {
-    path: "events/event-detail",
-    element: <EventDetailPageUser/>
-  },
-  {
-    path: '/events/create',
-    element: <EventCreation />
+    path: 'events/event-detail',
+    element: <EventDetailPageUser />
   }
 ]
 //
@@ -43,7 +38,7 @@ const adminRoutes: RouteType[] = []
 const staffRoutes: RouteType[] = []
 
 const Router = () => {
-  const { isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated } = useUserStore()
   const user = JSON.parse(localStorage.getItem('profile') || '{}')
   const router = [
     ...publicRoutes,
