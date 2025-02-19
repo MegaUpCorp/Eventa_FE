@@ -97,7 +97,7 @@ export const AccountInfoFormProvider = () => {
           </div>
         </div>
         <Button type='submit' className='text-white'>
-          Let's Go
+          Let&apos;s Go
         </Button>
       </form>
     </Form>

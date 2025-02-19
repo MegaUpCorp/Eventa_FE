@@ -21,10 +21,6 @@ const publicRoutes: RouteType[] = [
   {
     path: 'events/event-detail',
     element: <EventDetailPageUser />
-  },
-  {
-    path: '/events/create',
-    element: <EventCreation />
   }
 ]
 //
