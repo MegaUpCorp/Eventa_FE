@@ -1,8 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useUserStore } from 'src/config/zustand/UserStore'
-import { EventDetailPageUser, HomePageUser } from 'src/pages'
-import { AccountVerification } from 'src/pages/Auth/AccountVerification'
-import { EventCreation } from 'src/pages/Event/EventCreation'
+import { AccountVerification, CalendarCreation, EventCreation, EventDetailPageUser, HomePageUser } from 'src/pages'
 
 type RouteType = {
   path: string
@@ -28,6 +26,10 @@ const authenicatedRoutes: RouteType[] = [
   {
     path: '/events/create',
     element: <EventCreation />
+  },
+  {
+    path: '/calendars/create',
+    element: <CalendarCreation />
   }
 ]
 //

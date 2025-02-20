@@ -1,8 +1,8 @@
-import { Navigate, useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import { useAuthStore } from 'src/config/zustand/AuthStore'
 
-export const AccountVerification = () => {
+const AccountVerification = () => {
   const { setIsOpenDialog, setState } = useAuthStore()
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
@@ -25,3 +25,5 @@ export const AccountVerification = () => {
 
   return <Navigate to='/' replace />
 }
+
+export default AccountVerification

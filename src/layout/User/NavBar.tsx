@@ -20,7 +20,7 @@ const NavBar = () => {
   const { isAuthenticated, logout } = useUserStore()
 
   return (
-    <div className='container-xl '>
+    <div className='container-xl mb-10'>
       <div className='flex justify-start items-center py-4'>
         <div className='flex flex-row items-center w-1/2 h-10'>
           <div className=''>Logo</div>

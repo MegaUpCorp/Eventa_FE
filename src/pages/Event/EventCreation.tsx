@@ -1,9 +1,11 @@
 import { CreateEventFormProvider } from 'src/features/Events/CreateEvent/CreateEventFormProvider'
 
-export const EventCreation = () => {
+const EventCreation = () => {
   return (
-    <div className='container-xl mt-4'>
+    <div className='container-xl'>
       <CreateEventFormProvider />
     </div>
   )
 }
+
+export default EventCreation
