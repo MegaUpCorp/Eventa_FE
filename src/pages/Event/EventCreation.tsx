@@ -2,7 +2,7 @@ import { CreateEventFormProvider } from 'src/features/Events/CreateEvent/CreateE
 
 const EventCreation = () => {
   return (
-    <div className='container-xl'>
+    <div className='container-lg p-4'>
       <CreateEventFormProvider />
     </div>
   )

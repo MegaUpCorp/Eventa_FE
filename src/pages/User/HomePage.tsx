@@ -4,7 +4,7 @@ import { Solutions } from 'src/components/HomePage/Solutions/Solutions'
 
 const HomePage = () => {
   return (
-    <div className='container-xl flex flex-col'>
+    <div className='container-lg flex flex-col p-4'>
       <HeroSection />
       <Solutions />
       <Pricing />

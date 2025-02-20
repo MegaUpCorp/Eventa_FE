@@ -36,7 +36,7 @@ const ViewCalendars = ({ type, calendars, className }: ViewCalendarsProps) => {
   return (
     <>
       <div className='flex items-center justify-between'>
-        <p className='text-2xl font-semibold mb-2'>{title}</p>
+        <p className='text-xl font-semibold'>{title}</p>
         {type === 'owned' && (
           <Link to='/calendars/create' className={buttonVariants({ variant: 'secondary' })}>
             <Plus />
@@ -44,18 +44,18 @@ const ViewCalendars = ({ type, calendars, className }: ViewCalendarsProps) => {
           </Link>
         )}
       </div>
-      <div className={cn('grid grid-cols-4 gap-5', className)}>
+      <div className={cn('grid grid-cols-3 gap-5', className)}>
         {calendars.length === 0 ? (
-          <Card className='p-4 flex flex-col gap-2 h-[170px]'>
-            <CalendarX2 className='w-14 h-14 text-muted-foreground' />
-            <p className='text-xl mt-2 font-semibold truncate text-muted-foreground'>{emptyTitle}</p>
+          <Card className='p-4 flex flex-col gap-1 h-42'>
+            <CalendarX2 className='w-12 h-12 text-muted-foreground' />
+            <p className='text-lg mt-2 font-semibold truncate text-muted-foreground'>{emptyTitle}</p>
             <p className='text-muted-foreground text-sm font-medium'>{emptyDescription}</p>
           </Card>
         ) : (
           calendars.map((calendar) => (
-            <Card key={calendar.id} className='p-4 flex flex-col gap-1 h-[170px] cursor-pointer hover:border-gray-dark'>
-              <img src={calendar.profile} alt={calendar.name} className='w-16 h-16 object-cover rounded-lg' />
-              <p className='text-xl mt-2 font-semibold truncate'>{calendar.name}</p>
+            <Card key={calendar.id} className='p-4 flex flex-col gap-1 h-42 cursor-pointer hover:border-gray-dark'>
+              <img src={calendar.profile} alt={calendar.name} className='w-14 h-14 object-cover rounded-lg' />
+              <p className='text-lg mt-2 font-semibold truncate'>{calendar.name}</p>
               <p className='text-muted-foreground text-sm font-medium'>
                 {calendar.subscribers === 0 ? 'No subscribers' : `${calendar.subscribers} subscribers`}
               </p>

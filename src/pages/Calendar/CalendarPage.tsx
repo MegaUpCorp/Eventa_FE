@@ -26,8 +26,8 @@ const calendars = [
 
 const CalendarPage = () => {
   return (
-    <div className='container-xl flex flex-col gap-4'>
-      <p className='text-4xl font-semibold mb-4'>Calendars</p>
+    <div className='container-base flex flex-col gap-4 px-4'>
+      <p className='text-3xl font-semibold mb-4'>Calendars</p>
       <ViewCalendars calendars={calendars} type='owned' />
       <Separator className='my-4' />
       <ViewCalendars calendars={[]} type='subscribed' />

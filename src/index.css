@@ -3,11 +3,14 @@
 @tailwind utilities;
 
 @layer components {
-  .container-xs {
+  .container-sm {
+    @apply w-full mx-auto max-w-[780px];
+  }
+  .container-base {
     @apply w-full mx-auto max-w-[820px];
   }
-  .container-xl {
-    @apply w-full mx-auto max-w-[1120px];
+  .container-lg {
+    @apply w-full mx-auto max-w-[960px];
   }
 }
 
@@ -76,6 +79,10 @@
     @apply bg-background text-foreground;
     font-family: 'Archivo', sans-serif;
   }
+}
+
+html {
+  scrollbar-gutter: stable;
 }
 
 .glass {

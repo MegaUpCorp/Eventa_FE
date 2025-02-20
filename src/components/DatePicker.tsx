@@ -15,7 +15,7 @@ export default function DatePicker({
   date,
   onDateChange,
   trigger,
-  asChild,
+  asChild = true,
   usePopover = true,
   className
 }: DatePickerProps) {

@@ -42,11 +42,7 @@ const CalendarProfileForm = () => {
                   <input {...getInputProps()} />
                 </div>
               ) : (
-                <Card
-                  className='flex justify-end items-start w-24 h-24
-                  4 hover:bg-gray-dark cursor-pointer relative'
-                  {...getRootProps()}
-                >
+                <Card className='flex justify-end items-start w-24 h-24 cursor-pointer relative' {...getRootProps()}>
                   <input {...getInputProps()} />
                   <img
                     src='https://i.pinimg.com/564x/b4/b3/02/b4b3023700b1669b0a8eb93d70a5f08f.jpg'

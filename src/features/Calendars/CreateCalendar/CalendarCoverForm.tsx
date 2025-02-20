@@ -40,10 +40,7 @@ const CalendarCoverForm = () => {
                 <input {...getInputProps()} />
               </div>
             ) : (
-              <div
-                className='flex justify-end items-start h-48 hover:bg-gray-dark rounded-t-lg cursor-pointer'
-                {...getRootProps()}
-              >
+              <div className='flex justify-end items-start h-48 rounded-t-lg cursor-pointer' {...getRootProps()}>
                 <input {...getInputProps()} />
                 <Button variant='ghost' className='mt-3 mr-3'>
                   Change cover
