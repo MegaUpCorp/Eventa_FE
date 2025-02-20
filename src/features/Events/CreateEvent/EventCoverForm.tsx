@@ -40,7 +40,10 @@ export const EventCoverForm = () => {
             <FormItem>
               <FormControl>
                 {value ? (
-                  <img src={value} className='w-full h-96 rounded-lg' />
+                  <div className='flex justify-center h-96 items-center' {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <img src={value} className='w-full h-full object-cover rounded-lg' />
+                  </div>
                 ) : (
                   <Card className='flex justify-center items-center h-96 border-dashed border-2' {...getRootProps()}>
                     <input {...getInputProps()} />

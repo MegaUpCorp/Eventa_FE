@@ -6,7 +6,7 @@ export const HeroSection = () => {
     <div className='flex items-center justify-between relative'>
       {/* Slogan */}
       <div className='flex flex-col justify-start gap-2'>
-        <p className='text-7xl font-semibold'>Let's</p>
+        <p className='text-7xl font-semibold'>Let&apos;s</p>
         <p className='text-7xl font-semibold'>
           <span className='underline decoration-primary decoration-8 underline-offset-[12px]'>create</span> your
         </p>

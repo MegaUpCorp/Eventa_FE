@@ -10,15 +10,13 @@ const useLayout = () => {
       setLayout(['admin'])
     } else if (['/verify-account', '/404'].includes(path)) {
       setLayout(['none'])
-    } else if (['/events/create', '/404'].includes(path)) {
+    } else if (['/events/create', '/calendars/create', '/404'].includes(path)) {
       setLayout(['navbar'])
     } else {
       setLayout(['navbar', 'footer', 'chat'])
-      path !== '/' &&
-        !path.startsWith('/me') &&
-        !path.startsWith('/order-success') &&
-        !path.startsWith('/blog') &&
+      if (path !== '/' && !path.startsWith('/me') && !path.startsWith('/order-success') && !path.startsWith('/blog')) {
         setLayout((prev) => [...prev, 'breadcrumb'])
+      }
     }
   }, [path])
   return layout
