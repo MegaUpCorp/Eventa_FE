@@ -1,5 +1,5 @@
 import { Bell, CalendarDays, Compass, ExternalLink, LogOut, Search, SquareUserRound, Ticket } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
@@ -32,10 +32,10 @@ const NavBar = () => {
             <Ticket size={16} className='mr-1' />
             <p>Events</p>
           </div>
-          <div className='ml-[46px] flex items-center'>
+          <Link to='/calendars' className='ml-[46px] flex items-center'>
             <CalendarDays size={16} className='mr-1' />
-            <p>Calendar</p>
-          </div>
+            <p>Calendars</p>
+          </Link>
         </div>
         <div className='flex items-center justify-end w-1/2 h-10'>
           <Button size='sm' className='mr-[20px] text-white' onClick={() => navigate('/events/create')}>
