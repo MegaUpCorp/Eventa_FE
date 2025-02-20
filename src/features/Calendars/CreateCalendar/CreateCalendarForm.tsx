@@ -1,6 +1,5 @@
-import CalendarCoverForm from './CalendarCoverForm'
 import CalendarProfileForm from './CalendarProfileForm'
-import { CalendarPlus } from 'lucide-react'
+import CalendarCoverForm from './CalendarCoverForm'
 import { useFormContext } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
@@ -106,10 +105,6 @@ const CreateCalendarForm = () => {
           </div>
         </div>
       </Card>
-      <Button className='mr-auto text-white'>
-        <CalendarPlus />
-        Create calendar
-      </Button>
     </div>
   )
 }

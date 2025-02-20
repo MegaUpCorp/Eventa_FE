@@ -40,12 +40,12 @@ export const EventCoverForm = () => {
             <FormItem>
               <FormControl>
                 {value ? (
-                  <div className='flex justify-center h-96 items-center' {...getRootProps()}>
+                  <div className='flex justify-center h-80 items-center' {...getRootProps()}>
                     <input {...getInputProps()} />
                     <img src={value} className='w-full h-full object-cover rounded-lg' />
                   </div>
                 ) : (
-                  <Card className='flex justify-center items-center h-96 border-dashed border-2' {...getRootProps()}>
+                  <Card className='flex justify-center items-center h-80 border-dashed border-2' {...getRootProps()}>
                     <input {...getInputProps()} />
                     <div className='flex flex-col items-center justify-center'>
                       <CloudUpload size={85} className='text-muted-foreground' />

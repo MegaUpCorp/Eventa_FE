@@ -21,8 +21,8 @@ const PAID_PLAN = [
 export const Pricing = () => {
   return (
     <div className='flex flex-col mt-20 w-full'>
-      <p className='text-5xl font-semibold text-center'>Pick your plan and get started</p>
-      <p className='text-muted-foreground mt-1 mb-4 text-center px-60'>
+      <p className='text-4xl font-semibold text-center'>Pick your plan and get started</p>
+      <p className='text-sm text-muted-foreground mt-1 mb-4 text-center px-40'>
         Use Eventa for free with unlimited events and guests. Upgrade for more invites, insights, 0% platform free, and
         more.
       </p>

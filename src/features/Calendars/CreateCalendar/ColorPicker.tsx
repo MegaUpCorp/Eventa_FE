@@ -7,12 +7,10 @@ const colors: Record<string, string> = {
   '#d4d4d4': 'focus:ring-[#d4d4d4]',
   '#ff9ed2': 'focus:ring-[#ff9ed2]',
   '#c193ff': 'focus:ring-[#c193ff]',
-  '#89a5ff': 'focus:ring-[#89a5ff]',
   '#6ec3ff': 'focus:ring-[#6ec3ff]',
   '#71e676': 'focus:ring-[#71e676]',
   '#ffd873': 'focus:ring-[#ffd873]',
   '#ff8a80': 'focus:ring-[#ff8a80]',
-  '#ff66cc': 'focus:ring-[#ff66cc]',
   '#a855f7': 'focus:ring-[#a855f7]'
 }
 

@@ -42,11 +42,12 @@ export const HeroSearchEventFormProvider = () => {
         <div className='col-span-4'>
           <DatePicker
             date={date}
+            asChild={false}
             onDateChange={setDate}
-            trigger={<HeroSearchTrigger label='Date' value={format(date, 'EEEE, dd MMMM yyyy')} />}
+            trigger={<HeroSearchTrigger label='Date' value={format(date, 'dd MMMM yyyy')} />}
           />
         </div>
-        <div className='col-span-3'>
+        <div className='col-span-4'>
           {/* FIXME: Popover shift when switch slider */}
           <RangeSlider
             min={0}
@@ -64,7 +65,7 @@ export const HeroSearchEventFormProvider = () => {
             }
           />
         </div>
-        <div className='col-span-2 flex justify-end'>
+        <div className='col-span-1 flex justify-end'>
           <Button size='icon' className='w-12 h-12'>
             <Search className='text-white dark:text-foreground' />
           </Button>

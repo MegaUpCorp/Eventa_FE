@@ -9,10 +9,10 @@ export const HeroSearchTrigger = ({ label, value }: HeroSearchTriggerProps) => {
   return (
     <div className='flex flex-col items-start'>
       <div className='flex items-center gap-1'>
-        <p className='font-medium text-2xl'>{label}</p>
+        <p className='font-medium text-lg'>{label}</p>
         <ChevronDown className='text-primary' />
       </div>
-      <p className='text-sm text-muted-foreground'>{value}</p>
+      <p className='text-sm text-muted-foreground truncate text-ellipsis'>{value}</p>
     </div>
   )
 }

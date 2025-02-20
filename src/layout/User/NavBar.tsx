@@ -1,10 +1,9 @@
-import { Bell, CalendarDays, Compass, ExternalLink, LogOut, Search, SquareUserRound, Ticket } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Bell, CalendarDays, Compass, ExternalLink, LogOut, Search, SquareUserRound, Tickets } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
-import { useUserStore } from 'src/config/zustand/UserStore'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,74 +13,93 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from 'src/components/ui/dropdown-menu'
+import { useUserStore } from 'src/config/zustand/UserStore'
+import { useDynamicWidth } from 'src/hooks/useDynamicWidth'
+import { cn } from 'src/lib/utils'
+
+const navItems = [
+  { label: 'Discover', path: '/discover', icon: Compass },
+  { label: 'Events', path: '/events', icon: Tickets },
+  { label: 'Calendars', path: '/calendars', icon: CalendarDays }
+]
 
 const NavBar = () => {
   const navigate = useNavigate()
+  const width = useDynamicWidth()
+  const { pathname } = useLocation()
   const { isAuthenticated, logout } = useUserStore()
 
   return (
-    <div className='container-xl mb-10'>
-      <div className='flex justify-start items-center py-4'>
-        <div className='flex flex-row items-center w-1/2 h-10'>
-          <div className=''>Logo</div>
-          <div className='ml-[46px] flex items-center '>
-            <Compass size={16} className='mr-1' />
-            <p>Discover</p>
-          </div>
-          <div className='ml-[46px] flex items-center'>
-            <Ticket size={16} className='mr-1' />
-            <p>Events</p>
-          </div>
-          <Link to='/calendars' className='ml-[46px] flex items-center'>
-            <CalendarDays size={16} className='mr-1' />
-            <p>Calendars</p>
+    <nav className='flex items-center justify-between px-5 py-4 text-white mb-10'>
+      <Link to='/' className='flex'>
+        <p className='font-semibold'>eventa</p>
+        <div className='w-[5px] h-[5px] bg-primary rounded-full ml-[3px] mt-[13px]' />
+      </Link>
+
+      <div
+        className='absolute left-1/2 -translate-x-1/2 w-full flex justify-start items-center px-4 gap-8'
+        style={{ width }}
+      >
+        {navItems.map(({ label, path, icon: Icon }) => (
+          <Link key={path} to={path} className='flex items-start'>
+            <Icon
+              size={16}
+              className={cn('mr-1', pathname.startsWith(path) ? 'text-white' : 'text-muted-foreground')}
+            />
+            <p
+              className={cn('font-medium text-sm', pathname.startsWith(path) ? 'text-white' : 'text-muted-foreground')}
+            >
+              {label}
+            </p>
           </Link>
-        </div>
-        <div className='flex items-center justify-end w-1/2 h-10'>
-          <Button size='sm' className='mr-[20px] text-white' onClick={() => navigate('/events/create')}>
-            Create Event
-          </Button>
-          <Bell size={16} className='mr-[20px]' />
-          <Search size={16} className='mr-[20px]' />
-          <div className='mr-[20px]'>
-            {!isAuthenticated ? (
-              <AuthDialog
-                trigger={
-                  <Button size='sm' className='text-white'>
-                    <ExternalLink size={16} />
-                    Join us now!
-                  </Button>
-                }
-              />
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar>
-                    <AvatarImage src='https://github.com/shadcn.png' />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem className='cursor-pointer'>
-                      <SquareUserRound />
-                      <p className='font-medium'>Profile</p>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className='cursor-pointer' onClick={logout}>
-                    <LogOut className='text-red-500' />
-                    <p className='text-red-500 font-medium'>Log out</p>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-          </div>
-          <ModeToggle />
-        </div>
+        ))}
       </div>
-    </div>
+
+      <div className='flex items-center gap-4'>
+        <Button size='sm' className='text-white' onClick={() => navigate('/events/create')}>
+          Create Event
+        </Button>
+        <Bell size={16} />
+        <Search size={16} />
+        <>
+          {!isAuthenticated ? (
+            <AuthDialog
+              trigger={
+                <Button size='sm' className='text-white'>
+                  <ExternalLink size={16} />
+                  Join us now!
+                </Button>
+              }
+            />
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage src='https://github.com/shadcn.png' />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem className='cursor-pointer'>
+                    <SquareUserRound />
+                    <p className='font-medium'>Profile</p>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className='cursor-pointer' onClick={logout}>
+                  <LogOut className='text-red-500' />
+                  <p className='text-red-500 font-medium'>Log out</p>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </>
+        <ModeToggle />
+      </div>
+    </nav>
   )
 }
+
 export default NavBar
