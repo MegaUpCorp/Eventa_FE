@@ -3,6 +3,7 @@ import { useUserStore } from 'src/config/zustand/UserStore'
 import {
   AccountVerification,
   CalendarCreation,
+  CalendarDetailPage,
   CalendarPage,
   EventCreation,
   EventDetailPageUser,
@@ -26,6 +27,14 @@ const publicRoutes: RouteType[] = [
   {
     path: 'events/event-detail',
     element: <EventDetailPageUser />
+  },
+  {
+    path: '/calendars',
+    element: <CalendarPage />
+  },
+  {
+    path: '/calendars/:id',
+    element: <CalendarDetailPage />
   }
 ]
 //
@@ -37,10 +46,6 @@ const authenicatedRoutes: RouteType[] = [
   {
     path: '/calendars/create',
     element: <CalendarCreation />
-  },
-  {
-    path: '/calendars',
-    element: <CalendarPage />
   }
 ]
 //

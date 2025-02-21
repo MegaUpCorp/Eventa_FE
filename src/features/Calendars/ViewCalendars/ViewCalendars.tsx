@@ -1,5 +1,5 @@
 import { CalendarX2, Plus } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { buttonVariants } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import { cn } from 'src/lib/utils'
@@ -31,6 +31,7 @@ const getCalendarsContent = (type: CalendarType) => {
 }
 
 const ViewCalendars = ({ type, calendars, className }: ViewCalendarsProps) => {
+  const navigate = useNavigate()
   const { title, emptyDescription, emptyTitle } = getCalendarsContent(type)
 
   return (
@@ -53,7 +54,11 @@ const ViewCalendars = ({ type, calendars, className }: ViewCalendarsProps) => {
           </Card>
         ) : (
           calendars.map((calendar) => (
-            <Card key={calendar.id} className='p-4 flex flex-col gap-1 h-42 cursor-pointer hover:border-gray-dark'>
+            <Card
+              key={calendar.id}
+              className='p-4 flex flex-col gap-1 h-42 cursor-pointer hover:border-gray-dark'
+              onClick={() => navigate(`${calendar.id}`)}
+            >
               <img src={calendar.profile} alt={calendar.name} className='w-14 h-14 object-cover rounded-lg' />
               <p className='text-lg mt-2 font-semibold truncate'>{calendar.name}</p>
               <p className='text-muted-foreground text-sm font-medium'>

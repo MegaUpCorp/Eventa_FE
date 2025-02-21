@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <App />
         <Toaster />
       </ThemeProvider>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </BrowserRouter>
