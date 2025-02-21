@@ -30,7 +30,7 @@ const NavBar = () => {
   const { isAuthenticated, logout } = useUserStore()
 
   return (
-    <nav className='flex items-center justify-between px-5 py-4 text-white mb-10'>
+    <nav className='relative z-10 flex items-center justify-between px-5 py-4 text-white mb-10'>
       <Link to='/' className='flex'>
         <p className='font-semibold'>eventa</p>
         <div className='w-[5px] h-[5px] bg-primary rounded-full ml-[3px] mt-[13px]' />
