@@ -7,7 +7,8 @@ import {
   CalendarPage,
   EventCreation,
   EventDetailPageUser,
-  HomePageUser
+  HomePageUser,
+  MePage
 } from 'src/pages'
 
 type RouteType = {
@@ -29,10 +30,6 @@ const publicRoutes: RouteType[] = [
     element: <EventDetailPageUser />
   },
   {
-    path: '/calendars',
-    element: <CalendarPage />
-  },
-  {
     path: '/calendars/:id',
     element: <CalendarDetailPage />
   }
@@ -46,6 +43,14 @@ const authenicatedRoutes: RouteType[] = [
   {
     path: '/calendars/create',
     element: <CalendarCreation />
+  },
+  {
+    path: '/calendars',
+    element: <CalendarPage />
+  },
+  {
+    path: '/me',
+    element: <MePage />
   }
 ]
 //
