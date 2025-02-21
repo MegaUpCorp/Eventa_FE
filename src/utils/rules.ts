@@ -25,6 +25,7 @@ type Rules = {
     | 'user_name'
     | 'mssv']?: RegisterOptions
 }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getRulesLogin = (getValues?: UseFormGetValues<any>): Rules => {
   return {
     email: {
@@ -130,10 +131,10 @@ export const LoginSchemaYup = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required!'),
   password: yup.string().required('Password is required!')
 })
-
 export type LoginSchema = yup.InferType<typeof LoginSchemaYup>
 
-export const CreateEventOperatorSchemaYup = yup.object().shape({
+
+export const CreateEventOperatorCSchemaYup = yup.object().shape({
   user_name: yup.string().required('This field is required'),
   email: yup.string().email('Invalid email').required('This field is required'),
   phone_number: yup
@@ -142,7 +143,8 @@ export const CreateEventOperatorSchemaYup = yup.object().shape({
     .required('This field is required')
 })
 
-export type CreateEventOperatorSchema = yup.InferType<typeof CreateEventOperatorSchemaYup>
+export type CreateEventOperatorSchema = yup.InferType<typeof CreateEventOperatorCSchemaYup>
+
 
 export const ForgotPasswordSchemaYup = yup.object().shape({
   email: yup.string().email('Invalid email').required('This field is required')
