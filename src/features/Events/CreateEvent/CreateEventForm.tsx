@@ -40,7 +40,7 @@ export const CreateEventForm = () => {
   const { control } = useFormContext<FormValues>()
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(addHours(new Date(), 1))
-
+  
   const handleTimeChange = (
     type: 'hour' | 'minute' | 'ampm',
     value: string,

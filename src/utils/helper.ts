@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const convertIntToEnum = (enumType: any, value: number) => {
   switch (value) {
     case 0:
@@ -12,3 +13,4 @@ export const convertIntToEnum = (enumType: any, value: number) => {
 export const formatPrice = (num: number) => {
   return num.toLocaleString('de-DE')
 }
+
