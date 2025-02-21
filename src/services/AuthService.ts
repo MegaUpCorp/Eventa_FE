@@ -4,7 +4,7 @@ import { LoginAPIResponse } from 'src/@types/users.type'
 
 class AuthService {
   async login({ email, password }: SignInSchema) {
-    await http.post<LoginAPIResponse>('Account/login', {
+    await http.post<LoginAPIResponse>('accounts/login', {
       email,
       password
     })

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+  .container-xs {
+    @apply w-full mx-auto max-w-[640px];
+  }
   .container-sm {
     @apply w-full mx-auto max-w-[780px];
   }

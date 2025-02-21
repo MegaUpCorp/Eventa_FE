@@ -1,4 +1,14 @@
-import { Bell, CalendarDays, Compass, ExternalLink, LogOut, Search, SquareUserRound, Tickets } from 'lucide-react'
+import {
+  Bell,
+  CalendarDays,
+  CircleArrowOutUpRight,
+  CircleUserRound,
+  Compass,
+  ExternalLink,
+  Search,
+  Settings,
+  Tickets
+} from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
@@ -9,7 +19,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from 'src/components/ui/dropdown-menu'
@@ -79,18 +88,21 @@ const NavBar = () => {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuContent className='w-44 mt-2' align='end'>
                 <DropdownMenuGroup>
+                  <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/me')}>
+                    <CircleUserRound size={16} />
+                    <p className='font-medium'>View Profile</p>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className='cursor-pointer'>
-                    <SquareUserRound />
-                    <p className='font-medium'>Profile</p>
+                    <Settings size={16} />
+                    <p className='font-medium'>Settings</p>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='cursor-pointer' onClick={logout}>
-                  <LogOut className='text-red-500' />
-                  <p className='text-red-500 font-medium'>Log out</p>
+                <DropdownMenuItem className='cursor-pointer focus:text-[#ff0000]' onClick={logout}>
+                  <CircleArrowOutUpRight size={16} />
+                  <p className='font-medium'>Log out</p>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
