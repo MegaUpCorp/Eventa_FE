@@ -1,21 +1,13 @@
 import DatePicker from 'src/components/DatePicker'
+import GoongMap from 'src/components/Goong/GoongMap'
+import MapDialog from 'src/components/Goong/MapDialog'
 import TimePicker from 'src/components/TimePicker'
 import Tiptap from 'src/components/TipTap/TipTap'
 import { addHours, format } from 'date-fns'
-import {
-  CalendarIcon,
-  CircleDollarSign,
-  Database,
-  DoorOpen,
-  Globe,
-  GlobeLock,
-  MapPin,
-  NotepadText,
-  Ticket,
-  UserRoundCheck
-} from 'lucide-react'
-import { useState } from 'react'
+import { CalendarIcon, Database, Globe, GlobeLock, MapPin, NotepadText, Ticket, UserRoundCheck, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import {
   Dialog,
@@ -32,15 +24,17 @@ import { Input } from 'src/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
-import { FormValues } from './useCreateEvent'
-import { Button } from 'src/components/ui/button'
 import { cn } from 'src/lib/utils'
+import { defaultLocationValues, FormValues } from './useCreateEvent'
+import { useGetLocation } from 'src/features/Map/useGetLocation'
 
-export const CreateEventForm = () => {
-  const { control } = useFormContext<FormValues>()
+const CreateEventForm = () => {
+  const { control, watch, setValue } = useFormContext<FormValues>()
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(addHours(new Date(), 1))
-  
+
+  const { data: locationDetail } = useGetLocation(watch('location.id'))
+
   const handleTimeChange = (
     type: 'hour' | 'minute' | 'ampm',
     value: string,
@@ -61,13 +55,35 @@ export const CreateEventForm = () => {
     }
   }
 
+  useEffect(() => {
+    if (locationDetail) {
+      const location = {
+        id: locationDetail.place_id,
+        name: locationDetail.name,
+        address: locationDetail.formatted_address,
+        lat: locationDetail.geometry.location.lat,
+        lng: locationDetail.geometry.location.lng
+      }
+      setValue('location', location)
+    }
+  }, [locationDetail])
+
+  useEffect(() => {
+    if (startDate > endDate) {
+      setStartDate(endDate)
+      setEndDate(addHours(endDate, 1))
+    }
+    setValue('startDate', startDate.toISOString())
+    setValue('endDate', endDate.toISOString())
+  }, [startDate, endDate])
+
   return (
     <>
       <div className='flex justify-between items-center'>
         {/* Calendar */}
         <FormField
           control={control}
-          name='eventCalendar'
+          name='calendarId'
           render={({ field }) => (
             <FormItem>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -94,7 +110,7 @@ export const CreateEventForm = () => {
         {/* Visibility */}
         <FormField
           control={control}
-          name='eventVisibility'
+          name='visibility'
           render={({ field }) => (
             <FormItem>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -124,7 +140,7 @@ export const CreateEventForm = () => {
       </div>
       <FormField
         control={control}
-        name='eventName'
+        name='title'
         render={({ field }) => (
           <FormItem>
             <FormControl>
@@ -133,6 +149,7 @@ export const CreateEventForm = () => {
                 placeholder='Enter event name'
                 autoFocus
                 className='border-none p-0 focus-visible:ring-0 placeholder:text-4xl placeholder:font-semibold h-20 md:text-4xl font-semibold'
+                spellCheck={false}
               />
             </FormControl>
           </FormItem>
@@ -141,7 +158,7 @@ export const CreateEventForm = () => {
       <div className='flex flex-col gap-3'>
         <Card className='flex flex-col gap-3 p-4'>
           <div className='flex items-center gap-3'>
-            <p className='w-56 font-medium'>Start</p>
+            <p className='w-32 font-medium'>Start</p>
             <DatePicker
               date={startDate}
               onDateChange={setStartDate}
@@ -159,7 +176,7 @@ export const CreateEventForm = () => {
             <TimePicker date={startDate} onTimeChange={handleTimeChange} setDate={setStartDate} />
           </div>
           <div className='flex items-center gap-3'>
-            <p className='w-56 font-medium'>End</p>
+            <p className='w-32 font-medium'>End</p>
             <DatePicker
               date={endDate}
               onDateChange={setEndDate}
@@ -177,13 +194,43 @@ export const CreateEventForm = () => {
             <TimePicker date={endDate} onTimeChange={handleTimeChange} setDate={setEndDate} />
           </div>
         </Card>
-        <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
-          <MapPin size={18} className='mt-0.5 text-muted-foreground' />
-          <div className='flex flex-col'>
-            <p className='font-medium'>Add Event Location</p>
-            <p className='text-muted-foreground text-sm'>Online or Offline Event</p>
-          </div>
-        </Card>
+
+        {watch('location') && locationDetail ? (
+          <>
+            <Card className='flex gap-3 p-4'>
+              <MapPin size={18} className='mt-0.5 text-muted-foreground' />
+              <div className='flex flex-col'>
+                <p className='font-medium'>{locationDetail.name}</p>
+                <p className='text-muted-foreground text-sm'>
+                  {locationDetail.formatted_address.replace(locationDetail.name + ', ', '')}
+                </p>
+              </div>
+              <X
+                size={18}
+                className='text-muted-foreground cursor-pointer ml-auto'
+                onClick={() => setValue('location', defaultLocationValues)}
+              />
+            </Card>
+            <GoongMap
+              center={[locationDetail?.geometry.location.lng || 0, locationDetail?.geometry.location.lat || 0]}
+            />
+          </>
+        ) : (
+          <MapDialog<FormValues>
+            asChild={false}
+            name='location.id'
+            trigger={
+              <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
+                <MapPin size={18} className='mt-0.5 text-muted-foreground' />
+                <div className='flex flex-col'>
+                  <p className='font-medium'>Add Event Location</p>
+                  <p className='text-muted-foreground text-sm'>Online or Offline Event</p>
+                </div>
+              </Card>
+            }
+          />
+        )}
+
         <Dialog>
           <DialogTrigger>
             <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
@@ -198,7 +245,7 @@ export const CreateEventForm = () => {
             </DialogHeader>
             <FormField
               control={control}
-              name='eventDescription'
+              name='description'
               render={({ field: { onChange } }) => (
                 <FormItem>
                   <FormControl>
@@ -223,9 +270,9 @@ export const CreateEventForm = () => {
               <Ticket size={18} className='text-muted-foreground' />
               <p className='font-medium'>Tickets</p>
             </div>
-            <FormField
+            {/* <FormField
               control={control}
-              name='eventTicketType'
+              name='isFree'
               render={({ field }) => (
                 <FormItem>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -251,8 +298,20 @@ export const CreateEventForm = () => {
                   </Select>
                 </FormItem>
               )}
+            /> */}
+            {/* TODO: Change this to select (Free, Paid) */}
+            <FormField
+              control={control}
+              name='isFree'
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} aria-readonly />
+                  </FormControl>
+                </FormItem>
+              )}
             />
-            {/* TODO: Add the input for fee event ticket type */}
+            {/* TODO: Add the input for paid event ticket type */}
           </div>
           <Separator className='my-1' />
           <div className='flex items-center justify-between'>
@@ -262,7 +321,7 @@ export const CreateEventForm = () => {
             </div>
             <FormField
               control={control}
-              name='eventApprovalRequired'
+              name='requiresApproval'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -281,7 +340,7 @@ export const CreateEventForm = () => {
             </div>
             <FormField
               control={control}
-              name='eventCapacity'
+              name='capacity'
               render={({ field }) => (
                 <FormItem>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -311,3 +370,5 @@ export const CreateEventForm = () => {
     </>
   )
 }
+
+export default CreateEventForm

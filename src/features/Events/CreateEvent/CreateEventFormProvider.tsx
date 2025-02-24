@@ -1,16 +1,17 @@
+import CreateEventForm from './CreateEventForm'
 import { Form } from 'src/components/ui/form'
-import { CreateEventForm } from './CreateEventForm'
 import { FormValues, useCreateEvent } from './useCreateEvent'
 import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { EventCoverForm } from './EventCoverForm'
 import { CircleCheckBig } from 'lucide-react'
+import { toSlug } from 'src/utils/utils'
 
 export const CreateEventFormProvider = () => {
   const { methods } = useCreateEvent()
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data)
+    console.log({ ...data, slug: toSlug(data.title, false) || '' })
   }
 
   return (

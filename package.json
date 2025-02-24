@@ -11,6 +11,7 @@
     "eslint-inspector": "npx @eslint/config-inspector@latest"
   },
   "dependencies": {
+    "@goongmaps/goong-js": "^1.0.9",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.6",
@@ -67,6 +68,7 @@
     "tailwind-merge": "^3.0.1",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
+    "use-debounce": "^10.0.4",
     "uuid": "^10.0.0",
     "vaul": "^1.1.2",
     "yup": "^1.4.0",

@@ -65,7 +65,7 @@ const NavBar = () => {
       </div>
 
       <div className='flex items-center gap-4'>
-        <Button size='sm' className='text-white' onClick={() => navigate('/events/create')}>
+        <Button size='sm' className='text-white z-10' onClick={() => navigate('/events/create')}>
           Create Event
         </Button>
         <Bell size={16} />

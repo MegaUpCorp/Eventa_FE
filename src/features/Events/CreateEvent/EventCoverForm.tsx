@@ -18,7 +18,7 @@ export const EventCoverForm = () => {
       return
     }
     // TODO: Call API to upload the file then set the value
-    setValue('eventCover', URL.createObjectURL(acceptedFiles[0]))
+    setValue('profilePicture', URL.createObjectURL(acceptedFiles[0]))
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -35,7 +35,7 @@ export const EventCoverForm = () => {
       <div className='rounded-lg overflow-hidden'>
         <FormField
           control={control}
-          name='eventCover'
+          name='profilePicture'
           render={({ field: { value } }) => (
             <FormItem>
               <FormControl>
