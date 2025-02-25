@@ -6,9 +6,11 @@ import {
   CalendarDetailPage,
   CalendarPage,
   EventCreation,
-  EventDetailPageUser,
+  EventList,
+  // EventDetailPageUser,
   HomePageUser,
-  MePage
+  MePage,
+
 } from 'src/pages'
 
 type RouteType = {
@@ -26,9 +28,13 @@ const publicRoutes: RouteType[] = [
     element: <AccountVerification />
   },
   {
-    path: 'events/event-detail',
-    element: <EventDetailPageUser />
+    path: "events",
+    element: <EventList />
   },
+  // {
+  //   path: 'events/event-detail',
+  //   element: <EventDetailPageUser />
+  // },
   {
     path: '/calendars/:id',
     element: <CalendarDetailPage />

@@ -9,6 +9,7 @@ type ImgProps = React.DetailedHTMLProps<
     className: string
     src: string
     alt: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     register: UseFormRegister<any>
   }>
 
