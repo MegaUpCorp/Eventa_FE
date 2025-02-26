@@ -16,5 +16,9 @@ export const useSignUp = () => {
     mutationFn: authAPI.sendVerificationEmail
   })
 
-  return { emailMethods, accountInfoMethods, verifyEmailMutation }
+  const verifyTokenMutation = useMutation({
+    mutationFn: authAPI.verifyToken
+  })
+
+  return { emailMethods, accountInfoMethods, verifyEmailMutation, verifyTokenMutation }
 }
