@@ -22,7 +22,12 @@ export default function DatePicker({
   const [isOpen, setIsOpen] = useState(false)
 
   const calendarComponent = (
-    <Calendar mode='single' selected={date} onSelect={(day) => day && onDateChange(day)} initialFocus />
+    <Calendar
+      disabled={{ before: new Date() }}
+      mode='single'
+      selected={date}
+      onSelect={(day) => day && onDateChange(day)}
+    />
   )
 
   return usePopover ? (

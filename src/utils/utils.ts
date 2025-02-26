@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios'
 // import { RegisterSucces } from 'src/@types/event.type'
 import { ErrorResponse } from 'src/@types/utils.type'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
+import { FieldErrors, Path } from 'react-hook-form'
 
 type ResponsePaymentEvent = {
   url: string
@@ -13,29 +14,17 @@ export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
 }
 
-export function isAxiosUnprocessableEntityError<FormError>(
-  error: unknown
-): error is AxiosError<FormError> {
-  return (
-    isAxiosError(error) &&
-    error.response?.status === HttpStatusCode.UnprocessableEntity
-  )
+export function isAxiosUnprocessableEntityError<FormError>(error: unknown): error is AxiosError<FormError> {
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
 }
 
-export function isAxiosUnauthorized<FormError>(
-  error: unknown
-): error is AxiosError<FormError> {
-  return (
-    isAxiosError(error) &&
-    error.response?.status === HttpStatusCode.Unauthorized
-  )
+export function isAxiosUnauthorized<FormError>(error: unknown): error is AxiosError<FormError> {
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
 }
 
 export type NoNullable<T> = Exclude<T, undefined | null>
 
-export function isResponseNoFormHasPaymentType(
-  obj: object
-): obj is ResponsePaymentEvent {
+export function isResponseNoFormHasPaymentType(obj: object): obj is ResponsePaymentEvent {
   return 'url' in obj && typeof 'url' === 'string'
 }
 
@@ -53,12 +42,9 @@ export function isResponseNoFormHasPaymentType(
 //   )
 // }
 
-export function isAxiosErrorConflictAndNotPermisson<T>(
-  error: unknown
-): error is AxiosError<T> {
+export function isAxiosErrorConflictAndNotPermisson<T>(error: unknown): error is AxiosError<T> {
   return (
-    (isAxiosError(error) &&
-      error.response?.status === HttpStatusCode.Forbidden) ||
+    (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) ||
     (isAxiosError(error) && error.response?.status === HttpStatusCode.Conflict)
   )
 }
@@ -95,40 +81,70 @@ function convertToDate(dateString: string): Date {
   return new Date(year, month - 1, day)
 }
 
-export function isValidToFeeback(
-  date_event: string,
-  time_end: string
-): boolean {
-  const timeEvent = dayjs(
-    date_event.split('/').reverse().join('/') + ' ' + time_end
-  ).format('YYYY-MM-DD HH:mm')
+export function isValidToFeeback(date_event: string, time_end: string): boolean {
+  const timeEvent = dayjs(date_event.split('/').reverse().join('/') + ' ' + time_end).format('YYYY-MM-DD HH:mm')
   const nowDate = dayjs(new Date()).format('YYYY-MM-DD HH:mm')
   return dayjs(timeEvent).valueOf() - dayjs(nowDate).valueOf() <= 15 * 60 * 1000
 }
 
 export function isUnAuthorized<T>(error: unknown): error is AxiosError<T> {
-  return (
-    isAxiosError(error) &&
-    error.response?.status === HttpStatusCode.Unauthorized
-  )
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
 }
 
-export function isAxiosErrorJWTExpired(
-  error: unknown
-): error is AxiosError<ErrorResponse<{}>> {
-  return (
-    isUnAuthorized<ErrorResponse<{}>>(error) &&
-    error.response?.data.message === 'Jwt token expired'
-  )
+export function isAxiosErrorJWTExpired(error: unknown): error is AxiosError<ErrorResponse<{}>> {
+  return isUnAuthorized<ErrorResponse<{}>>(error) && error.response?.data.message === 'Jwt token expired'
 }
 
-export function isCanSeeOTPCheckIn(
-  dateEvent: string,
-  timeStart: string
-): boolean {
-  const timeEvent = dayjs(
-    dateEvent.split('/').reverse().join('/') + ' ' + timeStart
-  ).format('YYYY-MM-DD HH:mm')
+export function isCanSeeOTPCheckIn(dateEvent: string, timeStart: string): boolean {
+  const timeEvent = dayjs(dateEvent.split('/').reverse().join('/') + ' ' + timeStart).format('YYYY-MM-DD HH:mm')
   const nowDate = dayjs(new Date()).format('YYYY-MM-DD HH:mm')
   return -dayjs(timeEvent).minute() + dayjs(nowDate).minute() >= 60
+}
+
+/**
+ * Hàm nhận chuỗi xong tạo ra slug cho URL
+ * @param text : string
+ * @example
+ * const slug = toSlug("Em yêu lập trình!")
+ * @returns string - "em-yeu-lap-trinh-356231061"
+ * @author DanhYeuLapTrinh
+ * @version 1.0.0.0
+ */
+export const toSlug = (inputStr: string, noNumber: boolean) => {
+  if (inputStr) {
+    // Chuyển hết sang chữ thường
+    inputStr = inputStr.toLowerCase()
+
+    // xóa dấu
+    inputStr = inputStr
+      .normalize('NFD') // chuyển chuỗi sang unicode tổ hợp
+      .replace(/[\u0300-\u036f]/g, '') // xóa các ký tự dấu sau khi tách tổ hợp
+
+    // Thay ký tự đĐ
+    inputStr = inputStr.replace(/[đĐ]/g, 'd')
+
+    // Xóa ký tự đặc biệt
+    inputStr = inputStr.replace(/([^0-9a-z-\s])/g, '')
+
+    // Xóa khoảng trắng thay bằng ký tự -
+    inputStr = inputStr.replace(/(\s+)/g, '-')
+
+    // Xóa ký tự - liên tiếp
+    inputStr = inputStr.replace(/-+/g, '-')
+
+    // xóa phần dư - ở đầu & cuối
+    inputStr = inputStr.replace(/^-+|-+$/g, '')
+
+    if (noNumber) {
+      return inputStr
+    } else {
+      const randomNumber = Math.floor(Math.random() * 1000000000)
+      inputStr = `${inputStr}-${randomNumber}`
+      return inputStr
+    }
+  }
+}
+
+export const isFormError = <T>(errors: FieldErrors, name: Path<T>) => {
+  return errors[name] !== undefined
 }

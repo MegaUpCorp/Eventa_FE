@@ -1,4 +1,4 @@
-import authService from 'src/services/AuthService'
+import authAPI from 'src/apis/api.auth'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -17,7 +17,7 @@ export const useSignIn = () => {
   })
 
   const loginMutation = useMutation({
-    mutationFn: authService.login,
+    mutationFn: authAPI.login,
     onSuccess: () => {
       setIsOpenDialog(false)
       return toast({

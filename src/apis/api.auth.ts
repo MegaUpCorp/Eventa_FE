@@ -1,24 +1,10 @@
-import { ItemBaseResponse, ListBaseResponse } from "src/@types/response";
-import { SignInSchema } from "src/schemas/authSchema";
-import http from "src/utils/http";
-import { RegisterSchema } from "src/utils/rules";
+import http from 'src/utils/http'
+import { ItemBaseResponse } from 'src/@types/response'
+import { LoginAPIResponse } from 'src/@types/users.type'
+import { SignInSchema } from 'src/schemas/authSchema'
 
 const authAPI = {
-  login: (body: SignInSchema) =>
-    http.post<
-      ItemBaseResponse<{
-        data: { accessToken: string; refreshToken: string }
-        message: string
-      }>
-    >('api/Account/login', body),
-  // loginGoogle: (body: LoginGoogleBody) =>
-  //   http.post<
-  //     ItemBaseResponse<{
-  //       data: { accessToken: string; refreshToken: string }
-  //       message: string
-  //     }>
-  //   >('api/auth/login/google', body),
-  // register: (body: Omit<RegisterSchema, 'confirmPassword'>) =>
-  //   http.post<ListBaseResponse<{}>>('api/auth/register', body),
-  // logout: (body: { token: string }) => http.post<ListBaseResponse<{ message: string }>>('api/auth/logout', body)
+  login: (body: SignInSchema) => http.post<ItemBaseResponse<LoginAPIResponse>>('accounts/login', body)
 }
+
+export default authAPI

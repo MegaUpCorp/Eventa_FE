@@ -101,11 +101,22 @@ html {
   padding: 0px;
 }
 
+.tiptap hr {
+  margin: 30px 0;
+}
+
+.tiptap blockquote {
+  border-left: 3px solid hsl(var(--accent));
+  margin: 1rem 0.5rem;
+  padding-left: 1rem;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
 .tiptap p {
-  margin: 10px auto;
+  margin: 1rem 0;
   font-size: 1rem;
-  line-height: 1;
-  margin: 0.75em 0;
+  line-height: 1.5;
 }
 
 .tiptap a {
@@ -159,7 +170,7 @@ html {
   content: '•';
   position: absolute;
   left: 0;
-  top: 0.3em;
+  top: -5px;
   font-weight: bolder;
 }
 
@@ -180,8 +191,7 @@ html {
   counter-increment: list-counter;
   position: absolute;
   left: 0;
-  top: 0.35em;
-  font-weight: bolder;
+  top: -4px;
 }
 
 .tiptap img {
