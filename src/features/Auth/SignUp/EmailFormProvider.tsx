@@ -8,11 +8,12 @@ import { useSignUp } from './useSignUp'
 
 export const EmailFormProvider = () => {
   const { setState } = useAuthStore()
-  const { emailMethods } = useSignUp()
+  const { emailMethods, verifyEmailMutation } = useSignUp()
 
   const onSubmit: SubmitHandler<EmailSchema> = (data) => {
-    console.log(data)
-    setState('check-email')
+    verifyEmailMutation.mutateAsync(data.email).then(() => {
+      setState('check-email')
+    })
   }
 
   return (
@@ -31,7 +32,7 @@ export const EmailFormProvider = () => {
             </FormItem>
           )}
         />
-        <Button type='submit' className='w-full text-white'>
+        <Button type='submit' className='w-full text-white' isLoading={verifyEmailMutation.isPending}>
           Continue with Email
         </Button>
       </form>
