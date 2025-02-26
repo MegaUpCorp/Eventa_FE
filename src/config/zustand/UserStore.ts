@@ -14,7 +14,10 @@ export const useUserStore = create<UserStoreState>()(
       isAuthenticated: false,
       token: '',
       login: (accessToken) => set({ isAuthenticated: true, token: accessToken }),
-      logout: () => set({ isAuthenticated: false, token: '' })
+      logout: () => {
+        localStorage.clear()
+        return set({ isAuthenticated: false, token: '' })
+      }
     }),
     {
       name: 'auth-storage',

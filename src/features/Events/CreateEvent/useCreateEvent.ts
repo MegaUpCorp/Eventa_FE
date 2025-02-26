@@ -1,39 +1,12 @@
+import eventAPI from 'src/apis/api.event'
+import { useMutation } from '@tanstack/react-query'
 import { addHours } from 'date-fns'
 import { useForm } from 'react-hook-form'
+import { createEventSchema, CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useLocalStorage } from 'src/hooks/useLocalStorage'
 
-// TODO: Change this later after defining yup schema
-export type FormValues = {
-  calendarId: string
-  visibility: string
-  title: string
-  startDate: string
-  endDate: string
-  isOnline: boolean
-  location: {
-    id: string
-    name: string
-    address: string
-    lat: number
-    lng: number
-  }
-  meetUrl: string
-  description: string
-  isFree: boolean
-  requiresApproval: boolean
-  capacity: string
-  slug: string
-  profilePicture: string
-}
-
-export const defaultLocationValues = {
-  id: '',
-  name: '',
-  address: '',
-  lat: 0,
-  lng: 0
-}
-
-const defaultValues = {
+const defaultValues: Partial<CreateEventSchema> = {
   calendarId: 'pc',
   visibility: 'public',
   title: '',
@@ -42,8 +15,9 @@ const defaultValues = {
   isOnline: false,
   location: defaultLocationValues,
   meetUrl: '',
-  description: '',
   isFree: true,
+  type: 'free',
+  price: 0,
   requiresApproval: false,
   capacity: '50',
   slug: '',
@@ -51,9 +25,26 @@ const defaultValues = {
 }
 
 export const useCreateEvent = () => {
-  const methods = useForm<FormValues>({
-    defaultValues
+  const [description] = useLocalStorage('event-desc', '')
+  const methods = useForm<CreateEventSchema>({
+    defaultValues: {
+      ...defaultValues,
+      description
+    },
+    resolver: yupResolver(createEventSchema)
   })
 
-  return { methods }
+  const createEventMutation = useMutation({
+    mutationFn: eventAPI.createEvent,
+    onSuccess: () => {
+      // TODO: Redirect to the event page management
+      methods.reset()
+      localStorage.removeItem('event-desc')
+    },
+    onError: () => {
+      // TODO: Handle error
+    }
+  })
+
+  return { methods, createEventMutation }
 }

@@ -4,7 +4,19 @@ import MapDialog from 'src/components/Goong/MapDialog'
 import TimePicker from 'src/components/TimePicker'
 import Tiptap from 'src/components/TipTap/TipTap'
 import { addHours, format } from 'date-fns'
-import { CalendarIcon, Database, Globe, GlobeLock, MapPin, NotepadText, Ticket, UserRoundCheck, X } from 'lucide-react'
+import {
+  CalendarIcon,
+  CircleDollarSign,
+  Database,
+  DoorOpen,
+  Globe,
+  GlobeLock,
+  MapPin,
+  NotepadText,
+  Ticket,
+  UserRoundCheck,
+  X
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
@@ -25,11 +37,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 's
 import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
 import { cn } from 'src/lib/utils'
-import { defaultLocationValues, FormValues } from './useCreateEvent'
 import { useGetLocation } from 'src/features/Map/useGetLocation'
+import { ScrollArea } from 'src/components/ui/scroll-area'
+import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
+import { isFormError } from 'src/utils/utils'
 
 const CreateEventForm = () => {
-  const { control, watch, setValue } = useFormContext<FormValues>()
+  const {
+    control,
+    formState: { errors },
+    watch,
+    setValue,
+    setError,
+    clearErrors
+  } = useFormContext<CreateEventSchema>()
   const [startDate, setStartDate] = useState<Date>(new Date())
   const [endDate, setEndDate] = useState<Date>(addHours(new Date(), 1))
 
@@ -76,6 +97,21 @@ const CreateEventForm = () => {
     setValue('startDate', startDate.toISOString())
     setValue('endDate', endDate.toISOString())
   }, [startDate, endDate])
+
+  const type = watch('type')
+  const price = watch('price')
+  const location = watch('location')
+  const meetUrl = watch('meetUrl')
+
+  useEffect(() => {
+    setValue('isFree', type === 'free')
+    setValue('isOnline', !location.id && meetUrl !== '')
+    if (type === 'paid' && !price) {
+      setError('price', { type: 'required', message: 'Please enter a price' })
+    } else {
+      clearErrors('price')
+    }
+  }, [type, location, meetUrl, price])
 
   return (
     <>
@@ -148,7 +184,10 @@ const CreateEventForm = () => {
                 {...field}
                 placeholder='Enter event name'
                 autoFocus
-                className='border-none p-0 focus-visible:ring-0 placeholder:text-4xl placeholder:font-semibold h-20 md:text-4xl font-semibold'
+                className={cn(
+                  'border-none p-0 focus-visible:ring-0 placeholder:text-4xl placeholder:font-semibold my-4 h-14 md:text-4xl font-semibold',
+                  isFormError<CreateEventSchema>(errors, 'title') && 'placeholder:text-[#ff000059] bg-[#ff000013]'
+                )}
                 spellCheck={false}
               />
             </FormControl>
@@ -216,11 +255,16 @@ const CreateEventForm = () => {
             />
           </>
         ) : (
-          <MapDialog<FormValues>
+          <MapDialog<CreateEventSchema>
             asChild={false}
             name='location.id'
             trigger={
-              <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
+              <Card
+                className={cn(
+                  'flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer',
+                  isFormError<CreateEventSchema>(errors, 'location') && 'border-[#ff000059] border-2'
+                )}
+              >
                 <MapPin size={18} className='mt-0.5 text-muted-foreground' />
                 <div className='flex flex-col'>
                   <p className='font-medium'>Add Event Location</p>
@@ -233,7 +277,12 @@ const CreateEventForm = () => {
 
         <Dialog>
           <DialogTrigger>
-            <Card className='flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer'>
+            <Card
+              className={cn(
+                'flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer',
+                isFormError<CreateEventSchema>(errors, 'description') && 'border-[#ff000059] border-2'
+              )}
+            >
               <NotepadText size={18} className='mt-0.5 text-muted-foreground' />
               <p className='font-medium'>Add Event Description</p>
             </Card>
@@ -243,17 +292,19 @@ const CreateEventForm = () => {
               <DialogTitle>Event Description</DialogTitle>
               <DialogDescription>Overview of the event</DialogDescription>
             </DialogHeader>
-            <FormField
-              control={control}
-              name='description'
-              render={({ field: { onChange } }) => (
-                <FormItem>
-                  <FormControl>
-                    <Tiptap onChange={onChange} className='min-h-40' lsSectionName='event-desc' />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <ScrollArea className='min-h-40 max-h-96'>
+              <FormField
+                control={control}
+                name='description'
+                render={({ field: { onChange } }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Tiptap onChange={onChange} className='w-[448px] h-full' lsSectionName='event-desc' />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </ScrollArea>
             <DialogFooter>
               <DialogClose asChild>
                 <Button type='button' variant='secondary'>
@@ -270,9 +321,9 @@ const CreateEventForm = () => {
               <Ticket size={18} className='text-muted-foreground' />
               <p className='font-medium'>Tickets</p>
             </div>
-            {/* <FormField
+            <FormField
               control={control}
-              name='isFree'
+              name='type'
               render={({ field }) => (
                 <FormItem>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -288,32 +339,21 @@ const CreateEventForm = () => {
                           <p className='font-semibold text-muted-foreground'>Free</p>
                         </div>
                       </SelectItem>
-                      <SelectItem value='fee'>
+                      <SelectItem value='paid'>
                         <div className='flex'>
                           <CircleDollarSign size={18} className='text-muted-foreground mr-2' />
-                          <p className='font-semibold text-muted-foreground'>Fee</p>
+                          <p className='font-semibold text-muted-foreground'>Paid</p>
                         </div>
                       </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
               )}
-            /> */}
-            {/* TODO: Change this to select (Free, Paid) */}
-            <FormField
-              control={control}
-              name='isFree'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} aria-readonly />
-                  </FormControl>
-                </FormItem>
-              )}
             />
+            {isFormError<CreateEventSchema>(errors, 'price') && 'Please enter price'}
             {/* TODO: Add the input for paid event ticket type */}
           </div>
-          <Separator className='my-1' />
+          <Separator />
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <UserRoundCheck size={18} className='text-muted-foreground' />
@@ -332,7 +372,7 @@ const CreateEventForm = () => {
             />
             {/* TODO: Add the input for fee event ticket type */}
           </div>
-          <Separator className='my-1' />
+          <Separator />
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <Database size={18} className='text-muted-foreground' />

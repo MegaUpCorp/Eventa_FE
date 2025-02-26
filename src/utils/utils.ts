@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios'
 // import { RegisterSucces } from 'src/@types/event.type'
 import { ErrorResponse } from 'src/@types/utils.type'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
+import { FieldErrors, Path } from 'react-hook-form'
 
 type ResponsePaymentEvent = {
   url: string
@@ -104,7 +105,7 @@ export function isCanSeeOTPCheckIn(dateEvent: string, timeStart: string): boolea
  * Hàm nhận chuỗi xong tạo ra slug cho URL
  * @param text : string
  * @example
- * const slug = getFirstPTag("Em yêu lập trình!")
+ * const slug = toSlug("Em yêu lập trình!")
  * @returns string - "em-yeu-lap-trinh-356231061"
  * @author DanhYeuLapTrinh
  * @version 1.0.0.0
@@ -142,4 +143,8 @@ export const toSlug = (inputStr: string, noNumber: boolean) => {
       return inputStr
     }
   }
+}
+
+export const isFormError = <T>(errors: FieldErrors, name: Path<T>) => {
+  return errors[name] !== undefined
 }
