@@ -8,12 +8,7 @@ export const defaultLocationValues = {
   lng: 0
 }
 
-export const createEventSchema = yup.object().shape({
-  calendarId: yup.string().required('Please select a calendar'),
-  visibility: yup.string().oneOf(['public', 'private']).required('Please select visibility').default('public'),
-  title: yup.string().required('Please enter a title'),
-  startDate: yup.string().required('Please select a start date'),
-  endDate: yup.string().required('Please select an end date'),
+export const locationSchema = yup.object().shape({
   location: yup
     .object()
     .required()
@@ -23,7 +18,15 @@ export const createEventSchema = yup.object().shape({
       address: yup.string().required('Please enter a location address'),
       lat: yup.number().required('Please enter a location latitude'),
       lng: yup.number().required('Please enter a location longitude')
-    }),
+    })
+})
+
+const eventDetailSchema = yup.object().shape({
+  calendarId: yup.string().required('Please select a calendar'),
+  visibility: yup.string().oneOf(['public', 'private']).required('Please select visibility').default('public'),
+  title: yup.string().required('Please enter a title'),
+  startDate: yup.string().required('Please select a start date'),
+  endDate: yup.string().required('Please select an end date'),
   isOnline: yup
     .boolean()
     .required()
@@ -54,5 +57,7 @@ export const createEventSchema = yup.object().shape({
   slug: yup.string().notRequired().default(''),
   profilePicture: yup.string().required('Please upload a profile picture')
 })
+
+export const createEventSchema = eventDetailSchema.concat(locationSchema)
 
 export type CreateEventSchema = yup.InferType<typeof createEventSchema>

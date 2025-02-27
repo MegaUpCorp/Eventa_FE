@@ -61,7 +61,7 @@ export const EventCoverForm = () => {
                   <Card
                     className={cn(
                       'flex justify-center items-center h-80 border-dashed border-2',
-                      isFormError<CreateEventSchema>(errors, 'profilePicture') && 'border-[#ff000059] border-2'
+                      isFormError(errors, 'profilePicture') && 'border-[#ff000059] border-2'
                     )}
                     {...getRootProps()}
                   >

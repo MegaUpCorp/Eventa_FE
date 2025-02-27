@@ -186,7 +186,7 @@ const CreateEventForm = () => {
                 autoFocus
                 className={cn(
                   'border-none p-0 focus-visible:ring-0 placeholder:text-4xl placeholder:font-semibold my-4 h-14 md:text-4xl font-semibold',
-                  isFormError<CreateEventSchema>(errors, 'title') && 'placeholder:text-[#ff000059] bg-[#ff000013]'
+                  isFormError(errors, 'title') && 'placeholder:text-[#ff000059] bg-[#ff000013]'
                 )}
                 spellCheck={false}
               />
@@ -262,7 +262,7 @@ const CreateEventForm = () => {
               <Card
                 className={cn(
                   'flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer',
-                  isFormError<CreateEventSchema>(errors, 'location') && 'border-[#ff000059] border-2'
+                  isFormError(errors, 'location') && 'border-[#ff000059] border-2'
                 )}
               >
                 <MapPin size={18} className='mt-0.5 text-muted-foreground' />
@@ -280,7 +280,7 @@ const CreateEventForm = () => {
             <Card
               className={cn(
                 'flex gap-3 p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer',
-                isFormError<CreateEventSchema>(errors, 'description') && 'border-[#ff000059] border-2'
+                isFormError(errors, 'description') && 'border-[#ff000059] border-2'
               )}
             >
               <NotepadText size={18} className='mt-0.5 text-muted-foreground' />
@@ -350,7 +350,7 @@ const CreateEventForm = () => {
                 </FormItem>
               )}
             />
-            {isFormError<CreateEventSchema>(errors, 'price') && 'Please enter price'}
+            {isFormError(errors, 'price') && 'Please enter price'}
             {/* TODO: Add the input for paid event ticket type */}
           </div>
           <Separator />
