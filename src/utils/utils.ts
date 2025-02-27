@@ -4,7 +4,7 @@ import axios, { AxiosError } from 'axios'
 // import { RegisterSucces } from 'src/@types/event.type'
 import { ErrorResponse } from 'src/@types/utils.type'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
-import { FieldErrors, Path } from 'react-hook-form'
+import { FieldErrors } from 'react-hook-form'
 
 type ResponsePaymentEvent = {
   url: string
@@ -145,6 +145,6 @@ export const toSlug = (inputStr: string, noNumber: boolean) => {
   }
 }
 
-export const isFormError = <T>(errors: FieldErrors, name: Path<T>) => {
-  return errors[name] !== undefined
+export const isFormError = <T extends FieldErrors>(errors: T, name: keyof T) => {
+  return Boolean(errors[name])
 }

@@ -1,5 +1,6 @@
-import CalendarProfileForm from './CalendarProfileForm'
+import MapInputCard from 'src/components/Goong/MapInputCard'
 import CalendarCoverForm from './CalendarCoverForm'
+import CalendarProfileForm from './CalendarProfileForm'
 import { useFormContext } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
@@ -7,14 +8,20 @@ import { FormControl, FormField, FormItem } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
 import { Separator } from 'src/components/ui/separator'
 import { Textarea } from 'src/components/ui/textarea'
+import { CreateCalendarSchema } from 'src/schemas/calendarSchema'
 import { ColorPicker, ColorPickerItem, colors } from './ColorPicker'
-import { CreateCalendarFormValues } from './useCreateCalendar'
+import { cn } from 'src/lib/utils'
+import { isFormError } from 'src/utils/utils'
 
 const CreateCalendarForm = () => {
-  const { control } = useFormContext<CreateCalendarFormValues>()
+  const {
+    control,
+    formState: { errors },
+    watch
+  } = useFormContext<CreateCalendarSchema>()
 
   return (
-    <div className='flex flex-col gap-5'>
+    <div className='flex flex-col gap-5 relative'>
       <Card className='relative'>
         <CalendarCoverForm />
         <CalendarProfileForm />
@@ -22,14 +29,17 @@ const CreateCalendarForm = () => {
         <div className='p-4 space-y-2 mt-6'>
           <FormField
             control={control}
-            name='calendarName'
+            name='name'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input
                     placeholder='Enter Calendar name'
                     autoFocus
-                    className='border-none p-0 focus-visible:ring-0 placeholder:text-3xl placeholder:font-semibold md:text-3xl font-semibold'
+                    className={cn(
+                      'border-none p-0 focus-visible:ring-0 placeholder:text-3xl placeholder:font-semibold md:text-3xl font-semibold',
+                      isFormError(errors, 'name') && 'placeholder:text-[#ff000059] bg-[#ff000013]'
+                    )}
                     {...field}
                   />
                 </FormControl>
@@ -39,7 +49,7 @@ const CreateCalendarForm = () => {
           <Separator />
           <FormField
             control={control}
-            name='calendarDescription'
+            name='description'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -61,7 +71,7 @@ const CreateCalendarForm = () => {
             <p className='font-semibold text-muted-foreground'>Color</p>
             <FormField
               control={control}
-              name='calendarColor'
+              name='color'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -77,7 +87,7 @@ const CreateCalendarForm = () => {
             <p className='font-semibold text-muted-foreground mt-4'>Calendar URL</p>
             <FormField
               control={control}
-              name='calendarPublicUrl'
+              name='publicUrl'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -100,8 +110,15 @@ const CreateCalendarForm = () => {
             />
           </div>
           <div className='flex flex-col gap-2 w-1/2'>
-            <p className='font-semibold text-muted-foreground'>Location</p>
-            <Card className='min-h-40 p-4'>Insert Map Here!</Card>
+            <p
+              className={cn(
+                'font-semibold text-muted-foreground',
+                !watch('location').id && isFormError(errors, 'name') && 'text-[#ff000059] bg-[#ff000013] rounded-md p-1'
+              )}
+            >
+              Location
+            </p>
+            <MapInputCard<CreateCalendarSchema> className='h-40' name='location' valueName='location.id' />
           </div>
         </div>
       </Card>
