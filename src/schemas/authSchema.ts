@@ -23,7 +23,6 @@ const registerInfoSchema = yup.object().shape({
   avatar: yup.string().optional().default(''),
   accountName: yup.string().required('Please enter your account name')
 })
-
 export const signInSchema = emailSchema.concat(passwordSchema)
 export const signUpSchema = registerInfoSchema.concat(strongPasswordSchema)
 
