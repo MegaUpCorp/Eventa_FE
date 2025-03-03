@@ -108,7 +108,15 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
   }
 
   return (
-    <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
+    <Dialog
+      open={isOpenDialog}
+      onOpenChange={(open) => {
+        if (!open) {
+          resetDialog()
+        }
+        setIsOpenDialog(open)
+      }}
+    >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='[&>button]:hidden min-h-72 max-w-96'>
         <VisuallyHidden>

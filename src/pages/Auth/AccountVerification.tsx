@@ -1,22 +1,24 @@
 import { useEffect } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { useAuthStore } from 'src/config/zustand/AuthStore'
+import { useSignUp } from 'src/features/Auth/SignUp/useSignUp'
 
 const AccountVerification = () => {
   const { setIsOpenDialog, setState } = useAuthStore()
+  const { verifyTokenMutation } = useSignUp()
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
 
   useEffect(() => {
     if (!token) return
 
-    // TODO: Call API to verify the token
-    const isValid = true
-
-    if (isValid) {
-      setState('enter-information')
-      setIsOpenDialog(true)
-    }
+    verifyTokenMutation.mutateAsync(token).then(({ data }) => {
+      if (data) {
+        setState('enter-information')
+        setIsOpenDialog(true)
+        localStorage.setItem('token', JSON.stringify({ token }))
+      }
+    })
   }, [token, setState, setIsOpenDialog])
 
   if (!token) {
