@@ -4,7 +4,7 @@ type Width = 780 | 820 | 960
 
 const smWidthRoutes = [''] // 780px
 
-const lgWidthRoutes = ['/', '/events/create','/events'] // 960px
+const lgWidthRoutes = ['/', '/events/create'] // 960px
 
 const lgWidthRegex = [/^\/calendars\/\d+$/]
 

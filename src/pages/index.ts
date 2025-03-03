@@ -1,4 +1,5 @@
-export { default as HomePageUser } from './User/HomePage'
+export { default as HomePageUser } from './Landing/HomePage'
+export { default as DiscoverPage } from './Landing/DiscoverPage'
 export { default as EventDetailPageUser } from './User/EventDetailPage'
 export { default as CalendarCreation } from './Calendar/CalendarCreation'
 export { default as EventCreation } from './Event/EventCreation'

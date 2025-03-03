@@ -85,10 +85,10 @@ const EventList: React.FC = () => {
   const groupedPastEvents = groupEventsByDate(pastEvents)
 
   return (
-    <div className='container-lg p-4 mx-auto text-white'>
+    <div className='container-base p-4 mx-auto text-white'>
       <Tabs defaultValue='upcoming'>
         <div className='flex flex-row justify-between items-center mb-6'>
-          <h2 className='text-2xl font-bold mb-4'>Events</h2>
+          <h2 className='text-3xl font-semibold mb-4'>Events</h2>
           <TabsList>
             <TabsTrigger value='upcoming'>Upcoming</TabsTrigger>
             <TabsTrigger value='past'>Past</TabsTrigger>
