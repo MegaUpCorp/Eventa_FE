@@ -44,14 +44,14 @@ const CalendarCoverForm = () => {
               <div className='flex justify-end items-start h-48 relative' {...getRootProps()}>
                 <img src={value} className='w-full h-full object-cover rounded-t-lg cursor-pointer' />
                 <input {...getInputProps()} />
-                <Button variant='secondary' className='absolute top-3 right-3' isLoading={isPending}>
+                <Button type='button' variant='secondary' className='absolute top-3 right-3' isLoading={isPending}>
                   Change cover
                 </Button>
               </div>
             ) : (
               <div className='flex justify-end items-start h-48 rounded-t-lg cursor-pointer' {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Button variant='secondary' className='mt-3 mr-3' isLoading={isPending}>
+                <Button type='button' variant='secondary' className='mt-3 mr-3' isLoading={isPending}>
                   Change cover
                 </Button>
               </div>
