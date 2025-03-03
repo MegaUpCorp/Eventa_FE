@@ -130,7 +130,7 @@ export const AccountInfoFormProvider = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      type='Password'
+                      type='password'
                       placeholder='Password'
                       {...field}
                       spellCheck={false}
