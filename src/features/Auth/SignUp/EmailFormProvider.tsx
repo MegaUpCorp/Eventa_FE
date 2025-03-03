@@ -11,7 +11,7 @@ export const EmailFormProvider = () => {
   const { emailMethods, verifyEmailMutation } = useSignUp()
 
   const onSubmit: SubmitHandler<EmailSchema> = (data) => {
-    verifyEmailMutation.mutateAsync(data.email).then(() => {
+    verifyEmailMutation.mutateAsync(data).then(() => {
       setState('check-email')
     })
   }

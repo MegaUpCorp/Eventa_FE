@@ -16,6 +16,7 @@ const AccountVerification = () => {
       if (data) {
         setState('enter-information')
         setIsOpenDialog(true)
+        localStorage.setItem('token', JSON.stringify({ token }))
       }
     })
   }, [token, setState, setIsOpenDialog])

@@ -8,7 +8,7 @@ export const useSignUp = () => {
   const emailMethods = useForm<EmailSchema>({ defaultValues: { email: '' }, resolver: yupResolver(emailSchema) })
 
   const accountInfoMethods = useForm<SignUpSchema>({
-    defaultValues: { accountName: '', avatar: '', password: '' },
+    defaultValues: { UserName: '', ProfilePicture: '', Password: '', PhoneNumber: '' },
     resolver: yupResolver(signUpSchema)
   })
 
@@ -20,5 +20,9 @@ export const useSignUp = () => {
     mutationFn: authAPI.verifyToken
   })
 
-  return { emailMethods, accountInfoMethods, verifyEmailMutation, verifyTokenMutation }
+  const signUpMutation = useMutation({
+    mutationFn: authAPI.signUp
+  })
+
+  return { emailMethods, accountInfoMethods, verifyEmailMutation, verifyTokenMutation, signUpMutation }
 }
