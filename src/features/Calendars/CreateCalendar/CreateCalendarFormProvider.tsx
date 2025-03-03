@@ -7,10 +7,10 @@ import { CalendarPlus } from 'lucide-react'
 import { CreateCalendarSchema } from 'src/schemas/calendarSchema'
 
 const CreateCalendarFormProvider = () => {
-  const { methods } = useCreateCalendar()
+  const { methods, createCalendarMutation } = useCreateCalendar()
 
   const onSubmit: SubmitHandler<CreateCalendarSchema> = (data) => {
-    console.log(data)
+    createCalendarMutation.mutate(data)
   }
 
   return (

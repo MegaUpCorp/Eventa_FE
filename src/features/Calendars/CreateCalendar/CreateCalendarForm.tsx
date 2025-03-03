@@ -99,9 +99,12 @@ const CreateCalendarForm = () => {
                         eventa.com/
                       </Button>
                       <Input
-                        placeholder='Random if leave blank'
+                        placeholder='How people can find your calendar'
+                        className={cn(
+                          'rounded-tl-none rounded-bl-none w-full',
+                          isFormError(errors, 'publicUrl') && 'placeholder:text-[#ff000059] bg-[#ff000013]'
+                        )}
                         {...field}
-                        className='rounded-tl-none rounded-bl-none w-full'
                       />
                     </div>
                   </FormControl>
