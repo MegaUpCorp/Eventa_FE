@@ -36,7 +36,7 @@ const NavBar = () => {
   const navigate = useNavigate()
   const width = useDynamicWidth()
   const { pathname } = useLocation()
-  const { isAuthenticated, logout } = useUserStore()
+  const { isAuthenticated, logout, user } = useUserStore()
 
   return (
     <nav className='relative z-10 flex items-center justify-between px-5 py-4 text-white mb-10'>
@@ -84,8 +84,8 @@ const NavBar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src='https://github.com/shadcn.png' />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={user?.profilePicture} />
+                  <AvatarFallback>E</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-44 mt-2' align='end'>

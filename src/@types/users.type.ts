@@ -26,3 +26,12 @@ export type ProfileUpdate = {
 export type LoginAPIResponse = {
   token: string
 }
+
+export type DecodedUserToken = {
+  id: string
+  email: string
+  profilePicture: string
+  role: UserRole
+  username: string
+  exp: number
+}
