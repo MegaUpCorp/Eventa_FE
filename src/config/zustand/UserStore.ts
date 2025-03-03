@@ -1,9 +1,12 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { jwtDecode } from 'jwt-decode'
+import { DecodedUserToken } from 'src/@types/users.type'
 
 interface UserStoreState {
   isAuthenticated: boolean
   token: string
+  user: DecodedUserToken | null
   login: (accessToken: string) => void
   logout: () => void
 }
@@ -13,10 +16,14 @@ export const useUserStore = create<UserStoreState>()(
     (set) => ({
       isAuthenticated: false,
       token: '',
-      login: (accessToken) => set({ isAuthenticated: true, token: accessToken }),
+      user: null,
+      login: (accessToken) => {
+        set({ isAuthenticated: true, token: accessToken })
+        set({ user: jwtDecode(accessToken) as DecodedUserToken })
+      },
       logout: () => {
         localStorage.clear()
-        return set({ isAuthenticated: false, token: '' })
+        return set({ isAuthenticated: false, token: '', user: null })
       }
     }),
     {
@@ -24,8 +31,9 @@ export const useUserStore = create<UserStoreState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ token: state.token }),
       onRehydrateStorage: () => (state) => {
-        if (state && state.token) {
+        if (state?.token) {
           state.isAuthenticated = true
+          state.user = jwtDecode(state.token) as DecodedUserToken
         }
       }
     }
