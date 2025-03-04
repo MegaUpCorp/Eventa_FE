@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
 import { jwtDecode } from 'jwt-decode'
+import { useUserStore } from 'src/config/zustand/UserStore'
 interface AuthDialogProps {
   trigger: React.ReactNode
 }
@@ -49,15 +50,7 @@ const SocialButton = ({ className }: { className: string }) => {
       const loginBody: LoginGoogleBody = { accessToken: idToken }
       await loginGoogleMutation.mutateAsync(loginBody, {
         onSuccess: (data) => {
-          console.log('Login successful:', data)
-          const accessToken = data.data.data.accessToken.token
-          console.log('Access token:', accessToken)
-          localStorage.setItem('accessToken', accessToken)
-          const user = data.data.data.user
-          localStorage.setItem('profile', JSON.stringify(user))
-          setIsAuthenticated(true)
-          toast.success(data.data.message)
-          navigate('/')
+          useUserStore.getState().login(data.data.data.accessToken)
         }
       })
     } catch (error) {
