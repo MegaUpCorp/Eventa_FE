@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs
 import { Img } from 'src/components'
 import { Timeline, TimelineConnector, TimelineDot, TimelineItem, TimelineSeparator } from 'src/components/ui/timeline'
 
-interface EventListProps {
+export interface EventListProps {
   id: string
   title: string
   description?: string
@@ -76,7 +76,7 @@ const groupEventsByDate = (events: EventListProps[]) => {
   return grouped
 }
 
-const EventList: React.FC = () => {
+export default function EventList(eventData: EventListProps[]): JSX.Element {
   const now = moment()
   const upcomingEvents = eventData.filter((event) => moment(event.start_date).isSameOrAfter(now, 'day'))
   const pastEvents = eventData.filter((event) => moment(event.start_date).isBefore(now, 'day'))
@@ -184,4 +184,3 @@ const EventList: React.FC = () => {
   )
 }
 
-export default EventList
