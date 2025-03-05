@@ -9,6 +9,7 @@ import {
   Settings,
   Tickets
 } from 'lucide-react'
+import { log } from 'node:console'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthDialog } from 'src/components/AuthDialog'
 import { ModeToggle } from 'src/components/ModeToggle'
@@ -37,7 +38,7 @@ const NavBar = () => {
   const width = useDynamicWidth()
   const { pathname } = useLocation()
   const { isAuthenticated, logout, user } = useUserStore()
-
+  console.log('user', user)
   return (
     <nav className='relative z-10 flex items-center justify-between px-5 py-4 text-white mb-10'>
       <Link to='/' className='flex'>

@@ -15,18 +15,54 @@ import { EmailFormProvider } from 'src/features/Auth/SignUp/EmailFormProvider'
 import { Icons } from './Icons'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
-
+import { GoogleOAuthProvider, googleClientId } from 'src/config/googleOAuthConfig'
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
+import { useMutation } from '@tanstack/react-query'
+import authAPI from 'src/apis/api.auth'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from 'src/context/app.context'
+import { jwtDecode } from 'jwt-decode'
+import { useUserStore } from 'src/config/zustand/UserStore'
 interface AuthDialogProps {
   trigger: React.ReactNode
 }
 
+export interface LoginGoogleBody {
+  accessToken: string
+}
 const SocialButton = ({ className }: { className: string }) => {
+  const navigate = useNavigate()
+  const { setIsAuthenticated } = useContext(AppContext)
+  const loginGoogleMutation = useMutation({
+    mutationFn: async (body: LoginGoogleBody) => {
+      return await authAPI.loginGoogle(body)
+    }
+  })
+  const handleGoogleSuccess = async (response: CredentialResponse) => {
+    try {
+      const idToken = response.credential // Google ID Token
+      if (!idToken) {
+        console.error('No credential found in response')
+        return
+      }
+      const loginBody: LoginGoogleBody = { accessToken: idToken }
+      await loginGoogleMutation.mutateAsync(loginBody, {
+        onSuccess: (data) => {
+          useUserStore.getState().login(data.data.data.accessToken)
+        }
+      })
+    } catch (error) {
+      console.error('Error processing Google login:', error)
+    }
+  }
+
   return (
     <div className={className}>
-      <Button variant='outline'>
-        <Icons.google className='mr-2' style={{ width: 18, height: 18 }} />
-        <p>Continue with Google</p>
-      </Button>
+      <div className='flex items-center justify-center w-full my-4'>
+        <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => console.log('Login Failed')} />
+      </div>
       <div className='flex items-center justify-center w-full my-4'>
         <div className='w-full border-b bg-border' />
         <p className='text-muted-foreground text-xs mx-3'>or</p>
@@ -108,6 +144,7 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
   }
 
   return (
+    <GoogleOAuthProvider clientId={googleClientId}>
     <Dialog
       open={isOpenDialog}
       onOpenChange={(open) => {
@@ -128,5 +165,6 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
         <div className='flex flex-col'>{dialogContent}</div>
       </DialogContent>
     </Dialog>
+    </GoogleOAuthProvider>
   )
 }

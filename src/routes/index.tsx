@@ -7,7 +7,7 @@ import {
   CalendarPage,
   DiscoverPage,
   EventCreation,
-  EventList,
+  EventListPage,
   EventManagement,
   // EventDetailPageUser,
   HomePageUser,
@@ -32,7 +32,7 @@ const publicRoutes: RouteType[] = [
   },
   {
     path: 'events',
-    element: <EventList />
+    element: <EventListPage />
   },
   // {
   //   path: 'events/event-detail',

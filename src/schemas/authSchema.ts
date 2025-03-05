@@ -37,7 +37,6 @@ const registerInfoSchema = yup.object().shape({
     .matches(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores')
     .trim('Username cannot contain leading or trailing spaces')
 })
-
 export const signInSchema = emailSchema.concat(passwordSchema)
 export const signUpSchema = registerInfoSchema.concat(strongPasswordSchema).concat(vietnamPhoneSchema)
 

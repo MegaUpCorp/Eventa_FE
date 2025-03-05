@@ -12,7 +12,9 @@ import App from './App'
 import { ThemeProvider } from './context/theme.context'
 import { ToastContainer } from 'react-toastify'
 import { Toaster } from './components/ui/toaster'
+import { GoogleAuthProvider } from 'firebase/auth'
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,15 +26,15 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
-  <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-        <App />
-        <Toaster />
-      </ThemeProvider>
-      {/* <ToastContainer /> */}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </BrowserRouter>
+      <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+          <App />
+          <Toaster />
+        </ThemeProvider>
+        {/* <ToastContainer /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </BrowserRouter>
   // </React.StrictMode>
 )
