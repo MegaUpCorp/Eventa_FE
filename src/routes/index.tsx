@@ -8,6 +8,7 @@ import {
   DiscoverPage,
   EventCreation,
   EventList,
+  EventManagement,
   // EventDetailPageUser,
   HomePageUser,
   MePage
@@ -17,6 +18,8 @@ type RouteType = {
   path: string
   element: JSX.Element
 }
+
+const eventManagementRoutes = ['', '/overview', '/guests', '/registration', '/blasts', '/insights', '/more']
 
 const publicRoutes: RouteType[] = [
   {
@@ -35,6 +38,10 @@ const publicRoutes: RouteType[] = [
   //   path: 'events/event-detail',
   //   element: <EventDetailPageUser />
   // },
+  ...eventManagementRoutes.map((route) => ({
+    path: `/events/manage/:slug${route}`,
+    element: <EventManagement />
+  })),
   {
     path: '/calendars/:id',
     element: <CalendarDetailPage />
