@@ -1,3 +1,6 @@
+import SendABlastDialog from '../../Blasts/SendABlast/SendABlastDialog'
+import InviteGuestsDialog from '../../Guests/InviteGuests/InviteGuestsDialog'
+import ShareEventDialog from '../ShareEvent/ShareEventDialog'
 import {
   Calendar1,
   CalendarSync,
@@ -7,9 +10,7 @@ import {
   Linkedin,
   MailOpen,
   MapPinned,
-  MessageSquareText,
   Plus,
-  Repeat,
   Twitter,
   UserRoundPen
 } from 'lucide-react'
@@ -18,37 +19,15 @@ import { Badge } from 'src/components/ui/badge'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import { Separator } from 'src/components/ui/separator'
-import { cn } from 'src/lib/utils'
-
-const overviewActions = [
-  {
-    id: 1,
-    title: 'Invite Guests',
-    icon: <MailOpen size={24} className='text-primary' />,
-    color: 'bg-[#1355e434]'
-  },
-  {
-    id: 2,
-    title: 'Send a blast',
-    icon: <MessageSquareText size={24} className='text-pink' />,
-    color: 'bg-[#ff26e223]'
-  },
-  { id: 3, title: 'Share event', icon: <Repeat size={24} className='text-green' />, color: 'bg-[#38ff4223]' }
-]
 
 const ViewEventOverview = () => {
   return (
     <div className='mt-6 flex flex-col gap-6'>
       {/* Actions */}
       <div className='flex items-center gap-3'>
-        {overviewActions.map((action) => (
-          <Card key={action.id} className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
-            <div className='flex items-center gap-3'>
-              <Badge className={cn('p-2 hover:bg-transparent', action.color)}>{action.icon}</Badge>
-              <p className='font-medium'>{action.title}</p>
-            </div>
-          </Card>
-        ))}
+        <InviteGuestsDialog />
+        <SendABlastDialog />
+        <ShareEventDialog />
       </div>
       {/* Event detail */}
       <Card className='p-4 grid grid-cols-2 gap-6'>

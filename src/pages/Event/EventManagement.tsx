@@ -1,4 +1,4 @@
-import ViewEventOverview from 'src/features/Events/ViewEventOverview/ViewEventOverview'
+import ViewEventOverview from 'src/features/Events/EventManagement/Overview/ViewEventOverview/ViewEventOverview'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 
