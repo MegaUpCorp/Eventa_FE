@@ -22,7 +22,7 @@ const SOLUTION_ITEMS = [
     label: 'Calendars',
     description: 'Host recurring events, and manage memberships.',
     icon: <CalendarCog className='text-yellow' size={32} />,
-    color: 'bg-[#fbff2623]'
+    color: 'bg-[#ffff361f]'
   },
   {
     id: 4,
