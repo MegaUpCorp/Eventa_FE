@@ -13,10 +13,12 @@ import { useSignUp } from './useSignUp'
 import { useUpload } from 'src/config/appwrite/useUpload'
 import { appwriteStorage } from 'src/config/appwrite/appwrite'
 import { useUserStore } from 'src/config/zustand/UserStore'
+import { useToast } from 'src/hooks/use-toast'
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
 export const AccountInfoFormProvider = () => {
+  const { toast } = useToast()
   const { accountInfoMethods, signUpMutation } = useSignUp()
   const { mutateAsync, isPending } = useUpload()
   const { setIsOpenDialog, setState } = useAuthStore()
@@ -46,14 +48,28 @@ export const AccountInfoFormProvider = () => {
 
     if (!token) return
 
-    signUpMutation.mutateAsync({ ...data, Token: token }).then(({ data }) => {
-      useUserStore.getState().login(data.token)
-      localStorage.removeItem('token')
-      setIsOpenDialog(false)
-      setTimeout(() => {
-        setState('sign-in')
-      }, 500)
-    })
+    signUpMutation
+      .mutateAsync({ ...data, Token: token })
+      .then(({ data }) => {
+        useUserStore.getState().login(data.token)
+        localStorage.removeItem('token')
+        setIsOpenDialog(false)
+        setTimeout(() => {
+          setState('sign-in')
+        }, 500)
+        return toast({
+          title: '🎉 Welcome to Eventa!',
+          description: 'We hope you will enjoy staying here!',
+          duration: 5000
+        })
+      })
+      .catch((error) => {
+        return toast({
+          title: 'Something went wrong!',
+          description: error.message,
+          duration: 5000
+        })
+      })
   }
 
   return (
