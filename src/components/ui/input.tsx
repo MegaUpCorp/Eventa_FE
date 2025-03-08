@@ -6,10 +6,12 @@ import { ArrowBigUpDash, EyeIcon, EyeOffIcon, LucideIcon } from 'lucide-react'
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   StartIcon?: LucideIcon
   EndIcon?: LucideIcon
+  onClickStartIcon?: () => void
+  onClickEndIcon?: () => void
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ StartIcon, EndIcon, className, type, ...props }, ref) => {
+  ({ StartIcon, EndIcon, className, type, onClickStartIcon, onClickEndIcon, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)
     const [capsLockActive, setCapsLockActive] = React.useState(false)
 
@@ -31,9 +33,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn('relative', className)}>
         {StartIcon && (
-          <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+          <button
+            type='button'
+            className='absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer'
+            onClick={onClickStartIcon}
+          >
             <StartIcon size={18} className='text-slate-500' />
-          </div>
+          </button>
         )}
         <input
           type={type === 'password' && showPassword ? 'text' : type}
@@ -43,9 +49,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {EndIcon && (
-          <div className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
+          <button
+            type='button'
+            className='absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer'
+            onClick={onClickEndIcon}
+          >
             <EndIcon size={18} className='text-slate-500' />
-          </div>
+          </button>
         )}
         {type === 'password' && (
           <div className='absolute right-0 flex items-center pr-3 -translate-y-1/2 top-1/2 gap-x-1'>

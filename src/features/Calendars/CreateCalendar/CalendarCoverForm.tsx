@@ -3,19 +3,25 @@ import { FileRejection, useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { FormControl, FormField, FormItem } from 'src/components/ui/form'
-import { CreateCalendarFormValues } from './useCreateCalendar'
+import { appwriteStorage } from 'src/config/appwrite/appwrite'
+import { useUpload } from 'src/config/appwrite/useUpload'
+import { CreateCalendarSchema } from 'src/schemas/calendarSchema'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
 const CalendarCoverForm = () => {
-  const { control, setValue } = useFormContext<CreateCalendarFormValues>()
+  const { control, setValue } = useFormContext<CreateCalendarSchema>()
+  const { mutateAsync, isPending } = useUpload()
 
   const onDrop = useCallback(<T extends File>(acceptedFiles: T[], rejectedFiles: FileRejection[]) => {
     if (rejectedFiles.length || !acceptedFiles.length) {
       return
     }
-    // TODO: Call API to upload the file then set the value
-    setValue('calendarCover', URL.createObjectURL(acceptedFiles[0]))
+
+    mutateAsync(acceptedFiles[0]).then((response) => {
+      const appwriteImg = appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
+      setValue('coverPicture', appwriteImg)
+    })
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -30,19 +36,22 @@ const CalendarCoverForm = () => {
   return (
     <FormField
       control={control}
-      name='calendarCover'
+      name='coverPicture'
       render={({ field: { value } }) => (
         <FormItem>
           <FormControl>
             {value ? (
-              <div className='flex justify-end items-start h-48' {...getRootProps()}>
+              <div className='flex justify-end items-start h-48 relative' {...getRootProps()}>
                 <img src={value} className='w-full h-full object-cover rounded-t-lg cursor-pointer' />
                 <input {...getInputProps()} />
+                <Button type='button' variant='secondary' className='absolute top-3 right-3' isLoading={isPending}>
+                  Change cover
+                </Button>
               </div>
             ) : (
               <div className='flex justify-end items-start h-48 rounded-t-lg cursor-pointer' {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Button variant='ghost' className='mt-3 mr-3'>
+                <Button type='button' variant='secondary' className='mt-3 mr-3' isLoading={isPending}>
                   Change cover
                 </Button>
               </div>

@@ -1,22 +1,27 @@
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, Loader2 } from 'lucide-react'
 import { useCallback } from 'react'
 import { FileRejection, useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
-import { Card } from 'src/components/ui/card'
 import { FormControl, FormField, FormItem } from 'src/components/ui/form'
-import { CreateCalendarFormValues } from './useCreateCalendar'
+import { appwriteStorage } from 'src/config/appwrite/appwrite'
+import { useUpload } from 'src/config/appwrite/useUpload'
+import { CreateCalendarSchema } from 'src/schemas/calendarSchema'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
 const CalendarProfileForm = () => {
-  const { control, setValue } = useFormContext<CreateCalendarFormValues>()
+  const { control, setValue } = useFormContext<CreateCalendarSchema>()
+  const { mutateAsync, isPending } = useUpload()
 
   const onDrop = useCallback(<T extends File>(acceptedFiles: T[], rejectedFiles: FileRejection[]) => {
     if (rejectedFiles.length || !acceptedFiles.length) {
       return
     }
-    // TODO: Call API to upload the file then set the value
-    setValue('calendarProfile', URL.createObjectURL(acceptedFiles[0]))
+
+    mutateAsync(acceptedFiles[0]).then((response) => {
+      const appwriteImg = appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
+      setValue('profilePicture', appwriteImg)
+    })
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -32,28 +37,17 @@ const CalendarProfileForm = () => {
     <div className='absolute top-32 left-4'>
       <FormField
         control={control}
-        name='calendarProfile'
+        name='profilePicture'
         render={({ field: { value } }) => (
           <FormItem>
             <FormControl>
-              {value ? (
-                <div className='flex justify-end items-start w-24 h-24' {...getRootProps()}>
-                  <img src={value} className='w-full h-full object-cover rounded-lg cursor-pointer' />
-                  <input {...getInputProps()} />
+              <div className='flex justify-end items-start w-24 h-24' {...getRootProps()}>
+                <img src={value} className='w-full h-full object-cover rounded-lg cursor-pointer' />
+                <input {...getInputProps()} />
+                <div className='absolute p-1 rounded-lg bg-accent bottom-1 right-1'>
+                  {isPending ? <Loader2 size={16} className='animate-spin' /> : <ArrowUp size={16} />}
                 </div>
-              ) : (
-                <Card className='flex justify-end items-start w-24 h-24 cursor-pointer relative' {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <img
-                    src='https://i.pinimg.com/564x/b4/b3/02/b4b3023700b1669b0a8eb93d70a5f08f.jpg'
-                    alt='default-placeholder'
-                    className='w-full h-full object-cover rounded-lg'
-                  />
-                  <div className='absolute p-1 rounded-lg bg-accent bottom-1 right-1'>
-                    <ArrowUp size={16} />
-                  </div>
-                </Card>
-              )}
+              </div>
             </FormControl>
           </FormItem>
         )}

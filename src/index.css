@@ -84,10 +84,6 @@
   }
 }
 
-html {
-  scrollbar-gutter: stable;
-}
-
 .glass {
   background-color: rgba(55, 65, 81, 0.1);
   border-radius: 0.375rem;

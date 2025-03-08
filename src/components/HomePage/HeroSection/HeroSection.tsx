@@ -15,7 +15,7 @@ export const HeroSection = () => {
           Bring your vision to life! We provide the tools and support to make your event uniquely yours.
         </p>
         {/* Search box */}
-        <Card className='absolute w-[600px] bottom-3 p-4 glass'>
+        <Card className='absolute w-[600px] bottom-5 p-4 glass'>
           <HeroSearchEventFormProvider />
         </Card>
       </div>
@@ -29,7 +29,7 @@ export const HeroSection = () => {
               className='w-full h-full object-cover rounded-lg'
             />
           </Card>
-          <Card className='p-0.5 w-52 h-60'>
+          <Card className='p-0.5 w-52 h-64'>
             <img
               src='https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,background=white,quality=75,width=400,height=400/event-covers/w6/7d36fe28-b709-4202-ba0a-0cdaefd1d0f7.png'
               alt=''
