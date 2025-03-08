@@ -12,6 +12,7 @@ import { isFormError } from 'src/utils/utils'
 import { useSignUp } from './useSignUp'
 import { useUpload } from 'src/config/appwrite/useUpload'
 import { appwriteStorage } from 'src/config/appwrite/appwrite'
+import { useUserStore } from 'src/config/zustand/UserStore'
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
@@ -45,7 +46,9 @@ export const AccountInfoFormProvider = () => {
 
     if (!token) return
 
-    signUpMutation.mutateAsync({ ...data, Token: token }).then(() => {
+    signUpMutation.mutateAsync({ ...data, Token: token }).then(({ data }) => {
+      useUserStore.getState().login(data.token)
+      localStorage.removeItem('token')
       setIsOpenDialog(false)
       setTimeout(() => {
         setState('sign-in')
@@ -130,7 +133,7 @@ export const AccountInfoFormProvider = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      type='Password'
+                      type='password'
                       placeholder='Password'
                       {...field}
                       spellCheck={false}
