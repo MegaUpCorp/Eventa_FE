@@ -1,5 +1,6 @@
 import { CalendarX2, Plus } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Calendar } from 'src/@types/calendar.type'
 import { buttonVariants } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import { cn } from 'src/lib/utils'
@@ -8,7 +9,7 @@ type CalendarType = 'owned' | 'subscribed'
 
 interface ViewCalendarsProps {
   type: CalendarType
-  calendars: { id: number; name: string; profile: string; subscribers: number }[]
+  calendars: Calendar[]
   className?: string
 }
 
@@ -59,10 +60,19 @@ const ViewCalendars = ({ type, calendars, className }: ViewCalendarsProps) => {
               className='p-4 flex flex-col gap-1 h-42 cursor-pointer hover:border-gray-dark'
               onClick={() => navigate(`${calendar.id}`)}
             >
-              <img src={calendar.profile} alt={calendar.name} className='w-14 h-14 object-cover rounded-lg' />
+              <img
+                src={
+                  calendar.profilePicture ||
+                  'https://media.istockphoto.com/id/1264040074/vector/placeholder-rgb-color-icon.jpg?s=612x612&w=0&k=20&c=0ZFUNL28htu-zHRF9evishuNKYQAZVrfK0-TZNjnX3U='
+                }
+                alt={calendar.name}
+                className='w-14 h-14 object-cover rounded-lg'
+              />
               <p className='text-lg mt-2 font-semibold truncate'>{calendar.name}</p>
               <p className='text-muted-foreground text-sm font-medium'>
-                {calendar.subscribers === 0 ? 'No subscribers' : `${calendar.subscribers} subscribers`}
+                {calendar.subscribers === 0 || !calendar.subscribers
+                  ? 'No subscribers'
+                  : `${calendar.subscribers} subscribers`}
               </p>
             </Card>
           ))
