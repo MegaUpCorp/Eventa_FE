@@ -1,8 +1,3 @@
-import DatePicker from 'src/components/DatePicker'
-import GoongMap from 'src/components/Goong/GoongMap'
-import MapDialog from 'src/components/Goong/MapDialog'
-import TimePicker from 'src/components/TimePicker'
-import Tiptap from 'src/components/TipTap/TipTap'
 import { addHours, format } from 'date-fns'
 import {
   CalendarIcon,
@@ -19,6 +14,11 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import DatePicker from 'src/components/DatePicker'
+import GoongMap from 'src/components/Goong/GoongMap'
+import MapDialog from 'src/components/Goong/MapDialog'
+import TimePicker from 'src/components/TimePicker'
+import Tiptap from 'src/components/TipTap/TipTap'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import {
@@ -33,16 +33,19 @@ import {
 } from 'src/components/ui/dialog'
 import { FormControl, FormField, FormItem } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
+import { ScrollArea } from 'src/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
-import { cn } from 'src/lib/utils'
 import { useGetLocation } from 'src/features/Map/useGetLocation'
-import { ScrollArea } from 'src/components/ui/scroll-area'
+import { cn } from 'src/lib/utils'
 import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
 import { isFormError } from 'src/utils/utils'
+interface CreateEventFormProps {
+  calendars: { id: string; name: string; profilePicture: string }[]
+}
 
-const CreateEventForm = () => {
+const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
   const {
     control,
     formState: { errors },
@@ -129,15 +132,11 @@ const CreateEventForm = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value='pc'>
-                    <p className='font-semibold text-muted-foreground'>Personal Calendar</p>
-                  </SelectItem>
-                  <SelectItem value='c1'>
-                    <p className='font-semibold text-muted-foreground'>Calendar 1</p>
-                  </SelectItem>
-                  <SelectItem value='c2'>
-                    <p className='font-semibold text-muted-foreground'>Calendar 2</p>
-                  </SelectItem>
+                  {calendars.map((calendar) => (
+                    <SelectItem key={calendar.id} value={calendar.id}>
+                      <p className='font-semibold text-muted-foreground'>{calendar.name}</p>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>
