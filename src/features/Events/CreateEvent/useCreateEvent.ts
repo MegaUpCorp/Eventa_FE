@@ -1,13 +1,13 @@
 import eventAPI from 'src/apis/api.event'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { addHours } from 'date-fns'
 import { useForm } from 'react-hook-form'
-import { createEventSchema, CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { useGetMyCalendars } from 'src/features/Calendars/GetMyCalendars/useGetMyCalendars'
 import { useLocalStorage } from 'src/hooks/useLocalStorage'
+import { createEventSchema, CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
 
 const defaultValues: Partial<CreateEventSchema> = {
-  calendarId: 'pc',
   visibility: 'public',
   title: '',
   startDate: new Date().toISOString(),
@@ -26,6 +26,7 @@ const defaultValues: Partial<CreateEventSchema> = {
 
 export const useCreateEvent = () => {
   const [description] = useLocalStorage('event-desc', '')
+  const { data: myCalendars } = useGetMyCalendars()
   const methods = useForm<CreateEventSchema>({
     defaultValues: {
       ...defaultValues,
@@ -38,7 +39,8 @@ export const useCreateEvent = () => {
     mutationFn: eventAPI.createEvent,
     onSuccess: () => {
       // TODO: Redirect to the event page management
-      methods.reset()
+      const calendarId = methods.getValues('calendarId')
+      methods.reset({ ...defaultValues, calendarId })
       localStorage.removeItem('event-desc')
     },
     onError: () => {
@@ -46,5 +48,5 @@ export const useCreateEvent = () => {
     }
   })
 
-  return { methods, createEventMutation }
+  return { methods, createEventMutation, myCalendars }
 }
