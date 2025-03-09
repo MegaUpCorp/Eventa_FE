@@ -1,3 +1,8 @@
+import DatePicker from 'src/components/DatePicker'
+import GoongMap from 'src/components/Goong/GoongMap'
+import MapDialog from 'src/components/Goong/MapDialog'
+import TimePicker from 'src/components/TimePicker'
+import Tiptap from 'src/components/TipTap/TipTap'
 import { addHours, format } from 'date-fns'
 import {
   CalendarIcon,
@@ -14,11 +19,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import DatePicker from 'src/components/DatePicker'
-import GoongMap from 'src/components/Goong/GoongMap'
-import MapDialog from 'src/components/Goong/MapDialog'
-import TimePicker from 'src/components/TimePicker'
-import Tiptap from 'src/components/TipTap/TipTap'
+import { Calendar } from 'src/@types/calendar.type'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import {
@@ -41,8 +42,9 @@ import { useGetLocation } from 'src/features/Map/useGetLocation'
 import { cn } from 'src/lib/utils'
 import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
 import { isFormError } from 'src/utils/utils'
+
 interface CreateEventFormProps {
-  calendars: { id: string; name: string; profilePicture: string }[]
+  calendars: Calendar[]
 }
 
 const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
