@@ -1,3 +1,4 @@
+import SubscriptionButton from '../Subscription/SubscriptionButton'
 import { format } from 'date-fns'
 import { FileText, List, MapPin, Plus, Search, Video } from 'lucide-react'
 import { useState } from 'react'
@@ -58,7 +59,10 @@ export const ViewCalendarDetail = () => {
             alt='nature'
             className='w-28 h-28 object-cover rounded-2xl border-background border-8'
           />
-          <Button className='text-[#ffffff]'>{calendarDetail?.isSubscribe ? 'Unsubscribe' : 'Subscribe'}</Button>
+          <SubscriptionButton
+            isSubscribe={calendarDetail?.isSubscribe || false}
+            publicUrl={calendarDetail?.publicUrl || ''}
+          />
         </div>
       </div>
       <div className='container-lg px-4 space-y-2 mt-4'>

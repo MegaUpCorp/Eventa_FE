@@ -9,7 +9,8 @@ const calendarAPI = {
   getCalendarDetail: async (publicUrl: string) => {
     const { data } = await http.get<CalendarDetail>(`accounts/calendar/${publicUrl}`)
     return data
-  }
+  },
+  subscribeCalendar: (publicUrl: string) => http.post(`accounts/subscribe?publicUrl=${publicUrl}`)
 }
 
 export default calendarAPI
