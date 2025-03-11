@@ -18,6 +18,8 @@ import {
   TimelineTitle
 } from 'src/components/ui/timeline'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'src/components/ui/tooltip'
+import { useViewCalendarDetail } from './useViewCalendarDetail'
+import { Navigate } from 'react-router-dom'
 
 const users = [
   {
@@ -40,33 +42,32 @@ const users = [
 ]
 
 export const ViewCalendarDetail = () => {
+  const {
+    '0': { data: calendarDetail, isLoading }
+  } = useViewCalendarDetail()
+
+  if (!calendarDetail && !isLoading) return <Navigate to='/' />
+
   return (
     <>
       <div className='w-[1000px] h-72 mx-auto relative'>
-        <img
-          src='https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1250,height=357.14285714285717/calendar-cover-images/8h/7620f825-1290-449c-898b-0a731ae4ca15'
-          alt='nature'
-          className='w-full h-full object-cover rounded-lg'
-        />
+        <img src={calendarDetail?.coverPicture} alt='nature' className='w-full h-full object-cover rounded-lg' />
         <div className='container-lg absolute -bottom-16 left-4 p-4 flex justify-between items-end'>
           <img
-            src='https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1250,height=357.14285714285717/calendar-cover-images/8h/7620f825-1290-449c-898b-0a731ae4ca15'
+            src={calendarDetail?.profilePicture}
             alt='nature'
             className='w-28 h-28 object-cover rounded-2xl border-background border-8'
           />
-          <Button className='text-[#ffffff]'>Subscribe</Button>
+          <Button className='text-[#ffffff]'>{calendarDetail?.isSubscribe ? 'Unsubscribe' : 'Subscribe'}</Button>
         </div>
       </div>
       <div className='container-lg px-4 space-y-2 mt-4'>
-        <p className='text-4xl font-semibold mt-4'>Generative AI San Francisco and Bay Area</p>
+        <p className='text-4xl font-semibold mt-4'>{calendarDetail?.name}</p>
         <div className='flex items-center gap-2'>
           <MapPin size={18} className='text-muted-foreground' />
-          <p className='font-medium'>Ho Chi Minh City</p>
+          <p className='font-medium'>{calendarDetail?.location.name}</p>
         </div>
-        <p className='text-muted-foreground'>
-          GenerativeAISF.com In-person AI events 📤 Subscribe for a weekly events email ✍️ AI newsletter
-          www.aitidbits.ai 🗓️ Submit an event or ping me on X/LinkedIn
-        </p>
+        <p className='text-muted-foreground'>{calendarDetail?.description}</p>
       </div>
       <Separator />
       <div className='container-lg px-4 grid grid-cols-12 gap-8'>

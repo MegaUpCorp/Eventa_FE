@@ -58,7 +58,7 @@ const ViewCalendars = ({ type, calendars, className }: ViewCalendarsProps) => {
             <Card
               key={calendar.id}
               className='p-4 flex flex-col gap-1 h-42 cursor-pointer hover:border-gray-dark'
-              onClick={() => navigate(`${calendar.id}`)}
+              onClick={() => navigate(`${calendar.publicUrl}`)}
             >
               <img
                 src={
