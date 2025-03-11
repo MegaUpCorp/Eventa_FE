@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { addHours } from 'date-fns'
 import { useForm } from 'react-hook-form'
-import { useGetMyCalendars } from 'src/features/Calendars/GetMyCalendars/useGetMyCalendars'
+import { useGetMyCalendars } from 'src/features/Calendars/ViewCalendars/useGetMyCalendars'
 import { useLocalStorage } from 'src/hooks/useLocalStorage'
 import { createEventSchema, CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
 

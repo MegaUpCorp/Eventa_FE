@@ -1,7 +1,7 @@
 import ViewCalendars from 'src/features/Calendars/ViewCalendars/ViewCalendars'
 import { Separator } from 'src/components/ui/separator'
-import { useGetMyCalendars } from 'src/features/Calendars/GetMyCalendars/useGetMyCalendars'
-import { useGetMySubscribedCaledars } from 'src/features/Calendars/GetMySubscribedCaledars/useGetMySubscribedCaledars'
+import { useGetMyCalendars } from 'src/features/Calendars/ViewCalendars/useGetMyCalendars'
+import { useGetMySubscribedCaledars } from 'src/features/Calendars/ViewCalendars/useGetMySubscribedCaledars'
 
 const CalendarPage = () => {
   const { data: myCalendars } = useGetMyCalendars()
