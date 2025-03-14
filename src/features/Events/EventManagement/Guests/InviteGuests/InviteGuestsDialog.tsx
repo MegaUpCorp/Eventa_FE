@@ -32,17 +32,18 @@ import { cn } from 'src/lib/utils'
 interface InviteGuestsDialogProps {
   trigger?: React.ReactNode
   asChild?: boolean
+  className?: string
 }
 
 const isActive = (tab: string, activeTab: string) => (tab === activeTab ? 'bg-accent' : '')
 
-const InviteGuestsDialog = ({ trigger, asChild = false }: InviteGuestsDialogProps) => {
+const InviteGuestsDialog = ({ trigger, asChild = false, className }: InviteGuestsDialogProps) => {
   const [activeTab, setActiveTab] = useState<'email' | 'subscribers'>('email')
   const [inviteState, setInviteState] = useState<'input' | 'send'>('input')
 
   return (
     <Dialog>
-      <DialogTrigger asChild={asChild} className='w-full'>
+      <DialogTrigger asChild={asChild} className={cn('', className)}>
         {trigger ? (
           trigger
         ) : (

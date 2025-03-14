@@ -25,7 +25,7 @@ const ViewEventOverview = () => {
     <div className='mt-6 flex flex-col gap-6'>
       {/* Actions */}
       <div className='flex items-center gap-3'>
-        <InviteGuestsDialog />
+        <InviteGuestsDialog className='w-full' />
         <SendABlastDialog />
         <ShareEventDialog />
       </div>
@@ -87,10 +87,15 @@ const ViewEventOverview = () => {
             <p className='font-medium text-2xl'>Invites</p>
             <p className='text-muted-foreground'>Invite subscribers, contacts and past guests via email or SMS.</p>
           </div>
-          <Button size='sm' variant='secondary'>
-            <Plus />
-            Invite Guests
-          </Button>
+          <InviteGuestsDialog
+            asChild
+            trigger={
+              <Button size='sm' variant='secondary'>
+                <Plus />
+                Invite Guests
+              </Button>
+            }
+          />
         </div>
         <Card className='p-4 flex items-center gap-4'>
           <Badge className='p-2' variant='secondary'>
