@@ -1,5 +1,6 @@
-import { Repeat } from 'lucide-react'
+import { QrCode } from 'lucide-react'
 import { Badge } from 'src/components/ui/badge'
+import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import {
   Dialog,
@@ -11,13 +12,13 @@ import {
 } from 'src/components/ui/dialog'
 import { cn } from 'src/lib/utils'
 
-interface ShareEventDialogProps {
+interface CheckInGuestsDialogProps {
   trigger?: React.ReactNode
   asChild?: boolean
   className?: string
 }
 
-const ShareEventDialog = ({ trigger, asChild = false, className }: ShareEventDialogProps) => {
+const CheckInGuestsDialog = ({ trigger, asChild = false, className }: CheckInGuestsDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild={asChild} className={cn('', className)}>
@@ -27,24 +28,25 @@ const ShareEventDialog = ({ trigger, asChild = false, className }: ShareEventDia
           <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
             <div className='flex items-center gap-3'>
               <Badge className={'p-2 hover:bg-transparent bg-[#38ff4223]'}>
-                <Repeat size={24} className='text-green' />
+                <QrCode size={24} className='text-green' />
               </Badge>
-              <p className='font-medium'>Share Event</p>
+              <p className='font-medium'>Check In Guests</p>
             </div>
           </Card>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='flex flex-col w-96'>
+        <div className='p-3 mr-auto rounded-full glass'>
+          <QrCode size={32} className='text-muted-foreground' />
+        </div>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </DialogDescription>
+          <DialogTitle className='text-2xl'>Check In Guests</DialogTitle>
+          <DialogDescription>You can check in guests with our web scanner.</DialogDescription>
         </DialogHeader>
+        <Button className='mt-auto text-[#fff]'>Open Web Scanner</Button>
       </DialogContent>
     </Dialog>
   )
 }
 
-export default ShareEventDialog
+export default CheckInGuestsDialog

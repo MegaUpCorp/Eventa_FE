@@ -1,28 +1,9 @@
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import {
-  AtSign,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  FileSpreadsheet,
-  MailOpen,
-  Search,
-  Send,
-  UsersRound
-} from 'lucide-react'
+import DialogButton from 'src/components/DialogButton'
+import { AtSign, ChevronLeft, ChevronRight, Download, FileSpreadsheet, Search, Send, UsersRound } from 'lucide-react'
 import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
-import { Badge } from 'src/components/ui/badge'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from 'src/components/ui/dialog'
 import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { Separator } from 'src/components/ui/separator'
@@ -38,115 +19,107 @@ interface InviteGuestsDialogProps {
 const isActive = (tab: string, activeTab: string) => (tab === activeTab ? 'bg-accent' : '')
 
 const InviteGuestsDialog = ({ trigger, asChild = false, className }: InviteGuestsDialogProps) => {
+  const [open, setOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'email' | 'subscribers'>('email')
   const [inviteState, setInviteState] = useState<'input' | 'send'>('input')
 
   return (
-    <Dialog>
-      <DialogTrigger asChild={asChild} className={cn('', className)}>
-        {trigger ? (
-          trigger
-        ) : (
-          <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
-            <div className='flex items-center gap-3'>
-              <Badge className={'p-2 hover:bg-transparent bg-[#1355e434]'}>
-                <MailOpen size={24} className='text-primary' />
-              </Badge>
-              <p className='font-medium'>Invite Guests</p>
-            </div>
-          </Card>
-        )}
-      </DialogTrigger>
-      <DialogContent className='p-0 min-w-[800px]'>
-        <VisuallyHidden>
-          <DialogHeader>
-            <DialogTitle>Invite Guests</DialogTitle>
-            <DialogDescription>Fixed the warning</DialogDescription>
-          </DialogHeader>
-        </VisuallyHidden>
-        {inviteState === 'input' ? (
-          <div className='flex flex-col w-full'>
-            <p className='px-4 py-3 font-medium text-lg'>Invite Guests</p>
-            <Separator />
-            <div className='px-2 flex gap-2 h-[520px]'>
-              <div className='flex flex-col gap-1 py-2 w-[25%] shrink-0'>
-                <div
-                  className={cn(
-                    'flex items-center gap-2 hover:bg-accent p-2 rounded-md cursor-pointer',
-                    isActive('email', activeTab)
-                  )}
-                  onClick={() => setActiveTab('email')}
-                >
-                  <AtSign size={16} />
-                  <p className='font-medium text-sm'>Enter Emails</p>
+    <DialogButton
+      open={open}
+      setOpen={setOpen}
+      asChild={asChild}
+      className='p-0 min-w-[800px]'
+      triggerClassName={className}
+      content={
+        <>
+          {inviteState === 'input' ? (
+            <div className='flex flex-col w-full'>
+              <p className='px-4 py-3 font-medium text-lg'>Invite Guests</p>
+              <Separator />
+              <div className='px-2 flex gap-2 h-[520px]'>
+                <div className='flex flex-col gap-1 py-2 w-[25%] shrink-0'>
+                  <div
+                    className={cn(
+                      'flex items-center gap-2 hover:bg-accent p-2 rounded-md cursor-pointer',
+                      isActive('email', activeTab)
+                    )}
+                    onClick={() => setActiveTab('email')}
+                  >
+                    <AtSign size={16} />
+                    <p className='font-medium text-sm'>Enter Emails</p>
+                  </div>
+                  <div
+                    className={cn(
+                      'flex items-center gap-2 hover:bg-accent p-2 rounded-md cursor-pointer',
+                      isActive('subscribers', activeTab)
+                    )}
+                    onClick={() => setActiveTab('subscribers')}
+                  >
+                    <UsersRound size={16} />
+                    <p className='font-medium text-sm'>Subscribers</p>
+                  </div>
                 </div>
-                <div
-                  className={cn(
-                    'flex items-center gap-2 hover:bg-accent p-2 rounded-md cursor-pointer',
-                    isActive('subscribers', activeTab)
-                  )}
-                  onClick={() => setActiveTab('subscribers')}
-                >
-                  <UsersRound size={16} />
-                  <p className='font-medium text-sm'>Subscribers</p>
+                <Separator orientation='vertical' className='h-full' />
+                <div className='px-3 py-5 w-full'>
+                  {activeTab === 'email' ? <EnterEmailsTab /> : <SubscribersTab />}
                 </div>
               </div>
-              <Separator orientation='vertical' className='h-full' />
-              <div className='px-3 py-5 w-full'>{activeTab === 'email' ? <EnterEmailsTab /> : <SubscribersTab />}</div>
+              <Separator />
+              <div className='px-4 py-3 flex'>
+                <Button className='ml-auto text-[#fff]' onClick={() => setInviteState('send')}>
+                  Next
+                  <ChevronRight />
+                </Button>
+              </div>
             </div>
-            <Separator />
-            <div className='px-4 py-3 flex'>
-              <Button className='ml-auto text-[#fff]' onClick={() => setInviteState('send')}>
-                Next
-                <ChevronRight />
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className='flex flex-col w-full'>
-            <p className='px-4 py-3 font-medium text-lg'>Invite Guests</p>
-            <Separator />
-            <div className='px-2 flex gap-2 h-[520px]'>
-              <div className='flex flex-col gap-2 p-2 w-[30%] shrink-0'>
-                <p className='font-medium text-sm text-muted-foreground'>Inviting 1 Person</p>
-                <div className='flex items-center gap-2'>
-                  <Avatar className='w-6 h-6'>
-                    <AvatarImage src='https://github.com/shadcn.png' />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <p className='font-medium text-sm text-muted-foreground truncate'>demoABC@gmail.com</p>
+          ) : (
+            <div className='flex flex-col w-full'>
+              <p className='px-4 py-3 font-medium text-lg'>Invite Guests</p>
+              <Separator />
+              <div className='px-2 flex gap-2 h-[520px]'>
+                <div className='flex flex-col gap-2 p-2 w-[30%] shrink-0'>
+                  <p className='font-medium text-sm text-muted-foreground'>Inviting 1 Person</p>
+                  <div className='flex items-center gap-2'>
+                    <Avatar className='w-6 h-6'>
+                      <AvatarImage src='https://github.com/shadcn.png' />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <p className='font-medium text-sm text-muted-foreground truncate'>demoABC@gmail.com</p>
+                  </div>
+                </div>
+                <Separator orientation='vertical' className='h-full' />
+                <div className='px-3 py-5 w-full flex flex-col gap-3'>
+                  <Card>
+                    <p className='font-medium text-sm p-4 bg-accent rounded-t-lg'>
+                      Hi, Account VIP invites you to join Global AI
+                    </p>
+                    <Textarea
+                      autoFocus
+                      className='rounded-none border-none min-h-20 focus-visible:ring-0'
+                      placeholder='Add a custom message here...'
+                    />
+                    <p className='font-medium text-sm p-4 bg-accent rounded-b-lg'>RSVP: eventa.com/global-ai</p>
+                  </Card>
                 </div>
               </div>
-              <Separator orientation='vertical' className='h-full' />
-              <div className='px-3 py-5 w-full flex flex-col gap-3'>
-                <Card>
-                  <p className='font-medium text-sm p-4 bg-accent rounded-t-lg'>
-                    Hi, Account VIP invites you to join Global AI
-                  </p>
-                  <Textarea
-                    autoFocus
-                    className='rounded-none border-none min-h-20 focus-visible:ring-0'
-                    placeholder='Add a custom message here...'
-                  />
-                  <p className='font-medium text-sm p-4 bg-accent rounded-b-lg'>RSVP: eventa.com/global-ai</p>
-                </Card>
+              <Separator />
+              <div className='px-4 py-3 flex items-center justify-between'>
+                <Button className='text-[#fff]' variant='secondary' onClick={() => setInviteState('input')}>
+                  <ChevronLeft />
+                  Back
+                </Button>
+                <Button className='text-[#fff]'>
+                  <Send />
+                  Send Invites
+                </Button>
               </div>
             </div>
-            <Separator />
-            <div className='px-4 py-3 flex items-center justify-between'>
-              <Button className='text-[#fff]' variant='secondary' onClick={() => setInviteState('input')}>
-                <ChevronLeft />
-                Back
-              </Button>
-              <Button className='text-[#fff]'>
-                <Send />
-                Send Invites
-              </Button>
-            </div>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+          )}
+        </>
+      }
+    >
+      {trigger}
+    </DialogButton>
   )
 }
 

@@ -1,4 +1,5 @@
 import ViewEventOverview from 'src/features/Events/EventManagement/Overview/ViewEventOverview/ViewEventOverview'
+import ViewEventGuests from 'src/features/Events/EventManagement/Guests/ViewEventGuests/ViewEventGuests'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 
@@ -22,7 +23,7 @@ const eventTabs: EventTab[] = [
     id: 2,
     title: 'Guests',
     value: 'guests',
-    content: <div>Guests</div>
+    content: <ViewEventGuests />
   },
   {
     id: 3,
@@ -96,7 +97,9 @@ const EventManagement = () => {
             </TabsTrigger>
           ))}
         </TabsList>
-        <TabsContent value={activeTab.value}>{activeTab.content}</TabsContent>
+        <TabsContent value={activeTab.value} className='mt-6'>
+          {activeTab.content}
+        </TabsContent>
       </Tabs>
     </div>
   )

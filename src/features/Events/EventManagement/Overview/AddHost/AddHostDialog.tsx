@@ -1,17 +1,11 @@
+import DialogButton from 'src/components/DialogButton'
 import { UserRoundPlus } from 'lucide-react'
+import { useState } from 'react'
 import { SubmitHandler } from 'react-hook-form'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from 'src/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
-import { cn } from 'src/lib/utils'
 import { useAddHost } from './useAddHost'
+import { cn } from 'src/lib/utils'
 
 interface AddHostDialogProps {
   trigger: React.ReactNode
@@ -21,27 +15,26 @@ interface AddHostDialogProps {
 
 const AddHostDialog = ({ trigger, asChild = false, className }: AddHostDialogProps) => {
   const { methods } = useAddHost()
-
+  const [open, setOpen] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit: SubmitHandler<any> = (data) => {
     console.log(data)
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild={asChild} className={cn('', className)}>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className='flex flex-col h-96 w-96'>
-        <div className='p-4 mr-auto rounded-full glass'>
-          <UserRoundPlus size={24} />
+    <DialogButton
+      open={open}
+      setOpen={setOpen}
+      asChild={asChild}
+      topIcon={
+        <div className='p-3 mr-auto rounded-full glass'>
+          <UserRoundPlus size={32} className='text-muted-foreground' />
         </div>
-        <DialogHeader>
-          <DialogTitle>Add Host</DialogTitle>
-          <DialogDescription>
-            Add a host to highlight them on the event page or to get help managing the event.
-          </DialogDescription>
-        </DialogHeader>
+      }
+      title='Add Host'
+      subtitle='Add a host to highlight them on the event page or to get help managing the event.'
+      className={cn('flex flex-col h-96 w-96', className)}
+      content={
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
             <FormField
@@ -58,8 +51,10 @@ const AddHostDialog = ({ trigger, asChild = false, className }: AddHostDialogPro
             />
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      {trigger}
+    </DialogButton>
   )
 }
 
