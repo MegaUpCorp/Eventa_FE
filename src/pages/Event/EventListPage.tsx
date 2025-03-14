@@ -8,11 +8,10 @@ const EventListPage = () => {
     queryKey: ['events'],
     queryFn: () => eventAPI.getEvents()
   })
-  console.log(data)
+  console.log("data", data)
 
   return(
-    <>
-    Ho</>
+    <EventList eventData={data?.data || []} />
   )
 }
 export default EventListPage
