@@ -1,28 +1,22 @@
-import { Mail, MessageSquareText, Send } from 'lucide-react'
-import { Badge } from 'src/components/ui/badge'
-import { Card } from 'src/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from 'src/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel } from 'src/components/ui/form'
-import { Input } from 'src/components/ui/input'
-import { useSendABlast } from './useSendABlast'
-import { Textarea } from 'src/components/ui/textarea'
+import DialogButton from 'src/components/DialogButton'
+import { Mail, Send } from 'lucide-react'
+import { useState } from 'react'
 import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel } from 'src/components/ui/form'
+import { Input } from 'src/components/ui/input'
+import { Textarea } from 'src/components/ui/textarea'
+import { useSendABlast } from './useSendABlast'
 
 interface SendABlastDialogProps {
   trigger?: React.ReactNode
   asChild?: boolean
+  className?: string
 }
 
-const SendABlastDialog = ({ trigger, asChild = false }: SendABlastDialogProps) => {
+const SendABlastDialog = ({ trigger, asChild = false, className }: SendABlastDialogProps) => {
   const { methods } = useSendABlast()
+  const [open, setOpen] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit: SubmitHandler<any> = (data) => {
@@ -30,31 +24,15 @@ const SendABlastDialog = ({ trigger, asChild = false }: SendABlastDialogProps) =
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild={asChild} className='w-full'>
-        {trigger ? (
-          trigger
-        ) : (
-          <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
-            <div className='flex items-center gap-3'>
-              <Badge className={'p-2 hover:bg-transparent bg-[#ff26e223]'}>
-                <MessageSquareText size={24} className='text-pink' />
-              </Badge>
-              <p className='font-medium'>Send a Blast</p>
-            </div>
-          </Card>
-        )}
-      </DialogTrigger>
-      <DialogContent className='flex flex-col'>
-        <div className='p-4 mr-auto rounded-full glass'>
-          <Mail size={24} />
-        </div>
-        <DialogHeader>
-          <DialogTitle>Send Blast</DialogTitle>
-          <DialogDescription>
-            Guests will receive the blast via email. It will also be shown on the event page.
-          </DialogDescription>
-        </DialogHeader>
+    <DialogButton
+      open={open}
+      setOpen={setOpen}
+      asChild={asChild}
+      triggerClassName={className}
+      topIcon={<Mail size={32} className='text-muted-foreground' />}
+      title='Send Blast'
+      subtitle='Guests will receive the blast via email. It will also be shown on the event page.'
+      content={
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
             <FormField
@@ -87,8 +65,10 @@ const SendABlastDialog = ({ trigger, asChild = false }: SendABlastDialogProps) =
             </Button>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      {trigger}
+    </DialogButton>
   )
 }
 

@@ -41,7 +41,7 @@ import { Switch } from 'src/components/ui/switch'
 import { useGetLocation } from 'src/features/Map/useGetLocation'
 import { cn } from 'src/lib/utils'
 import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
-import { isFormError } from 'src/utils/utils'
+import { handleTimeChange, isFormError } from 'src/utils/utils'
 
 interface CreateEventFormProps {
   calendars: Calendar[]
@@ -60,26 +60,6 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
   const [endDate, setEndDate] = useState<Date>(addHours(new Date(), 1))
 
   const { data: locationDetail } = useGetLocation(watch('location.id'))
-
-  const handleTimeChange = (
-    type: 'hour' | 'minute' | 'ampm',
-    value: string,
-    date: Date,
-    setDate: React.Dispatch<React.SetStateAction<Date>>
-  ) => {
-    if (date) {
-      const newDate = new Date(date)
-      if (type === 'hour') {
-        newDate.setHours((parseInt(value) % 12) + (newDate.getHours() >= 12 ? 12 : 0))
-      } else if (type === 'minute') {
-        newDate.setMinutes(parseInt(value))
-      } else if (type === 'ampm') {
-        const currentHours = newDate.getHours()
-        newDate.setHours(value === 'PM' ? currentHours + 12 : currentHours - 12)
-      }
-      setDate(newDate)
-    }
-  }
 
   useEffect(() => {
     if (locationDetail) {

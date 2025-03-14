@@ -148,3 +148,23 @@ export const toSlug = (inputStr: string, noNumber: boolean) => {
 export const isFormError = <T extends FieldErrors>(errors: T, name: keyof T) => {
   return Boolean(errors[name])
 }
+
+export const handleTimeChange = (
+  type: 'hour' | 'minute' | 'ampm',
+  value: string,
+  date: Date,
+  setDate: React.Dispatch<React.SetStateAction<Date>>
+) => {
+  if (date) {
+    const newDate = new Date(date)
+    if (type === 'hour') {
+      newDate.setHours((parseInt(value) % 12) + (newDate.getHours() >= 12 ? 12 : 0))
+    } else if (type === 'minute') {
+      newDate.setMinutes(parseInt(value))
+    } else if (type === 'ampm') {
+      const currentHours = newDate.getHours()
+      newDate.setHours(value === 'PM' ? currentHours + 12 : currentHours - 12)
+    }
+    setDate(newDate)
+  }
+}

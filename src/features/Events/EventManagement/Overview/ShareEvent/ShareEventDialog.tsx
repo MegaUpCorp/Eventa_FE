@@ -9,16 +9,18 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
+import { cn } from 'src/lib/utils'
 
 interface ShareEventDialogProps {
   trigger?: React.ReactNode
   asChild?: boolean
+  className?: string
 }
 
-const ShareEventDialog = ({ trigger, asChild = false }: ShareEventDialogProps) => {
+const ShareEventDialog = ({ trigger, asChild = false, className }: ShareEventDialogProps) => {
   return (
     <Dialog>
-      <DialogTrigger asChild={asChild} className='w-full'>
+      <DialogTrigger asChild={asChild} className={cn('', className)}>
         {trigger ? (
           trigger
         ) : (

@@ -3,6 +3,7 @@ import InviteGuestsDialog from '../../Guests/InviteGuests/InviteGuestsDialog'
 import ShareEventDialog from '../ShareEvent/ShareEventDialog'
 import AddHostDialog from '../AddHost/AddHostDialog'
 import ChangeVisibilityDialog from '../ChangeVisibility/ChangeVisibilityDialog'
+import EditEventSheet from '../EditEvent/EditEventSheet'
 import {
   Calendar1,
   CalendarSync,
@@ -12,6 +13,7 @@ import {
   Linkedin,
   MailOpen,
   MapPinned,
+  MessageSquareText,
   Plus,
   Twitter,
   UserRoundPen
@@ -24,12 +26,36 @@ import { Separator } from 'src/components/ui/separator'
 
 const ViewEventOverview = () => {
   return (
-    <div className='mt-6 flex flex-col gap-6'>
+    <div className='flex flex-col gap-6'>
       {/* Actions */}
       <div className='flex items-center gap-3'>
-        <InviteGuestsDialog className='w-full' />
-        <SendABlastDialog />
-        <ShareEventDialog />
+        <InviteGuestsDialog
+          className='w-full'
+          trigger={
+            <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
+              <div className='flex items-center gap-3'>
+                <Badge className={'p-2 hover:bg-transparent bg-[#1355e434]'}>
+                  <MailOpen size={24} className='text-primary' />
+                </Badge>
+                <p className='font-medium'>Invite Guests</p>
+              </div>
+            </Card>
+          }
+        />
+        <SendABlastDialog
+          className='w-full'
+          trigger={
+            <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
+              <div className='flex items-center gap-3'>
+                <Badge className={'p-2 hover:bg-transparent bg-[#ff26e223]'}>
+                  <MessageSquareText size={24} className='text-pink' />
+                </Badge>
+                <p className='font-medium'>Send a Blast</p>
+              </div>
+            </Card>
+          }
+        />
+        <ShareEventDialog className='w-full' />
       </div>
       {/* Event detail */}
       <Card className='p-4 grid grid-cols-2 gap-6'>
@@ -73,9 +99,14 @@ const ViewEventOverview = () => {
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            <Button size='sm' className='w-full' variant='secondary'>
-              Edit Event
-            </Button>
+            <EditEventSheet
+              asChild
+              trigger={
+                <Button size='sm' className='w-full' variant='secondary'>
+                  Edit Event
+                </Button>
+              }
+            />
             <Button size='sm' className='w-full' variant='secondary'>
               Change Photo
             </Button>
