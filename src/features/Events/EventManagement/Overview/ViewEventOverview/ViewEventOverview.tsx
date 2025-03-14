@@ -1,6 +1,7 @@
 import SendABlastDialog from '../../Blasts/SendABlast/SendABlastDialog'
 import InviteGuestsDialog from '../../Guests/InviteGuests/InviteGuestsDialog'
 import ShareEventDialog from '../ShareEvent/ShareEventDialog'
+import AddHostDialog from '../AddHost/AddHostDialog'
 import {
   Calendar1,
   CalendarSync,
@@ -117,10 +118,15 @@ const ViewEventOverview = () => {
             <p className='font-medium text-2xl'>Hosts</p>
             <p className='text-muted-foreground'>Add hosts, special guests, and event managers.</p>
           </div>
-          <Button size='sm' variant='secondary'>
-            <Plus />
-            Add Host
-          </Button>
+          <AddHostDialog
+            asChild
+            trigger={
+              <Button size='sm' variant='secondary'>
+                <Plus />
+                Add Host
+              </Button>
+            }
+          />
         </div>
         <div className='flex flex-col gap-2.5'>
           <Card className='p-4 flex items-center gap-4'>
