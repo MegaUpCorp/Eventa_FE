@@ -7,83 +7,135 @@ import { Img } from 'src/components'
 import { Timeline, TimelineConnector, TimelineDot, TimelineItem, TimelineSeparator } from 'src/components/ui/timeline'
 
 export interface EventListProps {
+  calendarId: string
+  capacity: number
+  delFlg: boolean
   id: string
   title: string
   description?: string
-  start_date: string
+  startDate: string
+  endDate: string
   time_start: string
   time_end: string
-  location?: string
+  location?: object
   guests?: number
   imgage?: string
+  isFree?: boolean
+  isOnline?: boolean
+  price?: number
+  profilePicture?: string
+  slug?: string
+  visibility?: string
 }
-
 const eventData: EventListProps[] = [
   {
     id: '1',
     title: "GOOGLE'S INNOVATION SYMPOSIUM",
-    start_date: '2025-02-28',
+    startDate: '2025-02-28',
+    endDate: '2025-02-28',
+    calendarId: '1',
+    capacity: 100,
+    delFlg: false,
     time_start: '07:00 AM',
     time_end: '09:00 AM',
-    location: 'Location Missing',
+    location: { name: 'Location Missing' },
     guests: 0,
+    isFree: true,
+    isOnline: false,
+    price: 0,
+    profilePicture:
+      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin',
+    slug: 'google-innovation-symposium',
+    visibility: 'public',
     imgage:
       'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin'
   },
   {
     id: '2',
     title: 'BOOK REVIEW – WHAT’S YOUR STORY?',
-    start_date: '2025-02-01',
+    startDate: '2025-02-02',
+    endDate: '2025-02-02',
+    calendarId: '1',
+    capacity: 100,
+    delFlg: false,
     time_start: '09:00 AM',
     time_end: '11:00 AM',
-    location: 'FPT University HCMC',
+    location: { name: 'Location Missing' },
     guests: 200,
     imgage:
-      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin'
+      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin',
+    isFree: true,
+    isOnline: false,
+    price: 0,
+    profilePicture:
+      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin',
+    slug: 'book-review-whats-your-story',
+    visibility: 'public'
   },
   {
     id: '3',
     title: 'CONTENT CREATION MASTERCLASS',
-    start_date: '2025-02-02',
+    startDate: '2025-02-02',
+    endDate: '2025-02-02',
+    calendarId: '1',
+    capacity: 100,
+    delFlg: false,
     time_start: '07:00 AM',
     time_end: '09:00 AM',
-    location: 'Location Missing',
+    location: { name: 'Location Missing' },
     guests: 0,
+    isFree: true,
+    isOnline: false,
+    price: 0,
+    profilePicture:
+      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin',
+    slug: 'content-creation-masterclass',
+    visibility: 'public',
     imgage:
       'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin'
   },
   {
     id: '4',
     title: 'FPT’S TECHNOLOGY SHOWCASE EXPO',
-    start_date: '2025-02-02',
+    startDate: '2025-02-02',
+    endDate: '2025-02-02',
+    calendarId: '1',
+    capacity: 100,
+    delFlg: false,
     time_start: '09:00 AM',
     time_end: '11:00 AM',
-    location: 'FPT University HCMC',
+    location: { name: 'Location Missing' },
     guests: 400,
     imgage:
-      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin'
+      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin',
+    isFree: true,
+    isOnline: false,
+    price: 0,
+    profilePicture:
+      'https://cloud.appwrite.io/v1/storage/buckets/67bc7909001dae69bd46/files/67bd996a002857eac7e0/view?project=67bc78cb002225a750d4&mode=admin',
+    slug: 'fpts-technology-showcase-expo',
+    visibility: 'public'
   }
 ]
 
 const groupEventsByDate = (events: EventListProps[]) => {
   const grouped: { [key: string]: EventListProps[] } = {}
   events.forEach((event) => {
-    if (!grouped[event.start_date]) {
-      grouped[event.start_date] = []
+    if (!grouped[event.startDate]) {
+      grouped[event.startDate] = []
     }
-    grouped[event.start_date].push(event)
+    grouped[event.startDate].push(event)
   })
   return grouped
 }
 
-export default function EventList(eventData: EventListProps[]): JSX.Element {
+const EventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => {
   const now = moment()
-  const upcomingEvents = eventData.filter((event) => moment(event.start_date).isSameOrAfter(now, 'day'))
-  const pastEvents = eventData.filter((event) => moment(event.start_date).isBefore(now, 'day'))
-
+  const upcomingEvents = eventData.filter((event) => moment(event.startDate).isSameOrAfter(now, 'day'))
+  const pastEvents = eventData.filter((event) => moment(event.startDate).isBefore(now, 'day'))
   const groupedUpcomingEvents = groupEventsByDate(upcomingEvents)
   const groupedPastEvents = groupEventsByDate(pastEvents)
-
+  
   return (
     <div className='container-base p-4 mx-auto text-white'>
       <Tabs defaultValue='upcoming'>
@@ -119,7 +171,7 @@ export default function EventList(eventData: EventListProps[]): JSX.Element {
                             <p className='text-sm text-gray-400'>{event.time_start}</p>
                             <CardTitle className='text-lg font-bold mt-1'>{event.title}</CardTitle>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-2'>
-                              <MapPinIcon size={18} /> {event.location || 'Location Missing'}
+                              <MapPinIcon size={18} /> {event.location.name || 'Location Missing'}
                             </div>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
@@ -161,7 +213,7 @@ export default function EventList(eventData: EventListProps[]): JSX.Element {
                             <p className='text-sm text-gray-400'>{event.time_start}</p>
                             <CardTitle className='text-lg font-bold mt-1'>{event.title}</CardTitle>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-2'>
-                              <MapPinIcon size={18} /> {event.location || 'Location Missing'}
+                              <MapPinIcon size={18} /> {event.location.name || 'Location Missing'}
                             </div>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
@@ -184,3 +236,4 @@ export default function EventList(eventData: EventListProps[]): JSX.Element {
   )
 }
 
+export default EventList
