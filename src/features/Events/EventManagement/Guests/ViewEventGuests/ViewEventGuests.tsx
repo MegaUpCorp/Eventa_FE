@@ -1,7 +1,7 @@
 import CheckInGuestsDialog from '../CheckInGuests/CheckInGuestsDialog'
 import InviteGuestsDialog from '../InviteGuests/InviteGuestsDialog'
 import ToggleGuestListDialog from '../ToggleGuestList/ToggleGuestListDialog'
-import { MailOpen } from 'lucide-react'
+import { MailOpen, QrCode, ScrollText } from 'lucide-react'
 import { Badge } from 'src/components/ui/badge'
 import { Card } from 'src/components/ui/card'
 import { Progress } from 'src/components/ui/progress'
@@ -29,8 +29,35 @@ const ViewEventGuests = () => {
             </Card>
           }
         />
-        <CheckInGuestsDialog className='w-full' />
-        <ToggleGuestListDialog className='w-full' />
+        <CheckInGuestsDialog
+          className='w-full'
+          trigger={
+            <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
+              <div className='flex items-center gap-3'>
+                <Badge className={'p-2 hover:bg-transparent bg-[#38ff4223]'}>
+                  <QrCode size={24} className='text-green' />
+                </Badge>
+                <p className='font-medium'>Check In Guests</p>
+              </div>
+            </Card>
+          }
+        />
+        <ToggleGuestListDialog
+          className='w-full'
+          trigger={
+            <Card className='flex items-center gap-3 p-2 glass w-full cursor-pointer'>
+              <div className='flex items-center gap-3'>
+                <Badge className={'p-2 hover:bg-transparent bg-[#ffff361f]'}>
+                  <ScrollText size={24} className='text-yellow' />
+                </Badge>
+                <div className='flex flex-col items-start'>
+                  <p className='font-medium'>Guest List</p>
+                  <p className='text-xs text-muted-foreground'>Shown to guests</p>
+                </div>
+              </div>
+            </Card>
+          }
+        />
       </div>
       <Separator />
       <p className='font-semibold text-xl'>Guest List</p>

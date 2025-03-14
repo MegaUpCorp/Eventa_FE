@@ -1,5 +1,6 @@
 import ViewEventOverview from 'src/features/Events/EventManagement/Overview/ViewEventOverview/ViewEventOverview'
 import ViewEventGuests from 'src/features/Events/EventManagement/Guests/ViewEventGuests/ViewEventGuests'
+import ViewEventRegistration from 'src/features/Events/EventManagement/Registration/ViewEventRegistration/ViewEventRegistration'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 
@@ -29,7 +30,7 @@ const eventTabs: EventTab[] = [
     id: 3,
     title: 'Registration',
     value: 'registration',
-    content: <div>Registration</div>
+    content: <ViewEventRegistration />
   },
   {
     id: 4,

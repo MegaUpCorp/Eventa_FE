@@ -26,11 +26,7 @@ const AddHostDialog = ({ trigger, asChild = false, className }: AddHostDialogPro
       open={open}
       setOpen={setOpen}
       asChild={asChild}
-      topIcon={
-        <div className='p-3 mr-auto rounded-full glass'>
-          <UserRoundPlus size={32} className='text-muted-foreground' />
-        </div>
-      }
+      topIcon={<UserRoundPlus size={32} className='text-muted-foreground' />}
       title='Add Host'
       subtitle='Add a host to highlight them on the event page or to get help managing the event.'
       className={cn('flex flex-col h-96 w-96', className)}
