@@ -2,6 +2,7 @@ import SendABlastDialog from '../../Blasts/SendABlast/SendABlastDialog'
 import InviteGuestsDialog from '../../Guests/InviteGuests/InviteGuestsDialog'
 import ShareEventDialog from '../ShareEvent/ShareEventDialog'
 import AddHostDialog from '../AddHost/AddHostDialog'
+import ChangeVisibilityDialog from '../ChangeVisibility/ChangeVisibilityDialog'
 import {
   Calendar1,
   CalendarSync,
@@ -172,10 +173,16 @@ const ViewEventOverview = () => {
               <p>--- This event is listed on your profile page.</p>
             </div>
             <div className='flex items-center gap-2'>
-              <Button size='sm' variant='secondary'>
-                <Eye />
-                Change Visibility
-              </Button>
+              <ChangeVisibilityDialog
+                visibility='private'
+                asChild
+                trigger={
+                  <Button size='sm' variant='secondary'>
+                    <Eye />
+                    Change Visibility
+                  </Button>
+                }
+              />
               <Button size='sm' variant='secondary'>
                 <CalendarSync />
                 Transfer Calendar
