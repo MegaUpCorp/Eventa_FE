@@ -3,6 +3,7 @@ import InviteGuestsDialog from '../../Guests/InviteGuests/InviteGuestsDialog'
 import ShareEventDialog from '../ShareEvent/ShareEventDialog'
 import AddHostDialog from '../AddHost/AddHostDialog'
 import ChangeVisibilityDialog from '../ChangeVisibility/ChangeVisibilityDialog'
+import EditEventSheet from '../EditEvent/EditEventSheet'
 import {
   Calendar1,
   CalendarSync,
@@ -73,9 +74,14 @@ const ViewEventOverview = () => {
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            <Button size='sm' className='w-full' variant='secondary'>
-              Edit Event
-            </Button>
+            <EditEventSheet
+              asChild
+              trigger={
+                <Button size='sm' className='w-full' variant='secondary'>
+                  Edit Event
+                </Button>
+              }
+            />
             <Button size='sm' className='w-full' variant='secondary'>
               Change Photo
             </Button>
