@@ -1,6 +1,7 @@
 import { Button } from 'src/components/ui/button'
 import { useSubscribe } from './useSubscribe'
 import { BellRing } from 'lucide-react'
+import { useUnsubscribe } from './useUnsubscribe'
 
 interface SubscriptionButtonProps {
   isSubscribe: boolean
@@ -9,11 +10,17 @@ interface SubscriptionButtonProps {
 
 const SubscriptionButton = ({ isSubscribe, publicUrl }: SubscriptionButtonProps) => {
   const { mutate: subscribe, isPending: isPendingSub } = useSubscribe()
+  const { mutate: unsubscribe, isPending: isPendingUnSub } = useUnsubscribe()
 
   switch (isSubscribe) {
     case true:
       return (
-        <Button variant='secondary' className='text-[#ffffff]'>
+        <Button
+          onClick={() => unsubscribe(publicUrl)}
+          variant='secondary'
+          className='text-[#ffffff]'
+          isLoading={isPendingUnSub}
+        >
           <BellRing />
           Unsubscribe
         </Button>

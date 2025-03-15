@@ -15,6 +15,7 @@ export const useSubscribe = () => {
     mutationFn: calendarAPI.subscribeCalendar,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['calendarDetail', publicUrl, user?.id] })
+      queryClient.invalidateQueries({ queryKey: ['getMySubscribedCalendars', user?.id] })
     },
     onError: (error: AxiosError) => {
       if (error.status === 400) {

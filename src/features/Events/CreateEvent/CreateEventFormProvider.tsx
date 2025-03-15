@@ -1,6 +1,6 @@
 import CreateEventForm from './CreateEventForm'
 import { Form } from 'src/components/ui/form'
-import { useCreateEvent } from './useCreateEvent'
+import { defaultValues, useCreateEvent } from './useCreateEvent'
 import { SubmitHandler } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { EventCoverForm } from './EventCoverForm'
@@ -8,12 +8,37 @@ import { CircleCheckBig, Loader2 } from 'lucide-react'
 import { toSlug } from 'src/utils/utils'
 import { CreateEventSchema } from 'src/schemas/eventSchema'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
+import { useToast } from 'src/hooks/use-toast'
 
 export const CreateEventFormProvider = () => {
+  const navigate = useNavigate()
+  const { toast } = useToast()
   const { methods, createEventMutation, myCalendars } = useCreateEvent()
 
   const onSubmit: SubmitHandler<CreateEventSchema> = async (data) => {
-    createEventMutation.mutate({ ...data, slug: toSlug(data.title, false) || '' })
+    const slug = toSlug(data.title, false) || ''
+    createEventMutation
+      .mutateAsync({ ...data, slug })
+      .then(() => {
+        const calendarId = methods.getValues('calendarId')
+        navigate(`/events/manage/${slug}`)
+        methods.reset({ ...defaultValues, calendarId })
+        localStorage.removeItem('event-desc')
+        return toast({
+          title: '🎉 Create event successfully!',
+          description: 'We are redirecting you to the event management page!',
+          duration: 5000
+        })
+      })
+      .catch((error: AxiosError) => {
+        return toast({
+          title: '❌ Oops!',
+          description: error.message,
+          duration: 5000
+        })
+      })
   }
 
   useEffect(() => {

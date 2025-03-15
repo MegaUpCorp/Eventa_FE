@@ -1,7 +1,21 @@
+import FilterEventsDrawer from '../FilterEventsDrawer/FilterEventsDrawer'
 import SubscriptionButton from '../Subscription/SubscriptionButton'
-import { format } from 'date-fns'
-import { FileText, List, MapPin, Plus, Search, Video } from 'lucide-react'
+import {
+  addHours,
+  addWeeks,
+  endOfWeek,
+  format,
+  isToday,
+  isTomorrow,
+  isWithinInterval,
+  isYesterday,
+  parseISO,
+  startOfWeek
+} from 'date-fns'
+import { ArchiveRestore, MapPin, Plus, PlusSquare, Search, Video } from 'lucide-react'
 import { useState } from 'react'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { CalendarEventAccount, CalendarEventItem } from 'src/@types/calendar.type'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Button } from 'src/components/ui/button'
 import { Calendar } from 'src/components/ui/calendar'
@@ -19,35 +33,84 @@ import {
   TimelineTitle
 } from 'src/components/ui/timeline'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'src/components/ui/tooltip'
+import { useUserStore } from 'src/config/zustand/UserStore'
 import { useViewCalendarDetail } from './useViewCalendarDetail'
-import { Navigate } from 'react-router-dom'
+import { useDebounce } from 'use-debounce'
+
+const categorizeDate = (dateString: string): string => {
+  const date = parseISO(dateString)
+  const today = new Date()
+
+  if (isToday(date)) return 'Today'
+  if (isTomorrow(date)) return 'Tomorrow'
+  if (isYesterday(date)) return 'Yesterday'
+
+  const startOfThisWeek = startOfWeek(today, { weekStartsOn: 1 })
+  const endOfThisWeek = endOfWeek(today, { weekStartsOn: 1 })
+
+  if (isWithinInterval(date, { start: startOfThisWeek, end: endOfThisWeek })) {
+    return 'This Week'
+  }
+
+  const startOfNextWeek = addWeeks(startOfThisWeek, 1)
+  const endOfNextWeek = addWeeks(endOfThisWeek, 1)
+
+  if (isWithinInterval(date, { start: startOfNextWeek, end: endOfNextWeek })) {
+    return 'Next Week'
+  }
+
+  return format(date, 'dd MMM yyyy')
+}
 
 const users = [
   {
-    name: 'Liam Wilson',
+    username: 'Liam Wilson',
     role: 'Designer',
-    image:
+    profilePicture:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDv4IypsNlDqKx5_XwdakAhV19hDBHjkWkwpyFoV8ZitZNKiG2ukUdBfSIvcnmkd1ChDo&usqp=CAU'
   },
   {
-    name: 'Emma Davis',
+    username: 'Emma Davis',
     role: 'Developer',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNt9UpcsobJNOGFHPeBt-88iRmqjflBnIjhw&s'
+    profilePicture: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNt9UpcsobJNOGFHPeBt-88iRmqjflBnIjhw&s'
   },
   {
-    name: 'Noah Brown',
+    username: 'Noah Brown',
     role: 'Manager',
-    image:
+    profilePicture:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwfki8qupAeZafWi7UTxzDOHPhtTyJ2AGghm6zF6sJjKVXxxac_gFEZ5nsHmghc31f54M&usqp=CAU'
   }
 ]
 
+type TabState = 'upcoming' | 'past'
+
 export const ViewCalendarDetail = () => {
+  const navigate = useNavigate()
+  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [tab, setTab] = useState<TabState>('upcoming')
+  const [filter, setFilter] = useState('')
+  const [debouncedFilter] = useDebounce(filter, 500)
+  const { publicUrl } = useParams()
+  const { user } = useUserStore()
   const {
-    '0': { data: calendarDetail, isLoading }
-  } = useViewCalendarDetail()
+    '0': { data: calendarDetail, isLoading },
+    '1': { data: calendarEvents }
+  } = useViewCalendarDetail(
+    publicUrl || '',
+    debouncedFilter ? debouncedFilter : undefined,
+    date ? format(addHours(date, 7), 'yyyy-MM-dd') : undefined
+  )
 
   if (!calendarDetail && !isLoading) return <Navigate to='/' />
+
+  const filteredEvents = calendarEvents?.data.filter((x) => x?.startDate) || []
+
+  const sortedEvents =
+    tab === 'upcoming'
+      ? filteredEvents.filter((event) => new Date(event.startDate) >= new Date())
+      : filteredEvents.filter((event) => new Date(event.startDate) < new Date())
+
+  const isEmpty = sortedEvents.length === 0
 
   return (
     <>
@@ -59,67 +122,107 @@ export const ViewCalendarDetail = () => {
             alt='nature'
             className='w-28 h-28 object-cover rounded-2xl border-background border-8'
           />
-          <SubscriptionButton
-            isSubscribe={calendarDetail?.isSubscribe || false}
-            publicUrl={calendarDetail?.publicUrl || ''}
-          />
+          {user?.id !== calendarDetail?.accountId && (
+            <SubscriptionButton
+              isSubscribe={calendarDetail?.isSubscribe || false}
+              publicUrl={calendarDetail?.publicUrl || ''}
+            />
+          )}
         </div>
       </div>
       <div className='container-lg px-4 space-y-2 mt-4'>
         <p className='text-4xl font-semibold mt-4'>{calendarDetail?.name}</p>
         <div className='flex items-center gap-2'>
-          <MapPin size={18} className='text-muted-foreground' />
-          <p className='font-medium'>{calendarDetail?.location.name}</p>
+          {calendarDetail?.location.name && (
+            <>
+              <MapPin size={18} className='text-muted-foreground' />
+              <p className='font-medium'>{calendarDetail?.location.name}</p>
+            </>
+          )}
         </div>
         <p className='text-muted-foreground'>{calendarDetail?.description}</p>
       </div>
       <Separator />
       <div className='container-lg px-4 grid grid-cols-12 gap-8'>
-        <div className='col-span-8 space-y-4'>
+        <div className='col-span-8 flex flex-col gap-4'>
           <div className='flex items-center justify-between'>
             <p className='font-semibold text-2xl'>Events</p>
             <div className='flex items-center gap-2'>
-              <Tabs defaultValue='card'>
+              <Tabs defaultValue={tab} onValueChange={(value) => setTab(value as TabState)}>
                 <TabsList>
-                  <TabsTrigger value='card'>
-                    <FileText size={14} className='mr-2' />
-                    Card
-                  </TabsTrigger>
-                  <TabsTrigger value='list'>
-                    <List size={14} className='mr-2' />
-                    List
-                  </TabsTrigger>
+                  <TabsTrigger value='upcoming'>Upcoming</TabsTrigger>
+                  <TabsTrigger value='past'>Past</TabsTrigger>
                 </TabsList>
               </Tabs>
-              <Button variant='secondary' size='icon'>
-                <Search />
-              </Button>
+              <FilterEventsDrawer
+                filter={debouncedFilter}
+                events={filteredEvents}
+                setFilter={setFilter}
+                asChild
+                trigger={
+                  <Button variant='secondary' size='icon'>
+                    <Search />
+                  </Button>
+                }
+              />
             </div>
           </div>
-          <Timeline>
-            <TimelineItem>
-              <TimelineSeparator>
-                <TimelineDot />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <EventTimeline />
-            </TimelineItem>
-            <TimelineItem>
-              <TimelineSeparator>
-                <TimelineDot />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <EventTimeline />
-            </TimelineItem>
-          </Timeline>
+          {isEmpty ? (
+            <div className='flex flex-col items-center justify-center gap-2 mt-28 text-muted-foreground'>
+              <ArchiveRestore size={70} />
+              <p className='font-semibold text-2xl mt-2'>No Events</p>
+              <p>
+                {tab === 'upcoming' ? 'This calendar has no upcoming events.' : 'This calendar has no past events.'}
+              </p>
+              {calendarDetail?.accountId === user?.id && (
+                <Button variant='secondary' className='mt-2' onClick={() => navigate('/events/create')}>
+                  <PlusSquare />
+                  Add Event
+                </Button>
+              )}
+            </div>
+          ) : (
+            sortedEvents
+              .sort((a, b) => b.startDate.localeCompare(a.startDate))
+              .map((timeline) => {
+                return (
+                  <Timeline key={timeline.startDate}>
+                    <TimelineItem>
+                      <TimelineSeparator>
+                        <TimelineDot />
+                        <TimelineConnector />
+                      </TimelineSeparator>
+                      <TimelineContent>
+                        <TimelineTitle className='font-medium text-lg'>
+                          {categorizeDate(timeline.startDate)}
+                        </TimelineTitle>
+                        <TimelineDescription className='font-medium'>
+                          {format(timeline.startDate, 'EEEE, dd MMMM yyyy')}
+                        </TimelineDescription>
+                        <div className='flex flex-col gap-3 mt-4 space-y-2'>
+                          {timeline.events
+                            .sort((a, b) => b.startDate.localeCompare(a.startDate))
+                            .map((event) => (
+                              <EventCardTimeline key={event.id} event={event} accounts={timeline.account} />
+                            ))}
+                        </div>
+                      </TimelineContent>
+                    </TimelineItem>
+                  </Timeline>
+                )
+              })
+          )}
         </div>
         <div className='col-span-4 space-y-4'>
           <Button className='w-full' variant='secondary'>
             <Plus />
             Submit Event
           </Button>
-          <Card className='p-2'>
-            <Calendar />
+          <Card className='p-2 flex flex-col gap-2'>
+            <Calendar mode='single' selected={date} onSelect={setDate} required={true} className='rounded-md border' />
+            <Button variant='destructive' onClick={() => setDate(undefined)} disabled={!date}>
+              Clear Selection
+            </Button>
           </Card>
         </div>
       </div>
@@ -127,71 +230,69 @@ export const ViewCalendarDetail = () => {
   )
 }
 
-const EventTimeline = () => {
+export const EventCardTimeline = ({
+  event,
+  accounts
+}: {
+  event: CalendarEventItem
+  accounts: CalendarEventAccount[]
+}) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
   return (
-    <TimelineContent>
-      <TimelineTitle className='font-medium text-lg'>Today</TimelineTitle>
-      <TimelineDescription className='font-medium'>{format(new Date(), 'EEEE, dd MMMM yyyy')}</TimelineDescription>
-      <div className='flex flex-col gap-3 mt-4 space-y-2'>
-        {[1, 2, 3].map((item) => (
-          <Card className='p-4 grid grid-cols-12 gap-3' key={item}>
-            <div className='col-span-9 flex flex-col gap-2'>
-              <p className='text-muted-foreground font-medium'>10:00 AM</p>
-              <p className='text-xl font-medium'>🧠 GenAI Collective 🧠 Marin AI Investors Roundtable</p>
-              <div className='flex items-center gap-3'>
-                <TooltipProvider delayDuration={0}>
-                  <div className='flex -space-x-2 *:ring *:ring-background'>
-                    {users.map((user, index) => (
-                      <Tooltip key={index}>
-                        <TooltipTrigger asChild>
-                          <Avatar
-                            className={`size-6 cursor-pointer transition-transform ${activeIndex === index ? 'z-10 scale-110' : ''}`}
-                            onMouseEnter={() => setActiveIndex(index)}
-                            onMouseLeave={() => setActiveIndex(null)}
-                          >
-                            <AvatarImage src={user.image} alt={user.name} />
-                            <AvatarFallback>
-                              {user.name
-                                .split(' ')
-                                .map((n) => n[0])
-                                .join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                        </TooltipTrigger>
-                        <TooltipContent className='bg-accent glass'>
-                          <p className='font-semibold text-base text-primary'>{user.name}</p>
-                          <p className='text-xs text-[#ffffff]'>{user.role}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </div>
-                </TooltipProvider>
-                <p className='font-medium text-muted-foreground text-sm'>By Microsoft for Startups & Nathan Jordan</p>
-              </div>
-              <p className='mr-auto mt-2 text-green font-medium text-sm px-2 py-1 bg-[#5eff2827] rounded-lg'>
-                300.000 VND
-              </p>
-              <div className='flex items-center gap-2 mt-2'>
-                <Video className='text-muted-foreground' size={18} />
-                <p className='font-medium text-muted-foreground'>Google Meet</p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <MapPin className='text-muted-foreground' size={18} />
-                <p className='font-medium text-muted-foreground'>District 1, Ho Chi Minh City</p>
-              </div>
+    <Card className='p-4 grid grid-cols-12 gap-3'>
+      <div className='col-span-9 flex flex-col gap-2'>
+        <p className='text-muted-foreground font-medium'>{format(parseISO(event.startDate), 'hh:mm a')}</p>
+        <p className='text-xl font-medium'>{event.title}</p>
+        <div className='flex items-center gap-3'>
+          <TooltipProvider delayDuration={0}>
+            <div className='flex -space-x-2 *:ring *:ring-background'>
+              {users.map((user, index) => (
+                <Tooltip key={index}>
+                  <TooltipTrigger asChild>
+                    <Avatar
+                      className={`size-6 cursor-pointer transition-transform ${activeIndex === index ? 'z-10 scale-110' : ''}`}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onMouseLeave={() => setActiveIndex(null)}
+                    >
+                      <AvatarImage src={user.profilePicture} alt={user.username} />
+                      <AvatarFallback>
+                        {user.username
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent className='bg-accent glass'>
+                    <p className='font-semibold text-base text-primary'>{user.username}</p>
+                    {/* <p className='text-xs text-[#ffffff]'>{user.role}</p> */}
+                  </TooltipContent>
+                </Tooltip>
+              ))}
             </div>
-            <div className='col-span-3'>
-              <img
-                src='https://rubee.com.vn/wp-content/uploads/2021/06/logo-cua-microsoft.png'
-                alt='event'
-                className='w-full h-[120px] object-cover rounded-lg'
-              />
-            </div>
-          </Card>
-        ))}
+          </TooltipProvider>
+          <p className='font-medium text-muted-foreground text-sm'>By Microsoft for Startups & Nathan Jordan</p>
+        </div>
+        {event.meetUrl && event.isOnline && (
+          <div className='flex items-center gap-2 mt-2'>
+            <Video className='text-muted-foreground' size={18} />
+            <p className='font-medium text-muted-foreground'>Google Meet</p>
+          </div>
+        )}
+        {event.location.id && (
+          <div className='flex items-center gap-2'>
+            <MapPin className='text-muted-foreground' size={18} />
+            <p className='font-medium text-muted-foreground'>{event.location.name}</p>
+          </div>
+        )}
+        <p className='mr-auto mt-2 text-green font-medium text-sm px-2 py-1 bg-[#5eff2827] rounded-lg'>
+          {event.price && !event.isFree ? event.price : 'Free'}
+        </p>
       </div>
-    </TimelineContent>
+      <div className='col-span-3'>
+        <img src={event.profilePicture || ''} alt='event' className='w-full h-[120px] object-cover rounded-lg' />
+      </div>
+    </Card>
   )
 }

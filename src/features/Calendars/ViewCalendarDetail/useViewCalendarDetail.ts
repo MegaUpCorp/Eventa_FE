@@ -1,10 +1,8 @@
 import calendarAPI from 'src/apis/api.calendar'
 import { useQueries } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
 import { useUserStore } from 'src/config/zustand/UserStore'
 
-export const useViewCalendarDetail = () => {
-  const { publicUrl } = useParams()
+export const useViewCalendarDetail = (publicUrl: string, title?: string, startDate?: string) => {
   const { user } = useUserStore()
 
   return useQueries({
@@ -12,6 +10,10 @@ export const useViewCalendarDetail = () => {
       {
         queryKey: ['calendarDetail', publicUrl, user?.id],
         queryFn: () => calendarAPI.getCalendarDetail(publicUrl || '')
+      },
+      {
+        queryKey: ['calendarEvents', publicUrl, title, startDate],
+        queryFn: () => calendarAPI.getCalendarEvents(publicUrl, title, startDate)
       }
     ]
   })

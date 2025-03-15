@@ -6,7 +6,7 @@ const smWidthRoutes = [''] // 780px
 
 const lgWidthRoutes = ['/', '/events/create'] // 960px
 
-const lgWidthRegex = [/^\/calendars\/\d+$/]
+const lgWidthRegex = [/^\/calendars(\/.*)?$/]
 
 const useMatchesRoute = (currentPath: string, routes: string[], regexes: RegExp[] = []) => {
   return routes.includes(currentPath) || regexes.some((regex) => regex.test(currentPath))
