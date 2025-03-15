@@ -43,7 +43,7 @@ const publicRoutes: RouteType[] = [
     element: <EventManagement />
   })),
   {
-    path: '/calendars/:id',
+    path: '/calendars/:publicUrl',
     element: <CalendarDetailPage />
   },
   {

@@ -36,7 +36,7 @@ export const useSignIn = () => {
         })
       } else {
         return toast({
-          title: 'Something went wrong!',
+          title: '❌ Something went wrong!',
           description: error.message,
           duration: 5000
         })

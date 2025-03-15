@@ -3,11 +3,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { addHours } from 'date-fns'
 import { useForm } from 'react-hook-form'
-import { useGetMyCalendars } from 'src/features/Calendars/GetMyCalendars/useGetMyCalendars'
+import { useGetMyCalendars } from 'src/features/Calendars/ViewCalendars/useGetMyCalendars'
 import { useLocalStorage } from 'src/hooks/useLocalStorage'
 import { createEventSchema, CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
 
-const defaultValues: Partial<CreateEventSchema> = {
+export const defaultValues: Partial<CreateEventSchema> = {
   visibility: 'public',
   title: '',
   startDate: new Date().toISOString(),
@@ -36,16 +36,7 @@ export const useCreateEvent = () => {
   })
 
   const createEventMutation = useMutation({
-    mutationFn: eventAPI.createEvent,
-    onSuccess: () => {
-      // TODO: Redirect to the event page management
-      const calendarId = methods.getValues('calendarId')
-      methods.reset({ ...defaultValues, calendarId })
-      localStorage.removeItem('event-desc')
-    },
-    onError: () => {
-      // TODO: Handle error
-    }
+    mutationFn: eventAPI.createEvent
   })
 
   return { methods, createEventMutation, myCalendars }

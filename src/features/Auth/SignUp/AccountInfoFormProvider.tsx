@@ -65,7 +65,7 @@ export const AccountInfoFormProvider = () => {
       })
       .catch((error) => {
         return toast({
-          title: 'Something went wrong!',
+          title: '❌ Something went wrong!',
           description: error.message,
           duration: 5000
         })
