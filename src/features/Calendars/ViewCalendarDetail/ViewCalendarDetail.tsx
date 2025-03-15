@@ -112,6 +112,10 @@ export const ViewCalendarDetail = () => {
 
   const isEmpty = sortedEvents.length === 0
 
+  if (calendarDetail?.accountId === user?.id) {
+    return <Navigate to={`/calendars/manage/${publicUrl}`} />
+  }
+
   return (
     <>
       <div className='w-[1000px] h-72 mx-auto relative'>
