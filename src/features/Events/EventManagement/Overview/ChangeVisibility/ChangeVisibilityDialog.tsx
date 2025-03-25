@@ -40,7 +40,7 @@ const ChangeVisibilityDialog = ({ trigger, asChild = false, className, visibilit
         </div>
       }
       asChild={asChild}
-      className={cn('flex flex-col h-[340px] w-96', className)}
+      className={cn('flex flex-col w-96', className)}
       content={
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className='flex flex-col gap-4'>

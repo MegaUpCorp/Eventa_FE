@@ -19,7 +19,11 @@ const ToggleGuestListDialog = ({ trigger, asChild = false, className }: ToggleGu
       triggerClassName={className}
       asChild={asChild}
       content={<Button className='mt-auto text-[#fff]'>Hide Guest List</Button>}
-      topIcon={<ScrollText size={32} className='text-muted-foreground' />}
+      topIcon={
+        <div className='p-3 mr-auto rounded-full glass text-muted-foreground'>
+          <ScrollText size={32} className='text-muted-foreground' />
+        </div>
+      }
       title='Public Guest List'
       subtitle='Display the guest count and a few guests on the event page. Even when it is turned on, only registered guests can access the full list.'
     >

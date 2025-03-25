@@ -54,7 +54,11 @@ const ChangeCapacityDialog = ({ trigger, asChild = false, className }: ChangeCap
           </form>
         </Form>
       }
-      topIcon={<Download size={32} className='text-muted-foreground rotate-180' />}
+      topIcon={
+        <div className='p-3 mr-auto rounded-full glass text-muted-foreground'>
+          <Download size={32} className='text-muted-foreground rotate-180' />
+        </div>
+      }
       title='Max Capacity'
       subtitle='Auto-close registration when the capacity is reached. Only approved guests count toward the cap.'
     >

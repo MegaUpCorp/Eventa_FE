@@ -35,7 +35,7 @@ const DialogButton = ({
         {children}
       </DialogTrigger>
       <DialogContent className={cn('flex flex-col w-96', className)}>
-        <div className='p-3 mr-auto rounded-full glass'>{topIcon}</div>
+        {topIcon ? <div className='p-3 mr-auto rounded-full glass'>{topIcon}</div> : null}
         {title ? (
           <DialogHeader>
             <DialogTitle className='text-2xl'>{title}</DialogTitle>

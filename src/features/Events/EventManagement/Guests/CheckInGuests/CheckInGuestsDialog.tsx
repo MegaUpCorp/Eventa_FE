@@ -20,7 +20,11 @@ const CheckInGuestsDialog = ({ trigger, asChild = false, className }: CheckInGue
       asChild={asChild}
       title='Check In Guests'
       subtitle='You can check in guests with our web scanner.'
-      topIcon={<QrCode size={32} className='text-muted-foreground' />}
+      topIcon={
+        <div className='p-3 mr-auto rounded-full glass text-muted-foreground'>
+          <QrCode size={32} className='text-muted-foreground' />
+        </div>
+      }
       content={<Button className='mt-auto text-[#fff]'>Open Web Scanner</Button>}
     >
       {trigger}
