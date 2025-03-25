@@ -34,3 +34,34 @@ export type LocationDetailAPIResponse = {
   result: Location
   status: string
 }
+
+export interface EventDetail{
+  calendarId: string
+  id: string
+  title: string
+  description: string
+  startDate: string
+  endDate: string
+  isOnline: boolean
+  isFree: boolean
+  price: number
+  capacity: number
+  location: {
+    id: string
+    name: string
+    address: string
+    latitude: number
+    longitude: number
+  }
+  profilePicture: string
+  requiresApproval: boolean
+  visibility: string
+  slug: string
+  organizerId: {
+    id: string
+  }
+  insDate: string
+  updDate: string
+  delFlg: boolean
+  createdAt: string
+}
