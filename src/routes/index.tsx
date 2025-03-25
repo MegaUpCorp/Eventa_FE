@@ -14,6 +14,7 @@ import {
   HomePageUser,
   MePage
 } from 'src/pages'
+import { EventDetail } from 'src/pages/Event/EventDetail'
 
 type RouteType = {
   path: string
@@ -35,10 +36,10 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-  // {
-  //   path: 'events/event-detail',
-  //   element: <EventDetailPageUser />
-  // },
+  {
+    path: 'events/:slug',
+    element: <EventDetail />
+  },
   ...eventManagementRoutes.map((route) => ({
     path: `/events/manage/:slug${route}`,
     element: <EventManagementPage />

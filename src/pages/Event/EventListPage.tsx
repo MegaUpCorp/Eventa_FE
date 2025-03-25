@@ -1,17 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import eventAPI from 'src/apis/api.event'
-import EventList from 'src/components/Event/EventList'
+import ViewEventList from 'src/features/Events/ViewEvents/ViewEventList'
+import { useGetEventList } from 'src/features/Events/ViewEvents/useGetEventList'
 
 const EventListPage = () => {
-  const { data } = useQuery({
-    queryKey: ['events'],
-    queryFn: () => eventAPI.getEvents()
-  })
-  console.log("data", data)
-
+  const {data: events} = useGetEventList();
   return(
-    <EventList eventData={data?.data || []} />
+    <ViewEventList eventData={events?.data || []} />
   )
 }
 export default EventListPage
