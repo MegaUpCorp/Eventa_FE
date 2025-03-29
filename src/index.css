@@ -84,11 +84,11 @@
   }
 }
 
-.relative {
+.background {
   position: relative;
 }
 
-.relative::before {
+.background::before {
   content: '';
   position: absolute;
   inset: 0;

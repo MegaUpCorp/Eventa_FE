@@ -1,10 +1,9 @@
-import { useQueries, useQuery } from '@tanstack/react-query'
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
 import eventAPI from 'src/apis/api.event'
 
-export const useViewEventDetail = (publicUrl:string) => {
-    return useQuery({
-      queryKey: ['event', publicUrl],
-      queryFn: () => eventAPI.getEventDetail(publicUrl)
-    })
+export const useViewEventDetail = (publicUrl: string) => {
+  return useQuery({
+    queryKey: ['event', publicUrl],
+    queryFn: () => eventAPI.getEventDetail(publicUrl)
+  })
 }

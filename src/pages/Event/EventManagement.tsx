@@ -1,8 +1,10 @@
 import ViewEventOverview from 'src/features/Events/EventManagement/Overview/ViewEventOverview/ViewEventOverview'
 import ViewEventGuests from 'src/features/Events/EventManagement/Guests/ViewEventGuests/ViewEventGuests'
 import ViewEventRegistration from 'src/features/Events/EventManagement/Registration/ViewEventRegistration/ViewEventRegistration'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import ViewEventInsights from 'src/features/Events/EventManagement/Insights/ViewEventInsights'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
+import { useViewEventDetail } from 'src/features/Events/ViewEvents/useViewEventDetail'
 
 interface EventTab {
   id: number
@@ -13,49 +15,52 @@ interface EventTab {
 
 type Value = 'overview' | 'guests' | 'registration' | 'blasts' | 'insights' | 'more'
 
-const eventTabs: EventTab[] = [
-  {
-    id: 1,
-    title: 'Overview',
-    value: 'overview',
-    content: <ViewEventOverview />
-  },
-  {
-    id: 2,
-    title: 'Guests',
-    value: 'guests',
-    content: <ViewEventGuests />
-  },
-  {
-    id: 3,
-    title: 'Registration',
-    value: 'registration',
-    content: <ViewEventRegistration />
-  },
-  {
-    id: 4,
-    title: 'Blasts',
-    value: 'blasts',
-    content: <div>Blasts</div>
-  },
-  {
-    id: 5,
-    title: 'Insights',
-    value: 'insights',
-    content: <div>Insights</div>
-  },
-  {
-    id: 6,
-    title: 'More',
-    value: 'more',
-    content: <div>More</div>
-  }
-]
-
 const EventManagement = () => {
   const navigate = useNavigate()
   const { slug } = useParams()
   const { pathname } = useLocation()
+
+  if (!slug) return <Navigate to='/events' />
+  const { data: event } = useViewEventDetail(slug)
+
+  const eventTabs: EventTab[] = [
+    {
+      id: 1,
+      title: 'Overview',
+      value: 'overview',
+      content: <ViewEventOverview />
+    },
+    {
+      id: 2,
+      title: 'Guests',
+      value: 'guests',
+      content: <ViewEventGuests />
+    },
+    {
+      id: 3,
+      title: 'Registration',
+      value: 'registration',
+      content: <ViewEventRegistration />
+    },
+    // {
+    //   id: 4,
+    //   title: 'Blasts',
+    //   value: 'blasts',
+    //   content: <div>Blasts</div>
+    // },
+    {
+      id: 5,
+      title: 'Insights',
+      value: 'insights',
+      content: <ViewEventInsights />
+    },
+    {
+      id: 6,
+      title: 'More',
+      value: 'more',
+      content: <div>More</div>
+    }
+  ]
 
   let activeTab = eventTabs[0]
 
@@ -69,17 +74,17 @@ const EventManagement = () => {
     case 'blasts':
       activeTab = eventTabs[3]
       break
-    case 'insights':
-      activeTab = eventTabs[4]
-      break
+    // case 'insights':
+    //   activeTab = eventTabs[4]
+    //   break
     case 'more':
-      activeTab = eventTabs[5]
+      activeTab = eventTabs[4]
       break
   }
 
   return (
     <div className='container-base p-4 mb-32'>
-      <p className='text-3xl font-semibold mb-4'>Event Name</p>
+      <p className='text-3xl font-semibold mb-4'>{event?.data.title}</p>
       <Tabs defaultValue={activeTab.value} className='relative mr-auto w-full'>
         <TabsList className='inline-flex h-9 items-center text-muted-foreground w-full justify-start rounded-none border-b-2 bg-transparent p-0'>
           {eventTabs.map((tab) => (

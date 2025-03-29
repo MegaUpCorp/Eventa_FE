@@ -29,7 +29,11 @@ const SendABlastDialog = ({ trigger, asChild = false, className }: SendABlastDia
       setOpen={setOpen}
       asChild={asChild}
       triggerClassName={className}
-      topIcon={<Mail size={32} className='text-muted-foreground' />}
+      topIcon={
+        <div className='p-3 mr-auto rounded-full glass text-muted-foreground'>
+          <Mail size={32} className='text-muted-foreground' />
+        </div>
+      }
       title='Send Blast'
       subtitle='Guests will receive the blast via email. It will also be shown on the event page.'
       content={

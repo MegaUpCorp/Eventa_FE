@@ -31,7 +31,11 @@ const ChangeRegistrationDialog = ({ trigger, asChild = false, className }: Chang
           <Button className='w-full text-[#fff]'>Confirm</Button>
         </div>
       }
-      topIcon={<Ticket size={32} className='text-muted-foreground' />}
+      topIcon={
+        <div className='p-3 mr-auto rounded-full glass text-muted-foreground'>
+          <Ticket size={32} className='text-muted-foreground' />
+        </div>
+      }
       title='Registration'
       subtitle='Close registration to stop accepting new guests, including anyone who may have been invited.'
     >
