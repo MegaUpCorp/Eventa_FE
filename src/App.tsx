@@ -13,24 +13,26 @@ function App() {
 
   return (
     <StrictMode>
-      {/* <ToastContainer autoClose={2000} style={{ padding: '20px' }} /> */}
-      <div className='main relative'>
-        {layout.includes('navbar') && <NavBar />}
-        {/* <div
-          className='absolute inset-0 w-full h-full'
-          style={{
-            backgroundImage: `linear-gradient(to bottom, 
-            rgba(0, 0, 0, 1) 0%, 
-            ${primaryColor} 10%, 
-            ${primaryColor} 100%
-          )`
-          }}
-        /> */}
-        <div className='relative z-10 '>
-          <Router />
+      <div className='relative z-10 min-h-screen bg-cover bg-center bg-no-repeat'>
+        {/* <ToastContainer autoClose={2000} style={{ padding: '20px' }} /> */}
+        <div className='main relative'>
+          {layout.includes('navbar') && <NavBar />}
+          {/* <div
+            className='absolute inset-0 w-full h-full'
+            style={{
+              backgroundImage: `linear-gradient(to bottom, 
+              rgba(0, 0, 0, 1) 0%, 
+              ${primaryColor} 10%, 
+              ${primaryColor} 100%
+            )`
+            }}
+          /> */}
+          <div className='relative z-10 '>
+            <Router />
+          </div>
+          {layout.includes('footer') && <Footer />}
+          {layout.includes('chat') && ''}
         </div>
-        {layout.includes('footer') && <Footer />}
-        {layout.includes('chat') && ''}
       </div>
     </StrictMode>
   )

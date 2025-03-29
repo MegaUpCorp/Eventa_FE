@@ -84,6 +84,20 @@
   }
 }
 
+.relative {
+  position: relative;
+}
+
+.relative::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  filter: blur(30px);
+  z-index: -1;
+  background-image: url(/bg2.jpg);
+}
+
 .glass {
   background-color: rgba(102, 112, 128, 0.1);
   background-clip: padding-box;
