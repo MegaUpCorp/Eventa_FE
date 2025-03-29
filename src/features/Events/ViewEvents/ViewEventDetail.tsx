@@ -93,11 +93,17 @@ export const ViewEventDetail = () => {
                   <p>{event.visibility === 'public' ? 'Public Event' : 'Private Event'}</p>
                 </Badge>
                 {event.isFree ? (
-                  <Badge variant='secondary' className='bg-green-500/10 text-green-400 hover:bg-green-500/20 backdrop-blur-sm px-3 py-2 rounded-full'>
+                  <Badge
+                    variant='secondary'
+                    className='bg-green-500/10 text-green-400 hover:bg-green-500/20 backdrop-blur-sm px-3 py-2 rounded-full'
+                  >
                     Free
                   </Badge>
                 ) : (
-                  <Badge variant='secondary' className='bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 backdrop-blur-sm px-3 py-2 rounded-full'>
+                  <Badge
+                    variant='secondary'
+                    className='bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 backdrop-blur-sm px-3 py-2 rounded-full'
+                  >
                     ${event.price}
                   </Badge>
                 )}
@@ -114,7 +120,9 @@ export const ViewEventDetail = () => {
                   </div>
                   <div className='flex flex-col text-sm'>
                     <span>{formatDate(event.startDate)}</span>
-                    <span>{formatTime(event.startDate)} - {formatTime(event.endDate)}</span>
+                    <span>
+                      {formatTime(event.startDate)} - {formatTime(event.endDate)}
+                    </span>
                   </div>
                 </div>
 
@@ -133,11 +141,11 @@ export const ViewEventDetail = () => {
               <div className='bg-white/5 backdrop-blur-md p-6 rounded-2xl space-y-3 border border-white/10'>
                 <h3 className='font-medium text-lg text-white'>Registration</h3>
                 <p className='text-sm text-gray-300'>
-                  {event.requiresApproval 
-                    ? 'This event requires approval from the organizer to attend.' 
+                  {event.requiresApproval
+                    ? 'This event requires approval from the organizer to attend.'
                     : 'Welcome to the event! Please register below to join.'}
                 </p>
-                <Button className='w-full bg-blue/30 hover:bg-gray-light/30 text-white border font-medium rounded-xl h-11'>
+                <Button size="sm" className='w-full text-[#FFFFF]' >
                   Register
                 </Button>
               </div>
@@ -146,9 +154,11 @@ export const ViewEventDetail = () => {
               <div className='space-y-2'>
                 <h3 className='font-medium text-base'>About Event</h3>
                 <Separator className='my-4' />
-                <p className='text-muted-foreground text-sm leading-relaxed'>
-                  {event.description}
-                </p>
+                <div
+                  className='text-muted-foreground text-sm leading-relaxed'
+                  dangerouslySetInnerHTML={{ __html: event.description || '' }}
+                />
+                
               </div>
 
               {/* Location */}
@@ -156,7 +166,9 @@ export const ViewEventDetail = () => {
                 <h3 className='font-medium text-base'>Location</h3>
                 <Separator className='my-4' />
                 <p className='text-blue-400 font-medium'>{event.location?.name}</p>
-                <p className='text-sm text-muted-foreground'>{event.location?.address.replace(event.location.name + ', ', '')}</p>
+                <p className='text-sm text-muted-foreground'>
+                  {event.location?.address.replace(event.location.name + ', ', '')}
+                </p>
                 {event.location?.latitude && event.location?.longitude && (
                   <div className='rounded-2xl overflow-hidden relative border border-white/10'>
                     <GoongMap center={[event.location?.longitude, event.location?.latitude]} />

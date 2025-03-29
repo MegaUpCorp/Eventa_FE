@@ -36,10 +36,7 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-  {
-    path: 'events/:slug',
-    element: <EventDetail />
-  },
+  
   ...eventManagementRoutes.map((route) => ({
     path: `/events/manage/:slug${route}`,
     element: <EventManagementPage />
@@ -55,7 +52,8 @@ const publicRoutes: RouteType[] = [
   {
     path: '/discover',
     element: <DiscoverPage />
-  }
+  },
+  
 ]
 //
 const authenicatedRoutes: RouteType[] = [
@@ -77,7 +75,16 @@ const authenicatedRoutes: RouteType[] = [
   }
 ]
 //
-const unAuthenticatedRoute: RouteType[] = []
+const unAuthenticatedRoute: RouteType[] = [
+  {
+    path: 'events/:slug',
+    element: <EventDetail />
+  },
+  {
+    path: '/events/create',
+    element: <EventCreation />
+  },
+]
 //admin Route
 const adminRoutes: RouteType[] = []
 //staff Route
