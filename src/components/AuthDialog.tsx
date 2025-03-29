@@ -1,5 +1,10 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
+import { useMutation } from '@tanstack/react-query'
 import { Mailbox } from 'lucide-react'
+import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import authAPI from 'src/apis/api.auth'
 import {
   Dialog,
   DialogContent,
@@ -8,23 +13,16 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
+import { GoogleOAuthProvider, googleClientId } from 'src/config/googleOAuthConfig'
 import { useAuthStore } from 'src/config/zustand/AuthStore'
+import { useUserStore } from 'src/config/zustand/UserStore'
+import { AppContext } from 'src/context/app.context'
 import { SignInFormProvider } from 'src/features/Auth/SignIn/SignInFormProvider'
 import { AccountInfoFormProvider } from 'src/features/Auth/SignUp/AccountInfoFormProvider'
 import { EmailFormProvider } from 'src/features/Auth/SignUp/EmailFormProvider'
-import { Icons } from './Icons'
+import { useToast } from 'src/hooks/use-toast'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
-import { GoogleOAuthProvider, googleClientId } from 'src/config/googleOAuthConfig'
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
-import { useMutation } from '@tanstack/react-query'
-import authAPI from 'src/apis/api.auth'
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import { AppContext } from 'src/context/app.context'
-import { jwtDecode } from 'jwt-decode'
-import { useUserStore } from 'src/config/zustand/UserStore'
 interface AuthDialogProps {
   trigger: React.ReactNode
 }
@@ -34,13 +32,13 @@ export interface LoginGoogleBody {
 }
 const SocialButton = ({ className }: { className: string }) => {
   const navigate = useNavigate()
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { toast } = useToast()
   const loginGoogleMutation = useMutation({
     mutationFn: async (body: LoginGoogleBody) => {
       return await authAPI.loginGoogle(body)
     }
   })
-  const handleGoogleSuccess = async (response: CredentialResponse) => {
+  const handleGoogleSuccess = (response: CredentialResponse) => {
     try {
       const idToken = response.credential // Google ID Token
       if (!idToken) {
@@ -48,9 +46,14 @@ const SocialButton = ({ className }: { className: string }) => {
         return
       }
       const loginBody: LoginGoogleBody = { accessToken: idToken }
-      await loginGoogleMutation.mutateAsync(loginBody, {
+      loginGoogleMutation.mutate(loginBody, {
         onSuccess: (data) => {
           useUserStore.getState().login(data.data.data.accessToken)
+          return toast({
+            title: '🎉 Welcome to Eventa!',
+            description: 'We are happy to see you again!',
+            duration: 5000
+          })
         }
       })
     } catch (error) {
@@ -145,26 +148,26 @@ export const AuthDialog = ({ trigger }: AuthDialogProps) => {
 
   return (
     <GoogleOAuthProvider clientId={googleClientId}>
-    <Dialog
-      open={isOpenDialog}
-      onOpenChange={(open) => {
-        if (!open) {
-          resetDialog()
-        }
-        setIsOpenDialog(open)
-      }}
-    >
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className='[&>button]:hidden min-h-72 max-w-96'>
-        <VisuallyHidden>
-          <DialogHeader>
-            <DialogTitle>Auth</DialogTitle>
-            <DialogDescription>Fixed the warning</DialogDescription>
-          </DialogHeader>
-        </VisuallyHidden>
-        <div className='flex flex-col'>{dialogContent}</div>
-      </DialogContent>
-    </Dialog>
+      <Dialog
+        open={isOpenDialog}
+        onOpenChange={(open) => {
+          if (!open) {
+            resetDialog()
+          }
+          setIsOpenDialog(open)
+        }}
+      >
+        <DialogTrigger asChild>{trigger}</DialogTrigger>
+        <DialogContent className='[&>button]:hidden min-h-72 max-w-96'>
+          <VisuallyHidden>
+            <DialogHeader>
+              <DialogTitle>Auth</DialogTitle>
+              <DialogDescription>Fixed the warning</DialogDescription>
+            </DialogHeader>
+          </VisuallyHidden>
+          <div className='flex flex-col'>{dialogContent}</div>
+        </DialogContent>
+      </Dialog>
     </GoogleOAuthProvider>
   )
 }
