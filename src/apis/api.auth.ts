@@ -11,10 +11,7 @@ const authAPI = {
   signUp: (body: SignUpSchema) => http.post<LoginAPIResponse>('accounts/register/complete', body),
   loginGoogle: (body: LoginGoogleBody) =>
     http.post<
-      ItemBaseResponse<{
-        data: { accessToken: string; refreshToken: string }
-        message: string
-      }>
+      { data : {accessToken: string }, message: string}
     >('auth/login-google', body)
 }
 export default authAPI
