@@ -6,8 +6,13 @@ import { Badge } from 'src/components/ui/badge'
 import { Card } from 'src/components/ui/card'
 import { Progress } from 'src/components/ui/progress'
 import { Separator } from 'src/components/ui/separator'
+import { useViewEventGuests } from './useViewEventGuests'
 
 const ViewEventGuests = () => {
+  const { data } = useViewEventGuests()
+
+  console.log(data)
+
   return (
     <div className='flex flex-col gap-4'>
       <p className='font-semibold text-xl'>At a Glance</p>

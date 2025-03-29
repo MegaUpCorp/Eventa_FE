@@ -13,7 +13,7 @@ function App() {
 
   return (
     <StrictMode>
-      <div className='relative z-10 min-h-screen bg-cover bg-center bg-no-repeat'>
+      <div className='background z-10 min-h-screen bg-cover bg-center bg-no-repeat'>
         {/* <ToastContainer autoClose={2000} style={{ padding: '20px' }} /> */}
         <div className='main relative'>
           {layout.includes('navbar') && <NavBar />}
