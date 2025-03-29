@@ -14,6 +14,7 @@ import {
   HomePageUser,
   MePage
 } from 'src/pages'
+import { EventDetail } from 'src/pages/Event/EventDetail'
 
 type RouteType = {
   path: string
@@ -35,14 +36,14 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-  // {
-  //   path: 'events/event-detail',
-  //   element: <EventDetailPageUser />
-  // },
   ...eventManagementRoutes.map((route) => ({
     path: `/events/manage/:slug${route}`,
     element: <EventManagementPage />
   })),
+  {
+    path: 'events/:slug',
+    element: <EventDetail />
+  },
   {
     path: '/calendars/:publicUrl',
     element: <CalendarDetailPage />
@@ -76,7 +77,12 @@ const authenicatedRoutes: RouteType[] = [
   }
 ]
 //
-const unAuthenticatedRoute: RouteType[] = []
+const unAuthenticatedRoute: RouteType[] = [
+  {
+    path: '/events/create',
+    element: <EventCreation />
+  }
+]
 //admin Route
 const adminRoutes: RouteType[] = []
 //staff Route

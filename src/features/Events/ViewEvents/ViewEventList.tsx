@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 import { Img } from 'src/components'
 import { Timeline, TimelineConnector, TimelineDot, TimelineItem, TimelineSeparator } from 'src/components/ui/timeline'
+import { useNavigate } from 'react-router-dom'
 
 export interface EventListProps {
   calendarId: string
@@ -17,7 +18,7 @@ export interface EventListProps {
   endDate: string
   time_start: string
   time_end: string
-  location?: object
+  location?: { name: string }
   guests?: number
   imgage?: string
   isFree?: boolean
@@ -52,7 +53,7 @@ const eventData: EventListProps[] = [
   },
   {
     id: '2',
-    title: 'BOOK REVIEW – WHAT’S YOUR STORY?',
+    title: "BOOK REVIEW - WHAT'S YOUR STORY?",
     startDate: '2025-02-02',
     endDate: '2025-02-02',
     calendarId: '1',
@@ -96,7 +97,7 @@ const eventData: EventListProps[] = [
   },
   {
     id: '4',
-    title: 'FPT’S TECHNOLOGY SHOWCASE EXPO',
+    title: "FPT'S TECHNOLOGY SHOWCASE EXPO",
     startDate: '2025-02-02',
     endDate: '2025-02-02',
     calendarId: '1',
@@ -129,12 +130,17 @@ const groupEventsByDate = (events: EventListProps[]) => {
   return grouped
 }
 
-const EventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => {
+const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => {
+  const navigate = useNavigate()
   const now = moment()
   const upcomingEvents = eventData.filter((event) => moment(event.startDate).isSameOrAfter(now, 'day'))
   const pastEvents = eventData.filter((event) => moment(event.startDate).isBefore(now, 'day'))
   const groupedUpcomingEvents = groupEventsByDate(upcomingEvents)
   const groupedPastEvents = groupEventsByDate(pastEvents)
+  
+  const handleEventClick = (slug: string) => {
+    navigate(`/events/${slug}`)
+  }
   
   return (
     <div className='container-base p-4 mx-auto text-white'>
@@ -165,20 +171,21 @@ const EventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => 
                       {groupedUpcomingEvents[date].map((event) => (
                         <Card
                           key={event.id}
-                          className=' bg-black flex flex-row justify-between text-white border border-gray-700'
+                          className='bg-black flex flex-row justify-between text-white border border-gray-700 hover:bg-gray-900 transition-colors cursor-pointer'
+                          onClick={() => event.slug && handleEventClick(event.slug)}
                         >
                           <CardContent className='p-4 flex flex-col items-start'>
                             <p className='text-sm text-gray-400'>{event.time_start}</p>
                             <CardTitle className='text-lg font-bold mt-1'>{event.title}</CardTitle>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-2'>
-                              <MapPinIcon size={18} /> {event.location.name || 'Location Missing'}
+                              <MapPinIcon size={18} /> {event.location?.name || 'Location Missing'}
                             </div>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
                             </div>
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
-                            <img src={event.imgage} alt='' className='w-32 h-32 object-cover rounded-lg' />
+                            <img src={event?.profilePicture} alt='' className='w-32 h-32 object-cover rounded-lg' />
                           </CardContent>
                         </Card>
                       ))}
@@ -207,20 +214,21 @@ const EventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => 
                       {groupedPastEvents[date].map((event) => (
                         <Card
                           key={event.id}
-                          className=' bg-black flex flex-row justify-between text-white border border-gray-700'
+                          className='bg-black flex flex-row justify-between text-white border border-gray-700 hover:bg-gray-900 transition-colors cursor-pointer'
+                          onClick={() => event.slug && handleEventClick(event.slug)}
                         >
                           <CardContent className='p-4 flex flex-col items-start'>
                             <p className='text-sm text-gray-400'>{event.time_start}</p>
                             <CardTitle className='text-lg font-bold mt-1'>{event.title}</CardTitle>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-2'>
-                              <MapPinIcon size={18} /> {event.location.name || 'Location Missing'}
+                              <MapPinIcon size={18} /> {event.location?.name || 'Location Missing'}
                             </div>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
                             </div>
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
-                            <img src={event.imgage} alt='' className='w-32 h-32 object-cover rounded-lg' />
+                            <img src={event.profilePicture} alt='' className='w-32 h-32 object-cover rounded-lg' />
                           </CardContent>
                         </Card>
                       ))}
@@ -236,4 +244,4 @@ const EventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => 
   )
 }
 
-export default EventList
+export default ViewEventList
