@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "start": "serve -s build",
     "eslint-inspector": "npx @eslint/config-inspector@latest"
   },
   "dependencies": {
