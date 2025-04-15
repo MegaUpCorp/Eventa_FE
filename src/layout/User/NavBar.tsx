@@ -94,6 +94,10 @@ const NavBar = () => {
                     <CircleUserRound size={16} />
                     <p className='font-medium'>View Profile</p>
                   </DropdownMenuItem>
+                  <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/events/my-events')}>
+                    <Tickets size={16} />
+                    <p className='font-medium'>My Event</p>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className='cursor-pointer'>
                     <Settings size={16} />
                     <p className='font-medium'>Settings</p>

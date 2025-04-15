@@ -131,18 +131,18 @@ const groupEventsByDate = (events: EventListProps[]) => {
   return grouped
 }
 
-const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => {
+const ViewMyEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData }) => {
   const navigate = useNavigate()
   const now = moment()
   const upcomingEvents = eventData.filter((event) => moment(event.startDate).isSameOrAfter(now, 'day'))
   const pastEvents = eventData.filter((event) => moment(event.startDate).isBefore(now, 'day'))
   const groupedUpcomingEvents = groupEventsByDate(upcomingEvents)
   const groupedPastEvents = groupEventsByDate(pastEvents)
-  
+
   const handleEventClick = (slug: string) => {
-    navigate(`/events/${slug}`)
+    navigate(`/events/manage/${slug}`)
   }
-  
+
   return (
     <div className='container-base p-4 mx-auto text-white'>
       <Tabs defaultValue='upcoming'>
@@ -160,6 +160,7 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
                 <h3 className='text-lg font-semibold '>{moment(date).format('MMM D')}</h3>
                 <h2 className='text-sm font-thin text-muted-foreground'>{moment(date).format('dddd')}</h2>
               </div>
+
               <div className='w-4/5 mt-2 space-y-4'>
                 <Timeline>
                   <TimelineItem>
@@ -182,6 +183,11 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
                             </div>
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
+                            </div>
+                            <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
+                              <Button size='sm' onClick={() => event.slug && handleEventClick(event.slug)}>
+                                Management Event
+                              </Button>
                             </div>
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
@@ -226,7 +232,11 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
                             </div>
-                            
+                            <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
+                              <Button size='sm' onClick={() => event.slug && handleEventClick(event.slug)}>
+                                Management Event
+                              </Button>
+                            </div>
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
                             <img src={event.profilePicture} alt='' className='w-32 h-32 object-cover rounded-lg' />
@@ -245,4 +255,4 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
   )
 }
 
-export default ViewEventList
+export default ViewMyEventList

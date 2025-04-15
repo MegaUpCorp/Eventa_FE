@@ -15,6 +15,7 @@ import {
   MePage
 } from 'src/pages'
 import { EventDetail } from 'src/pages/Event/EventDetail'
+import MyEventListPage from 'src/pages/Event/MyEventListPage'
 
 type RouteType = {
   path: string
@@ -36,10 +37,7 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-  ...eventManagementRoutes.map((route) => ({
-    path: `/events/manage/:slug${route}`,
-    element: <EventManagementPage />
-  })),
+  
   {
     path: 'events/:slug',
     element: <EventDetail />
@@ -62,6 +60,14 @@ const authenicatedRoutes: RouteType[] = [
   {
     path: '/events/create',
     element: <EventCreation />
+  },
+  ...eventManagementRoutes.map((route) => ({
+    path: `/events/manage/:slug${route}`,
+    element: <EventManagementPage />
+  })),
+  {
+    path: '/events/my-events',
+    element: <MyEventListPage />
   },
   {
     path: '/calendars/create',

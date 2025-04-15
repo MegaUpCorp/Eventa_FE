@@ -5,6 +5,7 @@ import ViewEventInsights from 'src/features/Events/EventManagement/Insights/View
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 import { useViewEventDetail } from 'src/features/Events/ViewEvents/useViewEventDetail'
+import ViewMore from 'src/features/Events/EventManagement/More/ViewMore'
 
 interface EventTab {
   id: number
@@ -58,7 +59,7 @@ const EventManagement = () => {
       id: 6,
       title: 'More',
       value: 'more',
-      content: <div>More</div>
+      content: <ViewMore/>
     }
   ]
 
@@ -71,12 +72,12 @@ const EventManagement = () => {
     case 'registration':
       activeTab = eventTabs[2]
       break
-    case 'blasts':
+    // case 'blasts':
+    //   activeTab = eventTabs[3]
+    //   break
+    case 'insights':
       activeTab = eventTabs[3]
       break
-    // case 'insights':
-    //   activeTab = eventTabs[4]
-    //   break
     case 'more':
       activeTab = eventTabs[4]
       break
