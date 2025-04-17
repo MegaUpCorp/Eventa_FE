@@ -12,7 +12,8 @@ import {
   CalendarManagementPage,
   // EventDetailPageUser,
   HomePageUser,
-  MePage
+  MePage,
+  SettingsPage
 } from 'src/pages'
 import { EventDetail } from 'src/pages/Event/EventDetail'
 import MyEventListPage from 'src/pages/Event/MyEventListPage'
@@ -23,6 +24,8 @@ type RouteType = {
 }
 
 const eventManagementRoutes = ['', '/overview', '/guests', '/registration', '/blasts', '/insights', '/more']
+
+const settingRoutes = ['', '/account', '/payment']
 
 const publicRoutes: RouteType[] = [
   {
@@ -37,7 +40,7 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-  
+
   {
     path: 'events/:slug',
     element: <EventDetail />
@@ -64,6 +67,10 @@ const authenicatedRoutes: RouteType[] = [
   ...eventManagementRoutes.map((route) => ({
     path: `/events/manage/:slug${route}`,
     element: <EventManagementPage />
+  })),
+  ...settingRoutes.map((route) => ({
+    path: `/settings${route}`,
+    element: <SettingsPage />
   })),
   {
     path: '/events/my-events',

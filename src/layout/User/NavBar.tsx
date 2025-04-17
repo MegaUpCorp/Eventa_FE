@@ -98,7 +98,7 @@ const NavBar = () => {
                     <Tickets size={16} />
                     <p className='font-medium'>My Event</p>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className='cursor-pointer'>
+                  <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/settings')}>
                     <Settings size={16} />
                     <p className='font-medium'>Settings</p>
                   </DropdownMenuItem>
