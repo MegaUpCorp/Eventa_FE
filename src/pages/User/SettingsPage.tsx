@@ -1,4 +1,5 @@
 import ViewAccountSettings from 'src/features/Users/Settings/ViewAccountSettings'
+import ViewPaymentSettings from 'src/features/Users/Settings/ViewPaymentSettings'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 
@@ -27,7 +28,7 @@ const SettingsPage = () => {
       id: 2,
       title: 'Payment',
       value: 'payment',
-      content: <div>Payment Settings</div>
+      content: <ViewPaymentSettings />
     }
   ]
 
