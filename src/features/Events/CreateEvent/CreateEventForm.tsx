@@ -1,8 +1,3 @@
-import DatePicker from 'src/components/DatePicker'
-import GoongMap from 'src/components/Goong/GoongMap'
-import MapDialog from 'src/components/Goong/MapDialog'
-import TimePicker from 'src/components/TimePicker'
-import Tiptap from 'src/components/TipTap/TipTap'
 import { addHours, format } from 'date-fns'
 import {
   CalendarIcon,
@@ -15,11 +10,17 @@ import {
   NotepadText,
   Ticket,
   UserRoundCheck,
+  Wallet,
   X
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Calendar } from 'src/@types/calendar.type'
+import DatePicker from 'src/components/DatePicker'
+import GoongMap from 'src/components/Goong/GoongMap'
+import MapDialog from 'src/components/Goong/MapDialog'
+import TimePicker from 'src/components/TimePicker'
+import Tiptap from 'src/components/TipTap/TipTap'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import {
@@ -32,12 +33,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'src/components/ui/dialog'
-import { FormControl, FormField, FormItem } from 'src/components/ui/form'
+import { FormControl, FormField, FormItem, FormLabel } from 'src/components/ui/form'
 import { Input } from 'src/components/ui/input'
+import { RadioGroup, RadioGroupItem } from 'src/components/ui/radio-group'
 import { ScrollArea } from 'src/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
+import { useViewBankAccounts } from 'src/features/Auth/SePay/useViewBankAccounts'
 import { useGetLocation } from 'src/features/Map/useGetLocation'
 import { cn } from 'src/lib/utils'
 import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
@@ -74,6 +77,8 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
     }
   }, [locationDetail])
 
+  console.log(errors)
+
   useEffect(() => {
     if (startDate > endDate) {
       setStartDate(endDate)
@@ -97,6 +102,8 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
       clearErrors('price')
     }
   }, [type, location, meetUrl, price])
+
+  const { data: bankAccounts } = useViewBankAccounts()
 
   return (
     <>
@@ -331,9 +338,77 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
                 </FormItem>
               )}
             />
-            {isFormError(errors, 'price') && 'Please enter price'}
-            {/* TODO: Add the input for paid event ticket type */}
           </div>
+          {watch('type') === 'paid' && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  className={cn(
+                    'text-white ',
+                    isFormError(errors, 'bankAcc') ? 'border-[#ff000059] border-2 bg-[#ff000013]' : ''
+                  )}
+                  variant='secondary'
+                >
+                  <Wallet />
+                  Choose Bank Account
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Choose your bank account</DialogTitle>
+                  <DialogDescription>This is the bank account for your event to receive payments.</DialogDescription>
+                </DialogHeader>
+                <FormField
+                  control={control}
+                  name='bankAcc'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value?.acc}
+                          onValueChange={(value) => {
+                            const bankAccount = bankAccounts?.find((account) => account.accountNumber === value)
+                            if (bankAccount) {
+                              setValue('bankAcc', {
+                                acc: bankAccount.accountNumber,
+                                amount: price || 0,
+                                bank: bankAccount.bank.code,
+                                des: 'Test'
+                              })
+                            }
+                          }}
+                        >
+                          <FormItem>
+                            {bankAccounts?.map((account) => (
+                              <div className='flex items-center space-x-2' key={account.id}>
+                                <FormControl>
+                                  <RadioGroupItem value={account.accountNumber} id={account.accountNumber} />
+                                </FormControl>
+                                <FormLabel htmlFor='option-one'>
+                                  {account.accountHolderName} - {account.accountNumber} - {account.bank.fullName}
+                                </FormLabel>
+                              </div>
+                            ))}
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={control}
+                  name='price'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} placeholder='Ticket price' spellCheck={false} StartIcon={CircleDollarSign} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </DialogContent>
+            </Dialog>
+          )}
           <Separator />
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>

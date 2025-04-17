@@ -97,7 +97,7 @@ export default function Tiptap({ className, onChange, lsSectionName }: RichTextE
           setContent(editor.getHTML())
           onChange(editor.getHTML())
         }
-      }, 5000)
+      }, 500)
     },
     onCreate({ editor }) {
       editor.commands.setContent(content || '')

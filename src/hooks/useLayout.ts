@@ -8,9 +8,19 @@ const useLayout = () => {
   useEffect(() => {
     if (path.startsWith('/admin')) {
       setLayout(['admin'])
-    } else if (['/verify-account', '/404'].includes(path)) {
+    } else if (['/verify-account', '/404', '/oauth/sepay/callback'].includes(path)) {
       setLayout(['none'])
-    } else if (['/events/create', '/calendars/create', '/me', '/404'].includes(path)) {
+    } else if (
+      [
+        '/events/create',
+        '/calendars/create',
+        '/me',
+        '/404',
+        '/settings',
+        '/settings/account',
+        '/settings/payment'
+      ].includes(path)
+    ) {
       setLayout(['navbar'])
     } else {
       setLayout(['navbar', 'footer', 'chat'])

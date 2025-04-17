@@ -12,7 +12,9 @@ import {
   CalendarManagementPage,
   // EventDetailPageUser,
   HomePageUser,
-  MePage
+  MePage,
+  SettingsPage,
+  SepayCallbackPage
 } from 'src/pages'
 import { EventDetail } from 'src/pages/Event/EventDetail'
 import MyEventListPage from 'src/pages/Event/MyEventListPage'
@@ -23,6 +25,8 @@ type RouteType = {
 }
 
 const eventManagementRoutes = ['', '/overview', '/guests', '/registration', '/blasts', '/insights', '/more']
+
+const settingRoutes = ['', '/account', '/payment']
 
 const publicRoutes: RouteType[] = [
   {
@@ -37,7 +41,7 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-  
+
   {
     path: 'events/:slug',
     element: <EventDetail />
@@ -65,6 +69,10 @@ const authenicatedRoutes: RouteType[] = [
     path: `/events/manage/:slug${route}`,
     element: <EventManagementPage />
   })),
+  ...settingRoutes.map((route) => ({
+    path: `/settings${route}`,
+    element: <SettingsPage />
+  })),
   {
     path: '/events/my-events',
     element: <MyEventListPage />
@@ -80,6 +88,10 @@ const authenicatedRoutes: RouteType[] = [
   {
     path: '/me',
     element: <MePage />
+  },
+  {
+    path: '/oauth/sepay/callback',
+    element: <SepayCallbackPage />
   }
 ]
 //
@@ -101,12 +113,12 @@ const Router = () => {
     ...publicRoutes,
     ...(isAuthenticated ? authenicatedRoutes : unAuthenticatedRoute),
     ...(['ADMIN'].includes(user.scope) ? adminRoutes : []),
-    ...(['STAFF'].includes(user.scope) ? staffRoutes : []),
+    ...(['STAFF'].includes(user.scope) ? staffRoutes : [])
 
-    {
-      path: '*',
-      element: <Navigate to='/' />
-    }
+    // {
+    //   path: '*',
+    //   element: <Navigate to='/' />
+    // }
   ]
   return (
     <Routes>
