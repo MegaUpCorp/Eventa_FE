@@ -13,7 +13,8 @@ import {
   // EventDetailPageUser,
   HomePageUser,
   MePage,
-  SettingsPage
+  SettingsPage,
+  SepayCallbackPage
 } from 'src/pages'
 import { EventDetail } from 'src/pages/Event/EventDetail'
 import MyEventListPage from 'src/pages/Event/MyEventListPage'
@@ -87,6 +88,10 @@ const authenicatedRoutes: RouteType[] = [
   {
     path: '/me',
     element: <MePage />
+  },
+  {
+    path: '/oauth/sepay/callback',
+    element: <SepayCallbackPage />
   }
 ]
 //
@@ -108,12 +113,12 @@ const Router = () => {
     ...publicRoutes,
     ...(isAuthenticated ? authenicatedRoutes : unAuthenticatedRoute),
     ...(['ADMIN'].includes(user.scope) ? adminRoutes : []),
-    ...(['STAFF'].includes(user.scope) ? staffRoutes : []),
+    ...(['STAFF'].includes(user.scope) ? staffRoutes : [])
 
-    {
-      path: '*',
-      element: <Navigate to='/' />
-    }
+    // {
+    //   path: '*',
+    //   element: <Navigate to='/' />
+    // }
   ]
   return (
     <Routes>

@@ -55,7 +55,13 @@ const eventDetailSchema = yup.object().shape({
   requiresApproval: yup.boolean().required('Please select if event requires approval'),
   capacity: yup.string().required('Please enter a capacity'),
   slug: yup.string().notRequired().default(''),
-  profilePicture: yup.string().required('Please upload a profile picture')
+  profilePicture: yup.string().required('Please upload a profile picture'),
+  bankAcc: yup.object().shape({
+    acc: yup.string().required('Please select a bank account number'),
+    bank: yup.string().required('Please enter a bank account name'),
+    amount: yup.number().required('Please enter a bank account amount'),
+    des: yup.string().required('Please enter a bank account description')
+  })
 })
 
 export const createEventSchema = eventDetailSchema.concat(locationSchema)

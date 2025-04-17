@@ -10,8 +10,12 @@ const authAPI = {
   verifyToken: (token: string) => http.post<ItemBaseResponse<boolean>>(`accounts/register/verify`, { token }),
   signUp: (body: SignUpSchema) => http.post<LoginAPIResponse>('accounts/register/complete', body),
   loginGoogle: (body: LoginGoogleBody) =>
-    http.post<
-      { data : {accessToken: string }, message: string}
-    >('auth/login-google', body)
+    http.post<{ data: { accessToken: string }; message: string }>('auth/login-google', body),
+  exchangeCode: async (body: { code: string }) => {
+    const { data } = await http.get<{ token: { access_token: string; refresh_token: string } }>(`SepayAuth/callback`, {
+      params: body
+    })
+    return data
+  }
 }
 export default authAPI

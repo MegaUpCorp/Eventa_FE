@@ -21,7 +21,13 @@ export const defaultValues: Partial<CreateEventSchema> = {
   requiresApproval: false,
   capacity: '50',
   slug: '',
-  profilePicture: ''
+  profilePicture: '',
+  bankAcc: {
+    acc: 'none',
+    bank: 'none',
+    amount: 0,
+    des: 'none'
+  }
 }
 
 export const useCreateEvent = () => {

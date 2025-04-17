@@ -7,7 +7,6 @@ const eventAPI = {
   getEventDetail: (slug: string) => http.get(`events/getEvent/slug?slug=${slug}`),
   getMyEvents: () => http.get('events/get-all-me'),
   getEventGuestsList: (slug: string) => http.get(`participants/get-all-participant-of-event?slug=${slug}`)
-  
 }
 
 export default eventAPI

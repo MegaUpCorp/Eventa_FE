@@ -9,10 +9,12 @@ const generateState = () => {
 }
 
 const ViewPaymentSettings = () => {
+  const isLoggedIn = Boolean(localStorage.getItem('sepay-access-token'))
+
   const handleRedirect = () => {
     const state = generateState()
     const url = `${AUTH_URL}?response_type=code&client_id=${import.meta.env.VITE_SEPAY_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_SEPAY_REDIRECT_URI}&scope=${SCOPES}&state=${state}`
-    localStorage.setItem('oauthState', state)
+    localStorage.setItem('oauth-state', state)
     window.location.replace(url)
   }
 
@@ -22,10 +24,12 @@ const ViewPaymentSettings = () => {
         <p className='font-semibold text-xl'>Payments Methods</p>
         <p className='text-muted-foreground'>Your saved payments methods are encrypted and stored securely by SePay</p>
       </div>
-      <Button className='text-white' onClick={handleRedirect}>
-        <Radio />
-        Connect SePay
-      </Button>
+      {!isLoggedIn ? (
+        <Button className='text-white' onClick={handleRedirect}>
+          <Radio />
+          Connect SePay
+        </Button>
+      ) : null}
     </div>
   )
 }
