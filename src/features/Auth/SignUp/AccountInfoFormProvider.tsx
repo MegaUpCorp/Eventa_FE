@@ -11,7 +11,6 @@ import { SignUpSchema } from 'src/schemas/authSchema'
 import { isFormError } from 'src/utils/utils'
 import { useSignUp } from './useSignUp'
 import { useUpload } from 'src/config/appwrite/useUpload'
-import { appwriteStorage } from 'src/config/appwrite/appwrite'
 import { useUserStore } from 'src/config/zustand/UserStore'
 import { useToast } from 'src/hooks/use-toast'
 
@@ -27,10 +26,8 @@ export const AccountInfoFormProvider = () => {
     if (rejectedFiles.length || !acceptedFiles.length) {
       return
     }
-
     mutateAsync(acceptedFiles[0]).then((response) => {
-      const appwriteImg = appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
-      accountInfoMethods.setValue('ProfilePicture', appwriteImg)
+      accountInfoMethods.setValue('ProfilePicture', response)
     })
   }, [])
 
