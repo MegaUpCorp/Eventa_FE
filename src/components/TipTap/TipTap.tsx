@@ -12,7 +12,6 @@ import Blockquote from '@tiptap/extension-blockquote'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { useUpload } from 'src/config/appwrite/useUpload'
 import { useLocalStorage } from 'src/hooks/useLocalStorage'
-import { appwriteStorage } from 'src/config/appwrite/appwrite'
 
 // NOTE: the Image extension only support uploading images via URL, if you want to upload to your server use FileHandler
 // https://tiptap.dev/docs/editor/extensions/functionality/filehandler
@@ -51,7 +50,7 @@ export default function Tiptap({ className, onChange, lsSectionName }: RichTextE
                 .insertContentAt(pos, {
                   type: 'image',
                   attrs: {
-                    src: appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
+                    src: response
                   }
                 })
                 .focus()
@@ -71,7 +70,7 @@ export default function Tiptap({ className, onChange, lsSectionName }: RichTextE
                 .insertContentAt(currentEditor.state.selection.anchor, {
                   type: 'image',
                   attrs: {
-                    src: appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
+                    src: response
                   }
                 })
                 .focus()
