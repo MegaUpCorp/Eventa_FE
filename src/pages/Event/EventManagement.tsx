@@ -2,10 +2,10 @@ import ViewEventOverview from 'src/features/Events/EventManagement/Overview/View
 import ViewEventGuests from 'src/features/Events/EventManagement/Guests/ViewEventGuests/ViewEventGuests'
 import ViewEventRegistration from 'src/features/Events/EventManagement/Registration/ViewEventRegistration/ViewEventRegistration'
 import ViewEventInsights from 'src/features/Events/EventManagement/Insights/ViewEventInsights'
+import ViewMore from 'src/features/Events/EventManagement/More/ViewMore'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 import { useViewEventDetail } from 'src/features/Events/ViewEvents/useViewEventDetail'
-import ViewMore from 'src/features/Events/EventManagement/More/ViewMore'
 
 interface EventTab {
   id: number
@@ -59,7 +59,7 @@ const EventManagement = () => {
       id: 6,
       title: 'More',
       value: 'more',
-      content: <ViewMore/>
+      content: <ViewMore />
     }
   ]
 

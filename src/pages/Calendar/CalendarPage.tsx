@@ -9,7 +9,7 @@ const CalendarPage = () => {
   const { data: mySubscribedCalendars } = useGetMySubscribedCaledars()
 
   return (
-    <div className='container-base flex flex-col gap-4 px-4'>
+    <div className='container-lg flex flex-col gap-4 px-4'>
       <p className='text-3xl font-semibold mb-4'>Calendars</p>
       <ViewCalendars calendars={myCalendars?.data || []} type='owned' />
       <Separator className='my-4' />
