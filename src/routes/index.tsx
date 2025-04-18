@@ -28,6 +28,8 @@ const eventManagementRoutes = ['', '/overview', '/guests', '/registration', '/bl
 
 const settingRoutes = ['', '/account', '/payment']
 
+const calendarManagementRoutes = ['', '/events', '/newsletters', '/insights', '/settings']
+
 const publicRoutes: RouteType[] = [
   {
     path: '/',
@@ -51,10 +53,6 @@ const publicRoutes: RouteType[] = [
     element: <CalendarDetailPage />
   },
   {
-    path: '/calendars/manage/:slug',
-    element: <CalendarManagementPage />
-  },
-  {
     path: '/discover',
     element: <DiscoverPage />
   }
@@ -72,6 +70,10 @@ const authenicatedRoutes: RouteType[] = [
   ...settingRoutes.map((route) => ({
     path: `/settings${route}`,
     element: <SettingsPage />
+  })),
+  ...calendarManagementRoutes.map((route) => ({
+    path: `/calendars/manage/:publicUrl${route}`,
+    element: <CalendarManagementPage />
   })),
   {
     path: '/events/my-events',

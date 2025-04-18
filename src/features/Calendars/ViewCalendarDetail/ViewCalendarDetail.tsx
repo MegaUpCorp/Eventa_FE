@@ -37,7 +37,7 @@ import { useUserStore } from 'src/config/zustand/UserStore'
 import { useViewCalendarDetail } from './useViewCalendarDetail'
 import { useDebounce } from 'use-debounce'
 
-const categorizeDate = (dateString: string): string => {
+export const categorizeDate = (dateString: string): string => {
   const date = parseISO(dateString)
   const today = new Date()
 
