@@ -3,7 +3,6 @@ import { FileRejection, useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import { Button } from 'src/components/ui/button'
 import { FormControl, FormField, FormItem } from 'src/components/ui/form'
-import { appwriteStorage } from 'src/config/appwrite/appwrite'
 import { useUpload } from 'src/config/appwrite/useUpload'
 import { CreateCalendarSchema } from 'src/schemas/calendarSchema'
 
@@ -19,8 +18,7 @@ const CalendarCoverForm = () => {
     }
 
     mutateAsync(acceptedFiles[0]).then((response) => {
-      const appwriteImg = appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
-      setValue('coverPicture', appwriteImg)
+      setValue('coverPicture', response)
     })
   }, [])
 
