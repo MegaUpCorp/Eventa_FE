@@ -77,8 +77,6 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
     }
   }, [locationDetail])
 
-  console.log(errors)
-
   useEffect(() => {
     if (startDate > endDate) {
       setStartDate(endDate)
@@ -406,6 +404,11 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
                     </FormItem>
                   )}
                 />
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button className='w-full text-white'>Done</Button>
+                  </DialogClose>
+                </DialogFooter>
               </DialogContent>
             </Dialog>
           )}

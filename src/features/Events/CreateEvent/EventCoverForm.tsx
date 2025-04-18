@@ -6,7 +6,6 @@ import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import { Drawer, DrawerContent, DrawerTrigger } from 'src/components/ui/drawer'
 import { FormControl, FormField, FormItem } from 'src/components/ui/form'
-import { appwriteStorage } from 'src/config/appwrite/appwrite'
 import { useUpload } from 'src/config/appwrite/useUpload'
 import { cn } from 'src/lib/utils'
 import { CreateEventSchema } from 'src/schemas/eventSchema'
@@ -23,14 +22,12 @@ export const EventCoverForm = () => {
   } = useFormContext<CreateEventSchema>()
   const { mutateAsync, isPending } = useUpload()
 
-  const onDrop = useCallback(<T extends File>(acceptedFiles: T[], rejectedFiles: FileRejection[]) => {
+  const onDrop = useCallback(async <T extends File>(acceptedFiles: T[], rejectedFiles: FileRejection[]) => {
     if (rejectedFiles.length || !acceptedFiles.length) {
       return
     }
-
     mutateAsync(acceptedFiles[0]).then((response) => {
-      const appwriteImg = appwriteStorage.getFilePreview(import.meta.env.VITE_APPWRITE_IMAGES_STORAGE_ID, response.$id)
-      setValue('profilePicture', appwriteImg)
+      setValue('profilePicture', response)
     })
   }, [])
 
