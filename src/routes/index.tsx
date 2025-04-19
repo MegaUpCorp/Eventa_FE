@@ -17,6 +17,7 @@ import {
   SepayCallbackPage
 } from 'src/pages'
 import { EventDetail } from 'src/pages/Event/EventDetail'
+import EventPayment from 'src/pages/Event/EventPayment'
 import MyEventListPage from 'src/pages/Event/MyEventListPage'
 
 type RouteType = {
@@ -43,7 +44,10 @@ const publicRoutes: RouteType[] = [
     path: 'events',
     element: <EventListPage />
   },
-
+  {
+    path: '/events/payment',
+    element: <EventPayment />
+  },
   {
     path: 'events/:slug',
     element: <EventDetail />
@@ -75,6 +79,7 @@ const authenicatedRoutes: RouteType[] = [
     path: `/calendars/manage/:publicUrl${route}`,
     element: <CalendarManagementPage />
   })),
+
   {
     path: '/events/my-events',
     element: <MyEventListPage />
