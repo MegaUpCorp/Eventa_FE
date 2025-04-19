@@ -8,7 +8,7 @@ const useLayout = () => {
   useEffect(() => {
     if (path.startsWith('/admin')) {
       setLayout(['admin'])
-    } else if (['/verify-account', '/404', '/oauth/sepay/callback'].includes(path)) {
+    } else if (['/verify-account', '/404', '/oauth/sepay/callback', '/events/payment'].includes(path)) {
       setLayout(['none'])
     } else if (
       [

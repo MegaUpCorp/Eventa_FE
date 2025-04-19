@@ -1,21 +1,28 @@
-import { CalendarDays, MapPin, Clock, Users2, Earth } from 'lucide-react'
-import React from 'react'
-import { Button } from 'src/components/ui/button'
-import { Card, CardContent } from 'src/components/ui/card'
+import { format } from 'date-fns'
+import { CalendarDays, Earth, MapPin, Users2 } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { EventDetail } from 'src/@types/events.type'
+import GoongMap from 'src/components/Goong/GoongMap'
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
 import { Badge } from 'src/components/ui/badge'
+import { Button } from 'src/components/ui/button'
+import { Card, CardContent } from 'src/components/ui/card'
 import { Separator } from 'src/components/ui/separator'
-import GoongMap from 'src/components/Goong/GoongMap'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useViewEventDetail } from './useViewEventDetail'
-import { EventDetail } from 'src/@types/events.type'
-import { format } from 'date-fns'
+import { useRegisterPaidEvent } from './useRegisterPaidEvent'
+import { useRegisterFreeEvent } from './useRegisterFreeEvent'
+import useOrganizer from '../EventManagement/Overview/ViewEventOverview/useViewOrganizer'
+import { useUserStore } from 'src/config/zustand/UserStore'
 
 export const ViewEventDetail = () => {
-  const navigate = useNavigate()
   const { slug } = useParams()
+  const { user } = useUserStore()
+  const navigate = useNavigate()
   const { data: response, isLoading } = useViewEventDetail(slug || '')
   const event = response?.data as EventDetail | undefined
+  const { data: accountDetail } = useOrganizer(event?.organizerId[0] || '')
+  const { mutateAsync: registerPaid } = useRegisterPaidEvent(event?.id || '')
+  const { mutate: registerFree } = useRegisterFreeEvent(event?.id || '')
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -32,6 +39,18 @@ export const ViewEventDetail = () => {
   const formatTime = (date: string) => {
     return format(new Date(date), 'h:mm a')
   }
+
+  const registerPaidEvent = async () => {
+    const response = await registerPaid()
+    localStorage.setItem('order-detail', JSON.stringify(response))
+    navigate('/events/payment')
+  }
+
+  const registerEvent = async () => {
+    registerFree()
+  }
+
+  const isPaidEvent = event.isFree === false && event.price > 0
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 p-6'>
@@ -138,17 +157,26 @@ export const ViewEventDetail = () => {
               </div>
 
               {/* Registration Card */}
-              <div className='bg-white/5 backdrop-blur-md p-6 rounded-2xl space-y-3 border border-white/10'>
-                <h3 className='font-medium text-lg text-white'>Registration</h3>
-                <p className='text-sm text-gray-300'>
-                  {event.requiresApproval
-                    ? 'This event requires approval from the organizer to attend.'
-                    : 'Welcome to the event! Please register below to join.'}
-                </p>
-                <Button size="sm" className='w-full text-[#FFFFF]' >
-                  Register
-                </Button>
-              </div>
+              {accountDetail?.data?.value?.accountId !== user?.id && (
+                <div className='bg-white/5 backdrop-blur-md p-6 rounded-2xl space-y-3 border border-white/10'>
+                  <h3 className='font-medium text-lg text-white'>Registration</h3>
+                  <p className='text-sm text-gray-300'>
+                    {event.requiresApproval
+                      ? 'This event requires approval from the organizer to attend.'
+                      : 'Welcome to the event! Please register below to join.'}
+                  </p>
+
+                  {isPaidEvent ? (
+                    <Button size='sm' className='w-full text-[#FFFFF]' onClick={registerPaidEvent}>
+                      Register
+                    </Button>
+                  ) : (
+                    <Button size='sm' className='w-full text-[#FFFFF]' onClick={registerEvent}>
+                      Register
+                    </Button>
+                  )}
+                </div>
+              )}
 
               {/* About Event */}
               <div className='space-y-2'>
@@ -158,7 +186,6 @@ export const ViewEventDetail = () => {
                   className='text-muted-foreground text-sm leading-relaxed'
                   dangerouslySetInnerHTML={{ __html: event.description || '' }}
                 />
-                
               </div>
 
               {/* Location */}
