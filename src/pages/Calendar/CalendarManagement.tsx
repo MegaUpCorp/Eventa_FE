@@ -2,6 +2,8 @@ import ViewCalendarEvents from 'src/features/Calendars/CalendarManagement/ViewCa
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 import { useViewCalendarDetail } from 'src/features/Calendars/ViewCalendarDetail/useViewCalendarDetail'
+import ViewCalendarNewsletters from 'src/features/Calendars/CalendarManagement/ViewCalendarNewsletters'
+import ViewCalendarInsights from 'src/features/Calendars/CalendarManagement/ViewCalendarInsights'
 
 interface CalendarTab {
   id: number
@@ -32,19 +34,13 @@ const CalendarManagement = () => {
       id: 3,
       title: 'Newsletters',
       value: 'newsletters',
-      content: <div>Newsletters</div>
+      content: <ViewCalendarNewsletters />
     },
     {
       id: 4,
       title: 'Insights',
       value: 'insights',
-      content: <div>Insights</div>
-    },
-    {
-      id: 5,
-      title: 'Settings',
-      value: 'settings',
-      content: <div>Settings</div>
+      content: <ViewCalendarInsights />
     }
   ]
 
@@ -61,9 +57,6 @@ const CalendarManagement = () => {
       break
     case 'insights':
       activeTab = calendarTabs[2]
-      break
-    case 'settings':
-      activeTab = calendarTabs[3]
       break
   }
 
