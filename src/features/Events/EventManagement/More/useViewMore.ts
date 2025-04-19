@@ -50,9 +50,7 @@ export const useViewMore = () => {
           requiresApproval: false,
           visibility: "public",
           slug: "fpt-showcase-expo",
-          organizerId: {
-            id: "org-123"
-          },
+          organizerId: ["org-123"],
           insDate: new Date().toISOString(),
           updDate: new Date().toISOString(),
           delFlg: false,
