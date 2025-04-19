@@ -4,7 +4,7 @@ import { Button } from 'src/components/ui/button'
 import { Instagram, Youtube, Facebook, MapPin } from 'lucide-react'
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  event: any,
+  event: any
   renderProps: ReactNode
 }
 const EventDetailPage = ({ event, renderProps }: Props, className: string) => {
@@ -14,11 +14,7 @@ const EventDetailPage = ({ event, renderProps }: Props, className: string) => {
         <div className='flex md:flex-col'>
           <div className='flex w-[41%] flex-row items-start pb-[31px] md:w-full sm:pb-5'>
             <div className='w-[40%] mr-[40px]'>
-              <Img
-                src=""
-                alt='thumnal_event'
-                className='h-[286px] w-[375px] rounded-[30px] object-cover mb-[40px]'
-              />
+              <Img src='' alt='thumnal_event' className='h-[286px] w-[375px] rounded-[30px] object-cover mb-[40px]' />
               <div className='flex flex-col'>
                 <div className='flex flex-col items-start justify-between gap-5'>
                   <div className='flex items-center justify-between gap-[15px]'>
@@ -34,7 +30,6 @@ const EventDetailPage = ({ event, renderProps }: Props, className: string) => {
                       <Text size='s' as='p'>
                         {/* <span className='font-semibold'>{event.event_operator.user_name}</span> */}
                         <span className='font-semibold'>Nam Dep Trai</span>
-
                       </Text>
                     </div>
                     {/* <RightOutlined className='mt-4 ' /> */}
