@@ -23,8 +23,46 @@ import { Badge } from 'src/components/ui/badge'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import { Separator } from 'src/components/ui/separator'
+import { useParams } from 'react-router-dom'
+import { useViewEventDetail } from 'src/features/Events/ViewEvents/useViewEventDetail'
+import { EventDetail } from 'src/@types/events.type'
+import { format, isToday, isTomorrow, isYesterday } from 'date-fns'
+import useOrganizer from './useViewOrganizer'
+import { Organizer } from 'src/@types/organizer.type'
 
 const ViewEventOverview = () => {
+  const { slug } = useParams()
+  const { data: response, isLoading } = useViewEventDetail(slug || '')
+  const event = response?.data as EventDetail | undefined
+  const formatDate = (date: string) => {
+    return format(new Date(date), 'EEEE, MMM d')
+  }
+
+  const formatTime = (date: string) => {
+    return format(new Date(date), 'h:mm a')
+  }
+
+  const getRelativeDay = (dateString: string) => {
+    const eventDate = new Date(dateString)
+
+    if (isToday(eventDate)) {
+      return 'Today'
+    } else if (isTomorrow(eventDate)) {
+      return 'Tomorrow'
+    } else if (isYesterday(eventDate)) {
+      return 'Yesterday'
+    }
+
+    return format(eventDate, 'EEEE, MMM d')
+  }
+
+  const organizerId = event?.organizerId && event.organizerId.length > 0 ? event.organizerId[0] : undefined
+  const { data: response2 } = useOrganizer(organizerId)
+  const eventOrganizer = response2?.data.value as Organizer | undefined
+
+  console.log("organizerId:", organizerId);
+  console.log("eventOrganizer:", eventOrganizer);
+
   return (
     <div className='flex flex-col gap-6'>
       {/* Actions */}
@@ -61,7 +99,7 @@ const ViewEventOverview = () => {
       <Card className='p-4 grid grid-cols-2 gap-6'>
         <div className='col-span-1 space-y-4'>
           <img
-            src='https://blog.spoongraphics.co.uk/wp-content/uploads/2011/05/vibrant.jpg'
+            src={event?.profilePicture || 'https://blog.spoongraphics.co.uk/wp-content/uploads/2011/05/vibrant.jpg'} 
             alt='test'
             className='w-full rounded-lg'
           />
@@ -82,20 +120,32 @@ const ViewEventOverview = () => {
                 <Calendar1 size={26} />
               </Badge>
               <div>
-                <p className='font-medium'>Today</p>
-                <p className='text-sm text-muted-foreground font-medium'>12th December 2021</p>
+                <p className='font-medium'>{event ? getRelativeDay(event.startDate) : 'Date not available'}</p>
+                <p className='text-sm text-muted-foreground font-medium'>
+                  {event ? `${formatTime(event.startDate)} - ${formatTime(event.endDate)}` : 'Date not available'}
+                </p>
               </div>
             </div>
             <div className='flex items-start gap-2'>
               <Badge className='p-2' variant='secondary'>
                 <MapPinned size={26} />
               </Badge>
-              <div>
-                <p className='font-medium text-[#f3c05b]'>Location missing</p>
-                <p className='text-sm text-muted-foreground font-medium'>
-                  Please enter the location of the event before it starts.
-                </p>
-              </div>
+              {event?.location ? (
+                <div>
+                  <p className='font-medium'>{event.location.name}</p>
+                  <p className='text-sm text-muted-foreground font-medium'>{event.location.address}</p>
+                </div>
+              ) : (
+                <div className='flex items-center gap-2'>
+                  <Badge className='bg-[#f3c05b] p-2' variant='secondary'>
+                    <MapPinned size={26} />
+                  </Badge>
+                  <p className='font-medium text-[#f3c05b]'>Location missing</p>
+                  <p className='text-sm text-muted-foreground font-medium'>
+                    Please enter the location of the event before it starts.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div className='flex items-center gap-2'>
@@ -167,8 +217,8 @@ const ViewEventOverview = () => {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className='flex items-center gap-2 text-sm'>
-              <p className='font-medium'>Account VIP</p>
-              <p className='text-muted-foreground'>demo@gmail.com</p>
+              <p className='font-medium'>{eventOrganizer?.organizerName}</p>
+              <p className='text-muted-foreground'>{eventOrganizer?.organizerDescription}</p>
               <Badge className='bg-[#38ff4223] text-green'>Creator</Badge>
             </div>
             <UserRoundPen className='ml-auto text-muted-foreground' size={18} />

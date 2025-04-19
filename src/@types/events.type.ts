@@ -57,9 +57,8 @@ export interface EventDetail{
   requiresApproval: boolean
   visibility: string
   slug: string
-  organizerId: {
-    id: string
-  }
+  organizerId: [string ]
+ 
   insDate: string
   updDate: string
   delFlg: boolean
