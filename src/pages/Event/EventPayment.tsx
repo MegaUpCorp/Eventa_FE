@@ -1,11 +1,12 @@
 import http from 'src/utils/http'
 import { useQuery } from '@tanstack/react-query'
 import { format, parseISO } from 'date-fns'
-import { CircleCheck, Loader2 } from 'lucide-react'
+import { CircleCheck, Download, Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { Card } from 'src/components/ui/card'
 import { Separator } from 'src/components/ui/separator'
+import { Button } from 'src/components/ui/button'
 
 const getBankShortName = (code: string) => {
   const banks = [
@@ -430,8 +431,13 @@ const EventPayment = () => {
           <div className='col-span-6 flex flex-col'>
             <p className='font-semibold mb-4'>Option 1: Open your banking app and scan the QR Code</p>
             <img src={orderDetail.qrUrl} alt='qr-code' className='w-full h-full' />
-            <p className='text-muted-foreground text-xs mt-2 text-center'>Scan this QR code to checkout</p>
-
+            <p className='text-muted-foreground text-xs mt-2 mb-4 text-center'>Scan this QR code to checkout</p>
+            <a href={orderDetail.qrUrl} download='qrcode.png' className='mx-auto'>
+              <Button variant='outline'>
+                <Download />
+                Download QR Code
+              </Button>
+            </a>
             {data && data?.status === 'Unpaid' && (
               <div className='flex items-center mt-4 text-muted-foreground justify-center'>
                 <p>Waiting for transaction...</p>
@@ -451,7 +457,7 @@ const EventPayment = () => {
             <Separator />
             <div className='flex justify-between items-center'>
               <p className='font-semibold'>Description</p>
-              <p className='text-muted-foreground'>{description}</p>
+              <p className='text-muted-foreground truncate ml-20'>{description}</p>
             </div>
             <Separator />
             <div className='flex justify-between items-center'>

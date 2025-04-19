@@ -2,6 +2,9 @@ import { CircleCheck, Sparkles } from 'lucide-react'
 import { Button } from 'src/components/ui/button'
 import { Card } from 'src/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
+import { useBuyPremium } from './useBuyPremium'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const FREE_PLAN = [
   'Unlimited number of events',
@@ -19,6 +22,16 @@ const PAID_PLAN = [
 ]
 
 export const Pricing = () => {
+  const navigate = useNavigate()
+  const [currentTab, setCurrentTab] = useState<'month' | 'year'>('month')
+  const { mutateAsync } = useBuyPremium(currentTab)
+
+  const handleBuyPremium = async () => {
+    const response = await mutateAsync()
+    localStorage.setItem('order-detail', JSON.stringify(response))
+    navigate('/events/payment')
+  }
+
   return (
     <div className='flex flex-col mt-20 w-full'>
       <p className='text-4xl font-semibold text-center'>Pick your plan and get started</p>
@@ -27,12 +40,16 @@ export const Pricing = () => {
         more.
       </p>
       <div className='mx-auto w-full'>
-        <Tabs defaultValue='monthly'>
+        <Tabs defaultValue='month'>
           <TabsList className='grid w-60 mx-auto grid-cols-2'>
-            <TabsTrigger value='monthly'>Monthly</TabsTrigger>
-            <TabsTrigger value='annual'>Annual</TabsTrigger>
+            <TabsTrigger value='month' onClick={() => setCurrentTab('month')}>
+              By Month
+            </TabsTrigger>
+            <TabsTrigger value='year' onClick={() => setCurrentTab('year')}>
+              By Year
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value='monthly' className='mt-16'>
+          <TabsContent value='month' className='mt-16'>
             <div className='flex gap-4'>
               <PricingCard
                 label={<p className='font-semibold text-lg'>Eventa</p>}
@@ -53,15 +70,19 @@ export const Pricing = () => {
                     <p className='font-semibold text-lg text-primary'>Eventa Plus</p>
                   </div>
                 }
-                plan='399.000 VND'
+                plan='199.000 VND'
                 planDescription='Per month'
-                trigger={<Button className='mb-8 text-white'>Get Eventa Plus</Button>}
+                trigger={
+                  <Button className='mb-8 text-white' onClick={handleBuyPremium}>
+                    Get Eventa Plus
+                  </Button>
+                }
                 planSubtitle='Everything in the free plan along with:'
                 features={PAID_PLAN}
               />
             </div>
           </TabsContent>
-          <TabsContent value='annual' className='mt-16'>
+          <TabsContent value='year' className='mt-16'>
             <div className='flex gap-4'>
               <PricingCard
                 label={<p className='font-semibold text-lg'>Eventa</p>}
@@ -79,12 +100,16 @@ export const Pricing = () => {
                 label={
                   <div className='flex items-center gap-2'>
                     <Sparkles size={18} className='text-primary' />
-                    <p className='font-semibold text-lg text-primary'>Eventa Plus</p>
+                    <p className='font-semibold text-lg text-primary'>Eventa Plus (save 25%)</p>
                   </div>
                 }
-                plan='259.000 VND'
-                planDescription='Per month'
-                trigger={<Button className='mb-8 text-white'>Get Eventa Plus</Button>}
+                plan='1.800.000 VND'
+                planDescription='Per year'
+                trigger={
+                  <Button className='mb-8 text-white' onClick={handleBuyPremium}>
+                    Get Eventa Plus
+                  </Button>
+                }
                 planSubtitle='Everything in the free plan along with:'
                 features={PAID_PLAN}
               />
