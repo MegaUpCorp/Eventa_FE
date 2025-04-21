@@ -1,5 +1,11 @@
+import path from 'path'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useUserStore } from 'src/config/zustand/UserStore'
+import ViewEventsManagementAdmin from 'src/features/Admin/EventsManagementAdmin/ViewEventsManagementAdmin'
+import AdminDashboard from 'src/pages/Admin/Dashboard'
+import EventsManagement from 'src/pages/Admin/EventsManagement'
+import UsersManagement from 'src/pages/Admin/UsersManagement'
+import { AdminLayout } from 'src/layout/Admin/AdminLayout'
 import {
   AccountVerification,
   CalendarCreation,
@@ -10,7 +16,6 @@ import {
   EventListPage,
   EventManagementPage,
   CalendarManagementPage,
-  // EventDetailPageUser,
   HomePageUser,
   MePage,
   SettingsPage,
@@ -23,6 +28,7 @@ import MyEventListPage from 'src/pages/Event/MyEventListPage'
 type RouteType = {
   path: string
   element: JSX.Element
+  children?: RouteType[]
 }
 
 const eventManagementRoutes = ['', '/overview', '/guests', '/registration', '/blasts', '/insights', '/more']
@@ -59,6 +65,28 @@ const publicRoutes: RouteType[] = [
   {
     path: '/discover',
     element: <DiscoverPage />
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      {
+        path: '',
+        element: <AdminDashboard />
+      },
+      {
+        path: 'users',
+        element: <UsersManagement />
+      },
+      {
+        path: 'events',
+        element: <EventsManagement />
+      },
+      {
+        path: 'eventadmin',
+        element: <ViewEventsManagementAdmin />
+      }
+    ]
   }
 ]
 //
@@ -109,7 +137,30 @@ const unAuthenticatedRoute: RouteType[] = [
   }
 ]
 //admin Route
-const adminRoutes: RouteType[] = []
+const adminRoutes: RouteType[] = [
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      {
+        path: '',
+        element: <AdminDashboard />
+      },
+      {
+        path: 'users',
+        element: <UsersManagement />
+      },
+      {
+        path: 'events',
+        element: <EventsManagement />
+      },
+      {
+        path: 'eventadmin',
+        element: <ViewEventsManagementAdmin />
+      }
+    ]
+  }
+]
 //staff Route
 const staffRoutes: RouteType[] = []
 
@@ -127,12 +178,21 @@ const Router = () => {
     //   element: <Navigate to='/' />
     // }
   ]
-  return (
-    <Routes>
-      {router.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
-      ))}
-    </Routes>
-  )
+
+  // Hàm đệ quy để tạo các Route của React Router
+  const createRoutes = (routes: RouteType[]) => {
+    return routes.map((route) => {
+      if (route.children) {
+        return (
+          <Route key={route.path} path={route.path} element={route.element}>
+            {createRoutes(route.children)}
+          </Route>
+        )
+      }
+      return <Route key={route.path} path={route.path} element={route.element} />
+    })
+  }
+
+  return <Routes>{createRoutes(router)}</Routes>
 }
 export default Router
