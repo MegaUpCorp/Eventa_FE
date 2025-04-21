@@ -29,11 +29,19 @@ export const useUserStore = create<UserStoreState>()(
         set({ isAuthenticated: true, token: accessToken })
         set({ user: jwtDecode(accessToken) as DecodedUserToken })
       },
-      sePayLogin: (accessToken: string, refreshToken: string) => {
-        set({ isSepayAuthenticated: true, sePayAccessToken: accessToken, sePayRefreshToken: refreshToken })
+      sePayLogin: (accessToken, refreshToken) => {
+        set({
+          isSepayAuthenticated: true,
+          sePayAccessToken: accessToken,
+          sePayRefreshToken: refreshToken
+        })
       },
       sePayLogout: () => {
-        set({ isSepayAuthenticated: false, sePayAccessToken: '', sePayRefreshToken: '' })
+        set({
+          isSepayAuthenticated: false,
+          sePayAccessToken: '',
+          sePayRefreshToken: ''
+        })
       },
       logout: () => {
         localStorage.clear()
