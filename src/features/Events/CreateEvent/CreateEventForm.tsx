@@ -43,6 +43,7 @@ import { Switch } from 'src/components/ui/switch'
 import { useUserStore } from 'src/config/zustand/UserStore'
 import { useViewBankAccounts } from 'src/features/Auth/SePay/useViewBankAccounts'
 import { useGetLocation } from 'src/features/Map/useGetLocation'
+import { useCheckPremium } from 'src/features/Users/CheckPremium/useCheckPremium'
 import ConnectSepay from 'src/features/Users/Settings/ConnectSepay'
 import { cn } from 'src/lib/utils'
 import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
@@ -66,6 +67,7 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
 
   const { data: locationDetail } = useGetLocation(watch('location.id'))
   const { isSepayAuthenticated } = useUserStore()
+  const { data: isPremium } = useCheckPremium()
 
   useEffect(() => {
     if (locationDetail) {
@@ -344,88 +346,97 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
             />
           </div>
           {watch('type') === 'paid' ? (
-            isSepayAuthenticated ? (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    className={cn(
-                      'text-white ',
-                      isFormError(errors, 'bankAcc') ? 'border-[#ff000059] border-2 bg-[#ff000013]' : ''
-                    )}
-                    variant='secondary'
-                  >
-                    <Wallet />
-                    Choose Bank Account
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Choose your bank account</DialogTitle>
-                    <DialogDescription>This is the bank account for your event to receive payments.</DialogDescription>
-                  </DialogHeader>
-                  <FormField
-                    control={control}
-                    name='bankAcc'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <RadioGroup
-                            value={field.value?.acc}
-                            onValueChange={(value) => {
-                              const bankAccount = bankAccounts?.find((account) => account.accountNumber === value)
-                              if (bankAccount) {
-                                setValue('bankAcc', {
-                                  acc: bankAccount.accountNumber,
-                                  amount: price || 0,
-                                  bank: bankAccount.bank.code,
-                                  des: 'Test'
-                                })
-                              }
-                            }}
-                          >
-                            <FormItem>
-                              {bankAccounts?.map((account) => (
-                                <div className='flex items-center space-x-2' key={account.id}>
-                                  <FormControl>
-                                    <RadioGroupItem value={account.accountNumber} id={account.accountNumber} />
-                                  </FormControl>
-                                  <FormLabel htmlFor='option-one'>
-                                    {account.accountHolderName} - {account.accountNumber} - {account.bank.fullName}
-                                  </FormLabel>
-                                </div>
-                              ))}
-                            </FormItem>
-                          </RadioGroup>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={control}
-                    name='price'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder='Ticket price'
-                            spellCheck={false}
-                            StartIcon={CircleDollarSign}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button className='w-full text-white'>Done</Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            ) : (
-              <ConnectSepay variant='outline' type='button' />
-            )
+            <>
+              {isSepayAuthenticated ? (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      className={cn(
+                        'text-white ',
+                        isFormError(errors, 'bankAcc') ? 'border-[#ff000059] border-2 bg-[#ff000013]' : ''
+                      )}
+                      variant='secondary'
+                    >
+                      <Wallet />
+                      Choose Bank Account
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Choose your bank account</DialogTitle>
+                      <DialogDescription>
+                        This is the bank account for your event to receive payments.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <FormField
+                      control={control}
+                      name='bankAcc'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroup
+                              value={field.value?.acc}
+                              onValueChange={(value) => {
+                                const bankAccount = bankAccounts?.find((account) => account.accountNumber === value)
+                                if (bankAccount) {
+                                  setValue('bankAcc', {
+                                    acc: bankAccount.accountNumber,
+                                    amount: price || 0,
+                                    bank: bankAccount.bank.code,
+                                    des: 'Test'
+                                  })
+                                }
+                              }}
+                            >
+                              <FormItem>
+                                {bankAccounts?.map((account) => (
+                                  <div className='flex items-center space-x-2' key={account.id}>
+                                    <FormControl>
+                                      <RadioGroupItem value={account.accountNumber} id={account.accountNumber} />
+                                    </FormControl>
+                                    <FormLabel htmlFor='option-one'>
+                                      {account.accountHolderName} - {account.accountNumber} - {account.bank.fullName}
+                                    </FormLabel>
+                                  </div>
+                                ))}
+                              </FormItem>
+                            </RadioGroup>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={control}
+                      name='price'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder='Ticket price'
+                              spellCheck={false}
+                              StartIcon={CircleDollarSign}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button className='w-full text-white'>Done</Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <ConnectSepay variant='outline' type='button' />
+              )}
+              {isPremium ? null : (
+                <p className='text-red-500 italic text-xs text-left'>
+                  Note: You will be charged 5% each sold ticket, upgrade to premium to remove this fee.
+                </p>
+              )}
+            </>
           ) : null}
           <Separator />
           <div className='flex items-center justify-between'>
@@ -464,15 +475,25 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                      <SelectItem value='20'>
+                        <p className='font-semibold text-muted-foreground'>20</p>
+                      </SelectItem>
                       <SelectItem value='50'>
                         <p className='font-semibold text-muted-foreground'>50</p>
                       </SelectItem>
                       <SelectItem value='100'>
                         <p className='font-semibold text-muted-foreground'>100</p>
                       </SelectItem>
-                      <SelectItem value='200'>
-                        <p className='font-semibold text-muted-foreground'>200</p>
-                      </SelectItem>
+                      {isPremium && (
+                        <>
+                          <SelectItem value='200'>
+                            <p className='font-semibold text-muted-foreground'>200</p>
+                          </SelectItem>
+                          <SelectItem value='500'>
+                            <p className='font-semibold text-muted-foreground'>500</p>
+                          </SelectItem>
+                        </>
+                      )}
                     </SelectContent>
                   </Select>
                 </FormItem>

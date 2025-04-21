@@ -39,7 +39,7 @@ const SepayCallback = () => {
     return (
       <div className='w-full h-screen flex flex-col justify-center items-center gap-4'>
         <p className='text-xl font-medium'>OAuth failed. Try again.</p>
-        <Button className='text-white' onClick={() => navigate('/settings/payment')}>
+        <Button className='text-white' onClick={() => navigate('/')}>
           Back to Home
         </Button>
       </div>
