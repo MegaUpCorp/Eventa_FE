@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from 'src/components/ui/button'
+import { useUserStore } from 'src/config/zustand/UserStore'
 import { useExchangeCode } from 'src/features/Auth/SePay/useExchangeCode'
 
 const SepayCallback = () => {
@@ -14,6 +15,7 @@ const SepayCallback = () => {
 
   const isValid = Boolean(code && localState && state === localState)
   const { data, isLoading, isError } = useExchangeCode(code, isValid)
+  const { sePayLogin } = useUserStore()
 
   useEffect(() => {
     if (!isValid) {
@@ -27,8 +29,7 @@ const SepayCallback = () => {
         token: { access_token, refresh_token }
       } = data
       localStorage.removeItem('oauth-state')
-      localStorage.setItem('sepay-access-token', access_token)
-      localStorage.setItem('sepay-refresh-token', refresh_token)
+      sePayLogin(access_token, refresh_token)
       navigate('/settings/payment')
     }
   }, [data, navigate])
