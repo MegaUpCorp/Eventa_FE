@@ -123,7 +123,7 @@
 }
 
 .tiptap p {
-  margin: 1rem 0;
+  margin: 0 0 1rem 0;
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -179,7 +179,7 @@
   content: '•';
   position: absolute;
   left: 0;
-  top: -5px;
+  top: 0px;
   font-weight: bolder;
 }
 
@@ -200,7 +200,7 @@
   counter-increment: list-counter;
   position: absolute;
   left: 0;
-  top: -4px;
+  top: 0;
 }
 
 .tiptap img {
@@ -220,6 +220,6 @@
 
 .tiptap iframe {
   display: block;
-  margin: 0 auto;
+  margin: 10px auto;
   width: 100%;
 }

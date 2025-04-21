@@ -40,8 +40,10 @@ import { ScrollArea } from 'src/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 import { Separator } from 'src/components/ui/separator'
 import { Switch } from 'src/components/ui/switch'
+import { useUserStore } from 'src/config/zustand/UserStore'
 import { useViewBankAccounts } from 'src/features/Auth/SePay/useViewBankAccounts'
 import { useGetLocation } from 'src/features/Map/useGetLocation'
+import ConnectSepay from 'src/features/Users/Settings/ConnectSepay'
 import { cn } from 'src/lib/utils'
 import { CreateEventSchema, defaultLocationValues } from 'src/schemas/eventSchema'
 import { handleTimeChange, isFormError } from 'src/utils/utils'
@@ -63,6 +65,7 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
   const [endDate, setEndDate] = useState<Date>(addHours(new Date(), 1))
 
   const { data: locationDetail } = useGetLocation(watch('location.id'))
+  const { isSepayAuthenticated } = useUserStore()
 
   useEffect(() => {
     if (locationDetail) {
@@ -219,7 +222,6 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
             <TimePicker date={endDate} onTimeChange={handleTimeChange} setDate={setEndDate} />
           </div>
         </Card>
-
         {watch('location') && locationDetail ? (
           <>
             <Card className='flex gap-3 p-4'>
@@ -261,6 +263,7 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
           />
         )}
 
+        {/* Description */}
         <Dialog>
           <DialogTrigger>
             <Card
@@ -273,19 +276,23 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
               <p className='font-medium'>Add Event Description</p>
             </Card>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className='min-w-[820px] [&>button]:hidden p-4'>
             <DialogHeader>
               <DialogTitle>Event Description</DialogTitle>
               <DialogDescription>Overview of the event</DialogDescription>
             </DialogHeader>
-            <ScrollArea className='min-h-40 max-h-96'>
+            <ScrollArea className='min-h-72 max-h-96'>
               <FormField
                 control={control}
                 name='description'
                 render={({ field: { onChange } }) => (
                   <FormItem>
                     <FormControl>
-                      <Tiptap onChange={onChange} className='w-[448px] h-full' lsSectionName='event-desc' />
+                      <Tiptap
+                        onChange={onChange}
+                        lsSectionName='event-desc'
+                        className='w-[calc(820px-48px)] h-full absolute top-14'
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -300,7 +307,6 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-
         <Card className='flex flex-col gap-3 p-4'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
@@ -337,81 +343,90 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
               )}
             />
           </div>
-          {watch('type') === 'paid' && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  className={cn(
-                    'text-white ',
-                    isFormError(errors, 'bankAcc') ? 'border-[#ff000059] border-2 bg-[#ff000013]' : ''
-                  )}
-                  variant='secondary'
-                >
-                  <Wallet />
-                  Choose Bank Account
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Choose your bank account</DialogTitle>
-                  <DialogDescription>This is the bank account for your event to receive payments.</DialogDescription>
-                </DialogHeader>
-                <FormField
-                  control={control}
-                  name='bankAcc'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroup
-                          value={field.value?.acc}
-                          onValueChange={(value) => {
-                            const bankAccount = bankAccounts?.find((account) => account.accountNumber === value)
-                            if (bankAccount) {
-                              setValue('bankAcc', {
-                                acc: bankAccount.accountNumber,
-                                amount: price || 0,
-                                bank: bankAccount.bank.code,
-                                des: 'Test'
-                              })
-                            }
-                          }}
-                        >
-                          <FormItem>
-                            {bankAccounts?.map((account) => (
-                              <div className='flex items-center space-x-2' key={account.id}>
-                                <FormControl>
-                                  <RadioGroupItem value={account.accountNumber} id={account.accountNumber} />
-                                </FormControl>
-                                <FormLabel htmlFor='option-one'>
-                                  {account.accountHolderName} - {account.accountNumber} - {account.bank.fullName}
-                                </FormLabel>
-                              </div>
-                            ))}
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name='price'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} placeholder='Ticket price' spellCheck={false} StartIcon={CircleDollarSign} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button className='w-full text-white'>Done</Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
+          {watch('type') === 'paid' ? (
+            isSepayAuthenticated ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    className={cn(
+                      'text-white ',
+                      isFormError(errors, 'bankAcc') ? 'border-[#ff000059] border-2 bg-[#ff000013]' : ''
+                    )}
+                    variant='secondary'
+                  >
+                    <Wallet />
+                    Choose Bank Account
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Choose your bank account</DialogTitle>
+                    <DialogDescription>This is the bank account for your event to receive payments.</DialogDescription>
+                  </DialogHeader>
+                  <FormField
+                    control={control}
+                    name='bankAcc'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <RadioGroup
+                            value={field.value?.acc}
+                            onValueChange={(value) => {
+                              const bankAccount = bankAccounts?.find((account) => account.accountNumber === value)
+                              if (bankAccount) {
+                                setValue('bankAcc', {
+                                  acc: bankAccount.accountNumber,
+                                  amount: price || 0,
+                                  bank: bankAccount.bank.code,
+                                  des: 'Test'
+                                })
+                              }
+                            }}
+                          >
+                            <FormItem>
+                              {bankAccounts?.map((account) => (
+                                <div className='flex items-center space-x-2' key={account.id}>
+                                  <FormControl>
+                                    <RadioGroupItem value={account.accountNumber} id={account.accountNumber} />
+                                  </FormControl>
+                                  <FormLabel htmlFor='option-one'>
+                                    {account.accountHolderName} - {account.accountNumber} - {account.bank.fullName}
+                                  </FormLabel>
+                                </div>
+                              ))}
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name='price'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder='Ticket price'
+                            spellCheck={false}
+                            StartIcon={CircleDollarSign}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button className='w-full text-white'>Done</Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <ConnectSepay variant='outline' type='button' />
+            )
+          ) : null}
           <Separator />
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>

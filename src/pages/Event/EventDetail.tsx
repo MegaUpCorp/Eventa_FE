@@ -3,7 +3,8 @@ import { ViewEventDetail } from 'src/features/Events/ViewEvents/ViewEventDetail'
 
 export const EventDetail = () => {
   return (
-    <ViewEventDetail />
+    <div className='container-base'>
+      <ViewEventDetail />
+    </div>
   )
 }
-

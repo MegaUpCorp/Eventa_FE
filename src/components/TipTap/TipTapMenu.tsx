@@ -7,6 +7,7 @@ import {
   Italic,
   List,
   ListOrdered,
+  LucideIcon,
   MonitorPlay,
   Quote,
   SquareSplitVertical
@@ -14,21 +15,23 @@ import {
 import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { Separator } from '../ui/separator'
+import { cn } from 'src/lib/utils'
 
 interface BubbleMenuProps {
   editor: Editor | null
   type: 'floating' | 'bubble' | 'menu'
+  className?: string
 }
 
 export interface EditorMenu {
   name: string
-  icon: React.ReactNode
+  icon: LucideIcon
   onClick?: () => void
   isActive: boolean
   showDivider?: boolean
 }
 
-export default function TiptapMenu({ editor, type }: BubbleMenuProps) {
+export default function TiptapMenu({ editor, type, className }: BubbleMenuProps) {
   if (!editor) return null
 
   const addYoutubeVideo = () => {
@@ -46,57 +49,57 @@ export default function TiptapMenu({ editor, type }: BubbleMenuProps) {
   const EDITOR_MENU: EditorMenu[] = [
     {
       name: 'heading-1',
-      icon: <Heading1 />,
+      icon: Heading1,
       onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
       isActive: editor.isActive('heading', { level: 1 })
     },
     {
       name: 'heading-2',
-      icon: <Heading2 />,
+      icon: Heading2,
       onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
       isActive: editor.isActive('heading', { level: 2 })
     },
     {
       name: 'bold',
-      icon: <Bold />,
+      icon: Bold,
       onClick: () => editor.chain().focus().toggleBold().run(),
       isActive: editor.isActive('bold')
     },
     {
       name: 'italic',
-      icon: <Italic />,
+      icon: Italic,
       onClick: () => editor.chain().focus().toggleItalic().run(),
       isActive: editor.isActive('italic')
     },
     {
       name: 'blockquote',
-      icon: <Quote className='w-5 h-5' />,
+      icon: Quote,
       onClick: () => editor.chain().focus().toggleBlockquote().run(),
       isActive: editor.isActive('blockquote'),
       showDivider: true
     },
     {
       name: 'yt',
-      icon: <MonitorPlay />,
+      icon: MonitorPlay,
       onClick: addYoutubeVideo,
       isActive: false
     },
     {
       name: 'divider',
-      icon: <SquareSplitVertical />,
+      icon: SquareSplitVertical,
       onClick: () => editor.chain().focus().setHorizontalRule().run(),
       isActive: false,
       showDivider: true
     },
     {
       name: 'bulletList',
-      icon: <List className='w-5 h-5' />,
+      icon: List,
       onClick: () => editor.chain().focus().toggleBulletList().run(),
       isActive: editor.isActive('bulletList')
     },
     {
       name: 'orderedList',
-      icon: <ListOrdered className='w-5 h-5' />,
+      icon: ListOrdered,
       onClick: () => editor.chain().focus().toggleOrderedList().run(),
       isActive: editor.isActive('orderedList')
     }
@@ -125,7 +128,7 @@ export default function TiptapMenu({ editor, type }: BubbleMenuProps) {
 
   const content = (
     <Card className='p-1.5'>
-      <div className='flex items-center gap-1'>
+      <div className='flex items-center gap-1 w-full'>
         {EDITOR_MENU.map((item) => (
           <div key={item.name} className='flex items-center gap-1'>
             <Button
@@ -134,7 +137,7 @@ export default function TiptapMenu({ editor, type }: BubbleMenuProps) {
               size='icon'
               variant='ghost'
             >
-              {item.icon}
+              <item.icon />
             </Button>
             {item.showDivider && <Separator orientation='vertical' className='h-8' />}
           </div>
@@ -144,29 +147,33 @@ export default function TiptapMenu({ editor, type }: BubbleMenuProps) {
   )
 
   return (
-    <div id='parent' className='w-full'>
+    <div className={cn(className, 'fixed z-50 h-8 w-[calc(820px-48px)]')}>
       {type === 'bubble' ? (
         <TiptapBubbleMenu tippyOptions={{ appendTo: 'parent' }} editor={editor}>
           {content}
         </TiptapBubbleMenu>
       ) : type === 'floating' ? (
-        <TiptapFloatingMenu className='absolute -left-2.5 top-5' tippyOptions={{ appendTo: 'parent' }} editor={editor}>
+        <TiptapFloatingMenu tippyOptions={{ appendTo: 'parent' }} editor={editor}>
           {content}
         </TiptapFloatingMenu>
       ) : (
-        <div className='flex items-center justify-between w-full'>
-          <div className='p-1.5 flex items-center gap-2'>
-            {EDITOR_MENU.slice(0, 5).map((item) => (
+        <div className='flex items-center glass rounded-lg p-1 gap-2 mb-4'>
+          {EDITOR_MENU.map((item) => (
+            <div key={item.name} className='flex items-center gap-2'>
               <Button
-                key={item.name}
                 onClick={item.onClick ? item.onClick : undefined}
-                className={item.isActive ? 'bg-primary-100 text-primary' : 'bg-transparent'}
+                className={cn(
+                  'cursor-pointer',
+                  item.isActive ? 'bg-primary-100 text-primary' : 'bg-transparent text-white'
+                )}
                 size='icon'
+                variant='ghost'
               >
-                {item.icon}
+                <item.icon />
               </Button>
-            ))}
-          </div>
+              {item.showDivider && <Separator orientation='vertical' className='h-4' />}
+            </div>
+          ))}
         </div>
       )}
     </div>

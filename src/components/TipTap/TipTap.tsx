@@ -108,10 +108,9 @@ export default function Tiptap({ className, onChange, lsSectionName }: RichTextE
   const { mutateAsync } = useUpload()
 
   return (
-    <>
-      <TiptapMenu editor={editor} type='floating' />
-      <TiptapMenu editor={editor} type='bubble' />
+    <div id='parent' className='relative'>
+      <TiptapMenu editor={editor} type='menu' />
       <EditorContent editor={editor} autoFocus className={className} />
-    </>
+    </div>
   )
 }
