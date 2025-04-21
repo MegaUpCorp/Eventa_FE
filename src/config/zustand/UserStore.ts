@@ -5,6 +5,7 @@ import { DecodedUserToken } from 'src/@types/users.type'
 
 interface UserStoreState {
   isAuthenticated: boolean
+  isSepayAuthenticated: boolean
   token: string
   user: DecodedUserToken | null
   login: (accessToken: string) => void
@@ -15,6 +16,7 @@ export const useUserStore = create<UserStoreState>()(
   persist(
     (set) => ({
       isAuthenticated: false,
+      isSepayAuthenticated: false,
       token: '',
       user: null,
       login: (accessToken) => {
@@ -23,7 +25,7 @@ export const useUserStore = create<UserStoreState>()(
       },
       logout: () => {
         localStorage.clear()
-        return set({ isAuthenticated: false, token: '', user: null })
+        return set({ isAuthenticated: false, isSepayAuthenticated: false, token: '', user: null })
       }
     }),
     {
@@ -34,6 +36,11 @@ export const useUserStore = create<UserStoreState>()(
         if (state?.token) {
           state.isAuthenticated = true
           state.user = jwtDecode(state.token) as DecodedUserToken
+        }
+
+        const isLoggedIn = localStorage.getItem('sepay-access-token')
+        if (state?.isSepayAuthenticated) {
+          state.isSepayAuthenticated = !!isLoggedIn
         }
       }
     }

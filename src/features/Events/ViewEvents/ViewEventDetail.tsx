@@ -53,10 +53,10 @@ export const ViewEventDetail = () => {
   const isPaidEvent = event.isFree === false && event.price > 0
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 p-6'>
+    <div className='min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 p-4'>
       <div className='max-w-4xl mx-auto space-y-6'>
         <Card className='rounded-3xl border border-white/10 shadow-2xl overflow-hidden bg-gradient-to-br from-gray-900/90 to-gray-900/50 backdrop-blur-xl'>
-          <CardContent className='p-8 grid grid-cols-1 md:grid-cols-3 gap-8'>
+          <CardContent className='p-4 grid grid-cols-1 md:grid-cols-3 gap-8'>
             {/* Left Column - Event Image */}
             <div className='md:col-span-1'>
               <div className='aspect-square overflow-hidden rounded-2xl border border-white/10 shadow-lg'>
