@@ -16,7 +16,7 @@ import { useUserStore } from 'src/config/zustand/UserStore'
 
 export const ViewEventDetail = () => {
   const { slug } = useParams()
-  const { user } = useUserStore()
+  const { user, isAuthenticated } = useUserStore()
   const navigate = useNavigate()
   const { data: response, isLoading } = useViewEventDetail(slug || '')
   const event = response?.data as EventDetail | undefined
@@ -167,12 +167,22 @@ export const ViewEventDetail = () => {
                   </p>
 
                   {isPaidEvent ? (
-                    <Button size='sm' className='w-full text-[#FFFFF]' onClick={registerPaidEvent}>
-                      Register
+                    <Button
+                      size='sm'
+                      className='w-full text-[#FFFFF]'
+                      onClick={registerPaidEvent}
+                      disabled={!isAuthenticated}
+                    >
+                      {isAuthenticated ? 'Register' : 'Login to Register'}
                     </Button>
                   ) : (
-                    <Button size='sm' className='w-full text-[#FFFFF]' onClick={registerEvent}>
-                      Register
+                    <Button
+                      size='sm'
+                      className='w-full text-[#FFFFF]'
+                      onClick={registerEvent}
+                      disabled={!isAuthenticated}
+                    >
+                      {isAuthenticated ? 'Register' : 'Login to Register'}
                     </Button>
                   )}
                 </div>
