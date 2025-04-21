@@ -413,8 +413,8 @@ const EventPayment = () => {
   useEffect(() => {
     if (data && data.status === 'Paid') {
       const timer = setTimeout(() => {
-        navigate('/', { replace: true })
         localStorage.removeItem('order-detail')
+        navigate(-1)
       }, 2000)
       return () => clearTimeout(timer)
     }

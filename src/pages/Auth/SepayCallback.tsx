@@ -21,18 +21,16 @@ const SepayCallback = () => {
     if (!isValid) {
       navigate('/')
     }
-  }, [isValid, navigate])
 
-  useEffect(() => {
     if (data) {
       const {
         token: { access_token, refresh_token }
       } = data
       localStorage.removeItem('oauth-state')
       sePayLogin(access_token, refresh_token)
-      navigate('/settings/payment')
+      navigate(-1)
     }
-  }, [data, navigate])
+  }, [data, navigate, isValid])
 
   if (isLoading) return <div className='w-full h-screen flex justify-center items-center'>Exchanging code...</div>
 
