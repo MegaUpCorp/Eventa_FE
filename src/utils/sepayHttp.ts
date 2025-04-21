@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { decodeJwt, JWTPayload } from 'jose'
 import http from './http'
+import { decodeJwt, JWTPayload } from 'jose'
+import { useUserStore } from 'src/config/zustand/UserStore'
 
 export interface JwtPayload extends JWTPayload {
   aud: string
@@ -44,26 +45,24 @@ const refreshAccessToken = async (refreshToken: string) => {
     })
 
     const { access_token, refresh_token } = data.token
+    useUserStore.getState().sePayLogin(access_token, refresh_token)
 
-    localStorage.setItem('sepay-access-token', access_token)
-    localStorage.setItem('sepay-refresh-token', refresh_token)
     return access_token
   } catch (error) {
     console.error('Failed to refresh token:', error)
-    localStorage.removeItem('sepay-access-token')
-    localStorage.removeItem('sepay-refresh-token')
+    useUserStore.getState().sePayLogout()
     return null
   }
 }
 
 sepayInstance.interceptors.request.use(
   async (config) => {
-    let accessToken = localStorage.getItem('sepay-access-token')
-    const refreshToken = localStorage.getItem('sepay-refresh-token')
+    let accessToken = useUserStore.getState().sePayAccessToken
+    const refreshToken = useUserStore.getState().sePayRefreshToken
 
     if (!accessToken || isCloseToExpiration(accessToken)) {
       if (refreshToken) {
-        accessToken = await refreshAccessToken(refreshToken)
+        accessToken = (await refreshAccessToken(refreshToken)) || ''
         if (!accessToken) {
           return config
         }
