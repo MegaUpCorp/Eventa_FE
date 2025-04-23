@@ -6,6 +6,7 @@ import ViewMore from 'src/features/Events/EventManagement/More/ViewMore'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs'
 import { useViewEventDetail } from 'src/features/Events/ViewEvents/useViewEventDetail'
+import { useCheckPremium } from 'src/features/Users/CheckPremium/useCheckPremium'
 
 interface EventTab {
   id: number
@@ -18,6 +19,7 @@ type Value = 'overview' | 'guests' | 'registration' | 'blasts' | 'insights' | 'm
 
 const EventManagement = () => {
   const navigate = useNavigate()
+  const { data: isPremium } = useCheckPremium()
   const { slug } = useParams()
   const { pathname } = useLocation()
 
@@ -28,37 +30,35 @@ const EventManagement = () => {
     {
       id: 1,
       title: 'Overview',
-      value: 'overview',
+      value: 'overview' as Value,
       content: <ViewEventOverview />
     },
     {
       id: 2,
       title: 'Guests',
-      value: 'guests',
-      content: <ViewEventGuests />
+      value: 'guests' as Value,
+      content: <ViewEventGuests capacity={event?.data?.capacity} eventId={event?.data?.id} />
     },
     {
       id: 3,
       title: 'Registration',
-      value: 'registration',
+      value: 'registration' as Value,
       content: <ViewEventRegistration />
     },
-    // {
-    //   id: 4,
-    //   title: 'Blasts',
-    //   value: 'blasts',
-    //   content: <div>Blasts</div>
-    // },
+    ...(isPremium
+      ? [
+          {
+            id: 4,
+            title: 'Insights',
+            value: 'insights' as Value,
+            content: <ViewEventInsights />
+          }
+        ]
+      : []),
     {
       id: 5,
-      title: 'Insights',
-      value: 'insights',
-      content: <ViewEventInsights />
-    },
-    {
-      id: 6,
       title: 'More',
-      value: 'more',
+      value: 'more' as Value,
       content: <ViewMore />
     }
   ]
@@ -67,19 +67,16 @@ const EventManagement = () => {
 
   switch (pathname.split('/').pop() as Value) {
     case 'guests':
-      activeTab = eventTabs[1]
+      activeTab = eventTabs.find((tab) => tab.value === 'guests') || activeTab
       break
     case 'registration':
-      activeTab = eventTabs[2]
+      activeTab = eventTabs.find((tab) => tab.value === 'registration') || activeTab
       break
-    // case 'blasts':
-    //   activeTab = eventTabs[3]
-    //   break
     case 'insights':
-      activeTab = eventTabs[3]
+      activeTab = eventTabs.find((tab) => tab.value === 'insights') || activeTab
       break
     case 'more':
-      activeTab = eventTabs[4]
+      activeTab = eventTabs.find((tab) => tab.value === 'more') || activeTab
       break
   }
 

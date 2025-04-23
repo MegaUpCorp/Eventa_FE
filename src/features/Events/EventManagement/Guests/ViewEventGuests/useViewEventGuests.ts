@@ -6,7 +6,7 @@ export const useViewEventGuests = () => {
   const { slug } = useParams()
 
   return useQuery({
-    queryKey: ['getEventGuestsList'],
+    queryKey: ['getEventGuestsList', slug],
     queryFn: () => eventAPI.getEventGuestsList(slug || '')
   })
 }
