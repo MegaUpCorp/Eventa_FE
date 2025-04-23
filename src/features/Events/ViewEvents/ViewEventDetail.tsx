@@ -8,21 +8,27 @@ import { Badge } from 'src/components/ui/badge'
 import { Button } from 'src/components/ui/button'
 import { Card, CardContent } from 'src/components/ui/card'
 import { Separator } from 'src/components/ui/separator'
-import { useViewEventDetail } from './useViewEventDetail'
-import { useRegisterPaidEvent } from './useRegisterPaidEvent'
-import { useRegisterFreeEvent } from './useRegisterFreeEvent'
-import useOrganizer from '../EventManagement/Overview/ViewEventOverview/useViewOrganizer'
 import { useUserStore } from 'src/config/zustand/UserStore'
+import useOrganizer from '../EventManagement/Overview/ViewEventOverview/useViewOrganizer'
+import { useCheckInEvent } from './useCheckInEvent'
+import { useIsRegisteredForEvent } from './useIsRegisteredForEvent'
+import { useRegisterFreeEvent } from './useRegisterFreeEvent'
+import { useRegisterPaidEvent } from './useRegisterPaidEvent'
+import { useViewEventDetail } from './useViewEventDetail'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const ViewEventDetail = () => {
+  const queryClient = useQueryClient()
   const { slug } = useParams()
   const { user, isAuthenticated } = useUserStore()
   const navigate = useNavigate()
   const { data: response, isLoading } = useViewEventDetail(slug || '')
   const event = response?.data as EventDetail | undefined
   const { data: accountDetail } = useOrganizer(event?.organizerId[0] || '')
-  const { mutateAsync: registerPaid } = useRegisterPaidEvent(event?.id || '')
-  const { mutate: registerFree } = useRegisterFreeEvent(event?.id || '')
+  const { mutateAsync: registerPaid, isPending: isPendingPaid } = useRegisterPaidEvent(event?.id || '')
+  const { mutateAsync: registerFree, isPending: isPendingFree } = useRegisterFreeEvent(event?.id || '')
+  const { data: isRegistered } = useIsRegisteredForEvent(event?.id || '')
+  const { mutate: checkIn, isPending } = useCheckInEvent(event?.id || '')
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -47,10 +53,84 @@ export const ViewEventDetail = () => {
   }
 
   const registerEvent = async () => {
-    registerFree()
+    registerFree().then(() => {
+      queryClient.invalidateQueries({ queryKey: ['is-registered-for-event', event.id] })
+    })
   }
 
   const isPaidEvent = event.isFree === false && event.price > 0
+
+  const handleEventAction = () => {
+    const isEventEnded = new Date() > new Date(event.endDate)
+    const isEventNotStarted = new Date() < new Date(event.startDate)
+    const canCheckIn = !isEventEnded && !isEventNotStarted
+
+    if (isRegistered?.isCheckin) {
+      return (
+        <div className='flex flex-col gap-2 bg-white/5 backdrop-blur-md p-4 rounded-lg space-y-3 border border-white/10'>
+          <p className='font-medium text-emerald-500'>You have successfully checked in</p>
+          <p className='font-semibold text-3xl bg-accent py-3 rounded-lg text-center text-muted-foreground'>
+            {isRegistered.code}
+          </p>
+          <Button size='sm' className='w-full text-[#FFFFF]' disabled>
+            Feedback
+          </Button>
+        </div>
+      )
+    }
+
+    if (isRegistered?.isRegistered && isRegistered.code) {
+      return (
+        <div className='flex flex-col gap-2 bg-white/5 backdrop-blur-md p-4 rounded-lg space-y-3 border border-white/10'>
+          <p className='font-medium text-muted-foreground'>Registration Code</p>
+          <p className='font-semibold text-3xl bg-accent py-3 rounded-lg text-center'>{isRegistered.code}</p>
+          <p className='text-xs italic text-muted-foreground mb-4'>
+            *Show this to the check-in manager or click the button below
+          </p>
+          <Button
+            size='sm'
+            className='w-full text-[#FFFFF]'
+            disabled={!canCheckIn}
+            onClick={() =>
+              checkIn({
+                eventId: event.id,
+                uniqueCode: isRegistered.code,
+                participantId: isRegistered.paticipantId
+              })
+            }
+            isLoading={isPending}
+          >
+            Check In
+          </Button>
+        </div>
+      )
+    }
+
+    const registrationText = event.requiresApproval
+      ? 'This event requires approval from the organizer to attend.'
+      : 'Welcome to the event! Please register below to join.'
+
+    const handleRegister = isPaidEvent ? registerPaidEvent : registerEvent
+    const isPendingRegister = isPaidEvent ? isPendingPaid : isPendingFree
+
+    if (new Date() >= new Date(event.startDate)) return null
+
+    return (
+      <div className='bg-white/5 backdrop-blur-md p-4 rounded-lg space-y-3 border border-white/10'>
+        <h3 className='font-medium text-lg text-white'>Registration</h3>
+        <p className='text-sm text-gray-300'>{registrationText}</p>
+        <Button
+          size='sm'
+          className='w-full text-[#FFFFF]'
+          onClick={handleRegister}
+          disabled={!isAuthenticated}
+          isLoading={isPendingRegister}
+        >
+          {isAuthenticated ? 'Register' : 'Login to Register'}
+        </Button>
+      </div>
+    )
+  }
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 p-4'>
@@ -157,36 +237,7 @@ export const ViewEventDetail = () => {
               </div>
 
               {/* Registration Card */}
-              {accountDetail?.data?.value?.accountId !== user?.id && (
-                <div className='bg-white/5 backdrop-blur-md p-6 rounded-2xl space-y-3 border border-white/10'>
-                  <h3 className='font-medium text-lg text-white'>Registration</h3>
-                  <p className='text-sm text-gray-300'>
-                    {event.requiresApproval
-                      ? 'This event requires approval from the organizer to attend.'
-                      : 'Welcome to the event! Please register below to join.'}
-                  </p>
-
-                  {isPaidEvent ? (
-                    <Button
-                      size='sm'
-                      className='w-full text-[#FFFFF]'
-                      onClick={registerPaidEvent}
-                      disabled={!isAuthenticated}
-                    >
-                      {isAuthenticated ? 'Register' : 'Login to Register'}
-                    </Button>
-                  ) : (
-                    <Button
-                      size='sm'
-                      className='w-full text-[#FFFFF]'
-                      onClick={registerEvent}
-                      disabled={!isAuthenticated}
-                    >
-                      {isAuthenticated ? 'Register' : 'Login to Register'}
-                    </Button>
-                  )}
-                </div>
-              )}
+              {accountDetail?.data?.value?.accountId !== user?.id && <>{handleEventAction()}</>}
 
               {/* About Event */}
               <div className='space-y-2'>

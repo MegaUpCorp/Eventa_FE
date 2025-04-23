@@ -13,6 +13,7 @@ const useLayout = () => {
     } else if (
       [
         '/events/create',
+        '/calendars',
         '/calendars/create',
         '/me',
         '/404',

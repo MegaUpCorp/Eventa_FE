@@ -1,29 +1,29 @@
-import path from 'path'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useUserStore } from 'src/config/zustand/UserStore'
 import ViewEventsManagementAdmin from 'src/features/Admin/EventsManagementAdmin/ViewEventsManagementAdmin'
-import AdminDashboard from 'src/pages/Admin/Dashboard'
-import EventsManagement from 'src/pages/Admin/EventsManagement'
-import UsersManagement from 'src/pages/Admin/UsersManagement'
 import { AdminLayout } from 'src/layout/Admin/AdminLayout'
 import {
   AccountVerification,
   CalendarCreation,
   CalendarDetailPage,
+  CalendarManagementPage,
   CalendarPage,
   DiscoverPage,
   EventCreation,
   EventListPage,
   EventManagementPage,
-  CalendarManagementPage,
   HomePageUser,
   MePage,
-  SettingsPage,
-  SepayCallbackPage
+  SepayCallbackPage,
+  SettingsPage
 } from 'src/pages'
+import AdminDashboard from 'src/pages/Admin/Dashboard'
+import EventsManagement from 'src/pages/Admin/EventsManagement'
+import UsersManagement from 'src/pages/Admin/UsersManagement'
 import { EventDetail } from 'src/pages/Event/EventDetail'
 import EventPayment from 'src/pages/Event/EventPayment'
 import MyEventListPage from 'src/pages/Event/MyEventListPage'
+import RegisteredEventPage from 'src/pages/Event/RegisteredEventPage'
 
 type RouteType = {
   path: string
@@ -53,10 +53,6 @@ const publicRoutes: RouteType[] = [
   {
     path: '/events/payment',
     element: <EventPayment />
-  },
-  {
-    path: 'events/:slug',
-    element: <EventDetail />
   },
   {
     path: '/calendars/:publicUrl',
@@ -107,7 +103,10 @@ const authenicatedRoutes: RouteType[] = [
     path: `/calendars/manage/:publicUrl${route}`,
     element: <CalendarManagementPage />
   })),
-
+  {
+    path: '/events/registered-events',
+    element: <RegisteredEventPage />
+  },
   {
     path: '/events/my-events',
     element: <MyEventListPage />
@@ -171,8 +170,11 @@ const Router = () => {
     ...publicRoutes,
     ...(isAuthenticated ? authenicatedRoutes : unAuthenticatedRoute),
     ...(['ADMIN'].includes(user.scope) ? adminRoutes : []),
-    ...(['STAFF'].includes(user.scope) ? staffRoutes : [])
-
+    ...(['STAFF'].includes(user.scope) ? staffRoutes : []),
+    {
+      path: 'events/:slug',
+      element: <EventDetail />
+    }
     // {
     //   path: '*',
     //   element: <Navigate to='/' />

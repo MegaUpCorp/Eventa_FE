@@ -86,12 +86,12 @@ type TabState = 'upcoming' | 'past'
 
 export const ViewCalendarDetail = () => {
   const navigate = useNavigate()
+  const { user } = useUserStore()
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [tab, setTab] = useState<TabState>('upcoming')
   const [filter, setFilter] = useState('')
   const [debouncedFilter] = useDebounce(filter, 500)
   const { publicUrl } = useParams()
-  const { user } = useUserStore()
   const {
     '0': { data: calendarDetail, isLoading },
     '1': { data: calendarEvents }
@@ -112,7 +112,7 @@ export const ViewCalendarDetail = () => {
 
   const isEmpty = sortedEvents.length === 0
 
-  if (calendarDetail?.accountId === user?.id) {
+  if (calendarDetail?.accountId && user?.id && calendarDetail?.accountId === user?.id) {
     return <Navigate to={`/calendars/manage/${publicUrl}`} />
   }
 
