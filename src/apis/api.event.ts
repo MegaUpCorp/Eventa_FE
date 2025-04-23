@@ -6,7 +6,19 @@ const eventAPI = {
   getEvents: () => http.get('events/get-all'),
   getEventDetail: (slug: string) => http.get(`events/getEvent/slug?slug=${slug}`),
   getMyEvents: () => http.get('events/get-all-me'),
-  getEventGuestsList: (slug: string) => http.get(`participants/get-all-participant-of-event?slug=${slug}`)
+  getEventGuestsList: async (slug: string) => {
+    const { data } = await http.get<
+      {
+        id: string
+        profilePicture: string
+        fullName: string
+        email: string
+        isCheckin: boolean
+        participantId: string
+      }[]
+    >(`participants/get-all-participant-of-event?slug=${slug}`)
+    return data
+  }
 }
 
 export default eventAPI
