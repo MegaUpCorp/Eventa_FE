@@ -26,6 +26,8 @@ export interface EventListProps {
   isOnline?: boolean
   price?: number
   profilePicture?: string
+  insDate?: string
+  updDate?: string
   slug?: string
   visibility?: string
 }
@@ -138,11 +140,11 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
   const pastEvents = eventData.filter((event) => moment(event.startDate).isBefore(now, 'day'))
   const groupedUpcomingEvents = groupEventsByDate(upcomingEvents)
   const groupedPastEvents = groupEventsByDate(pastEvents)
-  
+
   const handleEventClick = (slug: string) => {
     navigate(`/events/${slug}`)
   }
-  
+
   return (
     <div className='container-base p-4 mx-auto text-white'>
       <Tabs defaultValue='upcoming'>
@@ -228,11 +230,10 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
                             <div className='flex items-center gap-2 text-gray-400 text-sm mt-1'>
                               <UsersIcon size={18} /> {event.guests || 'No Guests'}
                             </div>
-                            
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
                             <div className='w-32 h-32 overflow-hidden rounded-lg flex items-center justify-center bg-gray-800'>
-                              <img src={event.profilePicture} alt='' className='w-full h-full object-cover' />
+                              <img src={event?.profilePicture} alt='' className='w-full h-full object-cover' />
                             </div>
                           </CardContent>
                         </Card>
