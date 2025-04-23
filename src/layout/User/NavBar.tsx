@@ -5,6 +5,7 @@ import {
   CircleUserRound,
   Compass,
   ExternalLink,
+  Heart,
   Search,
   Settings,
   Tickets
@@ -23,6 +24,7 @@ import {
   DropdownMenuTrigger
 } from 'src/components/ui/dropdown-menu'
 import { useUserStore } from 'src/config/zustand/UserStore'
+import { useCheckPremium } from 'src/features/Users/CheckPremium/useCheckPremium'
 import { useDynamicWidth } from 'src/hooks/useDynamicWidth'
 import { cn } from 'src/lib/utils'
 
@@ -37,6 +39,9 @@ const NavBar = () => {
   const width = useDynamicWidth()
   const { pathname } = useLocation()
   const { isAuthenticated, logout, user } = useUserStore()
+  const { data: isPremium } = useCheckPremium()
+
+  const filteredNavItems = isAuthenticated ? navItems : navItems.filter((item) => item.path !== '/calendars')
 
   return (
     <nav className='relative z-10 flex items-center justify-between px-5 py-4 text-white mb-10'>
@@ -49,7 +54,7 @@ const NavBar = () => {
         className='absolute left-1/2 -translate-x-1/2 w-full flex justify-start items-center px-4 gap-8'
         style={{ width }}
       >
-        {navItems.map(({ label, path, icon: Icon }) => (
+        {filteredNavItems.map(({ label, path, icon: Icon }) => (
           <Link key={path} to={path} className='flex items-start'>
             <Icon
               size={16}
@@ -83,7 +88,7 @@ const NavBar = () => {
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Avatar>
+                <Avatar className={isPremium ? 'border-2 border-amber-500' : ''}>
                   <AvatarImage src={user?.profilePicture} />
                   <AvatarFallback>E</AvatarFallback>
                 </Avatar>
@@ -97,6 +102,10 @@ const NavBar = () => {
                   <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/events/my-events')}>
                     <Tickets size={16} />
                     <p className='font-medium'>My Event</p>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/events/registered-events')}>
+                    <Heart size={16} />
+                    <p className='font-medium'>Registered Event</p>
                   </DropdownMenuItem>
                   <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/settings')}>
                     <Settings size={16} />

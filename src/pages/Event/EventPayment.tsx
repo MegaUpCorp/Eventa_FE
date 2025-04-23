@@ -1,5 +1,5 @@
 import http from 'src/utils/http'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { format, parseISO } from 'date-fns'
 import { CircleCheck, Download, Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
@@ -7,6 +7,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { Card } from 'src/components/ui/card'
 import { Separator } from 'src/components/ui/separator'
 import { Button } from 'src/components/ui/button'
+import { useUserStore } from 'src/config/zustand/UserStore'
 
 const getBankShortName = (code: string) => {
   const banks = [
@@ -383,7 +384,9 @@ const getBankShortName = (code: string) => {
 
 const EventPayment = () => {
   const navigate = useNavigate()
+  const { user } = useUserStore()
   const orderDetail = JSON.parse(localStorage.getItem('order-detail') || '{}')
+  const queryClient = useQueryClient()
   const isValidOrderDetail = Object.keys(orderDetail).length > 0 && orderDetail.order && orderDetail.qrUrl
 
   if (!isValidOrderDetail) {
@@ -413,8 +416,10 @@ const EventPayment = () => {
   useEffect(() => {
     if (data && data.status === 'Paid') {
       const timer = setTimeout(() => {
-        navigate('/', { replace: true })
         localStorage.removeItem('order-detail')
+        queryClient.invalidateQueries({ queryKey: ['is-registered-for-event', id] })
+        queryClient.invalidateQueries({ queryKey: ['checkPremium', user?.id] })
+        navigate(-1)
       }, 2000)
       return () => clearTimeout(timer)
     }

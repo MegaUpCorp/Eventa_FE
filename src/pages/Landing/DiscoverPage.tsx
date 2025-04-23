@@ -94,7 +94,7 @@ const DiscoverPage = () => {
           </div> */}
           <div className='col-span-4'>
             <DiscoverCalendarCard
-              image='https://firebasestorage.googleapis.com/v0/b/ticket-resell-e100c.appspot.com/o/images%2Fimages.png?alt=media&token=261169c2-907c-4eee-b5a0-9880ee070fdb'
+              image='https://firebasestorage.googleapis.com/v0/b/ticket-resell-e100c.appspot.com/o/images%2Fimages.png?alt=media&token=950e3283-2e09-40f2-b9a7-772ded69d279'
               description='The career network for the next generation of women and non-binary leaders with inclusive in-person and virtual places to share stories, build relationships, and exchange knowledge.'
               name='Her Workplace'
               publicUrl='herworkplaceevents'

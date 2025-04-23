@@ -84,11 +84,12 @@ const CreateEventForm = ({ calendars }: CreateEventFormProps) => {
 
   useEffect(() => {
     if (startDate > endDate) {
-      setStartDate(endDate)
-      setEndDate(addHours(endDate, 1))
+      setStartDate(startDate)
+      setEndDate(addHours(startDate, 1))
+    } else {
+      setValue('startDate', startDate.toISOString())
+      setValue('endDate', endDate.toISOString())
     }
-    setValue('startDate', startDate.toISOString())
-    setValue('endDate', endDate.toISOString())
   }, [startDate, endDate])
 
   const type = watch('type')

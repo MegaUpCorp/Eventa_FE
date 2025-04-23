@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs
 import { useBuyPremium } from './useBuyPremium'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useCheckPremium } from 'src/features/Users/CheckPremium/useCheckPremium'
 
 const FREE_PLAN = [
   'Unlimited number of events',
@@ -25,6 +26,7 @@ export const Pricing = () => {
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState<'month' | 'year'>('month')
   const { mutateAsync } = useBuyPremium(currentTab)
+  const { data: isPremium } = useCheckPremium()
 
   const handleBuyPremium = async () => {
     const response = await mutateAsync()
@@ -56,8 +58,8 @@ export const Pricing = () => {
                 plan='Free'
                 planDescription='Free, forever'
                 trigger={
-                  <Button variant='secondary' className='mb-8'>
-                    Get Started
+                  <Button variant='secondary' className='mb-8' disabled={isPremium}>
+                    Your Current Plan
                   </Button>
                 }
                 planSubtitle='No credit card required with:'
@@ -70,11 +72,11 @@ export const Pricing = () => {
                     <p className='font-semibold text-lg text-primary'>Eventa Plus</p>
                   </div>
                 }
-                plan='199.000 VND'
+                plan='59.000 VND'
                 planDescription='Per month'
                 trigger={
-                  <Button className='mb-8 text-white' onClick={handleBuyPremium}>
-                    Get Eventa Plus
+                  <Button className='mb-8 text-white' onClick={handleBuyPremium} disabled={isPremium}>
+                    {isPremium ? 'Your Current Plan' : 'Get Eventa Plus'}
                   </Button>
                 }
                 planSubtitle='Everything in the free plan along with:'
@@ -89,8 +91,8 @@ export const Pricing = () => {
                 plan='Free'
                 planDescription='Free, forever'
                 trigger={
-                  <Button variant='secondary' className='mb-8'>
-                    Get Started
+                  <Button variant='secondary' className='mb-8' disabled={isPremium}>
+                    Your Current Plan
                   </Button>
                 }
                 planSubtitle='No credit card required with:'
@@ -103,11 +105,11 @@ export const Pricing = () => {
                     <p className='font-semibold text-lg text-primary'>Eventa Plus (save 25%)</p>
                   </div>
                 }
-                plan='1.800.000 VND'
+                plan='530.000 VND'
                 planDescription='Per year'
                 trigger={
-                  <Button className='mb-8 text-white' onClick={handleBuyPremium}>
-                    Get Eventa Plus
+                  <Button className='mb-8 text-white' onClick={handleBuyPremium} disabled={isPremium}>
+                    {isPremium ? 'Your Current Plan' : 'Get Eventa Plus'}
                   </Button>
                 }
                 planSubtitle='Everything in the free plan along with:'
