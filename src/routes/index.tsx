@@ -19,7 +19,7 @@ import {
 } from 'src/pages'
 import AdminDashboard from 'src/pages/Admin/Dashboard'
 import EventsManagement from 'src/pages/Admin/EventsManagement'
-import UsersManagement from 'src/pages/Admin/UsersManagement'
+import UsersManagementPage from 'src/pages/Admin/UsersManagementPage'
 import { EventDetail } from 'src/pages/Event/EventDetail'
 import EventPayment from 'src/pages/Event/EventPayment'
 import MyEventListPage from 'src/pages/Event/MyEventListPage'
@@ -72,7 +72,7 @@ const publicRoutes: RouteType[] = [
       },
       {
         path: 'users',
-        element: <UsersManagement />
+        element: <UsersManagementPage />
       },
       {
         path: 'events',
@@ -147,7 +147,7 @@ const adminRoutes: RouteType[] = [
       },
       {
         path: 'users',
-        element: <UsersManagement />
+        element: <UsersManagementPage />
       },
       {
         path: 'events',
