@@ -185,7 +185,9 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
                             </div>
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
-                            <img src={event?.profilePicture} alt='' className='w-32 h-32 object-cover rounded-lg' />
+                            <div className='w-32 h-32 overflow-hidden rounded-lg flex items-center justify-center bg-gray-800'>
+                              <img src={event?.profilePicture} alt='' className='w-full h-full object-cover' />
+                            </div>
                           </CardContent>
                         </Card>
                       ))}
@@ -229,7 +231,9 @@ const ViewEventList: React.FC<{ eventData: EventListProps[] }> = ({ eventData })
                             
                           </CardContent>
                           <CardContent className='p-4 flex justify-end'>
-                            <img src={event.profilePicture} alt='' className='w-32 h-32 object-cover rounded-lg' />
+                            <div className='w-32 h-32 overflow-hidden rounded-lg flex items-center justify-center bg-gray-800'>
+                              <img src={event.profilePicture} alt='' className='w-full h-full object-cover' />
+                            </div>
                           </CardContent>
                         </Card>
                       ))}
