@@ -39,8 +39,8 @@ export function AdminNav({ isCollapsed, className }: AdminNavProps) {
     },
     {
       icon: CreditCard,
-      title: 'Payments',
-      href: '/admin/payments',
+      title: 'Transactions',
+      href: '/admin/transactions',
     },
     {
       icon: Settings,
