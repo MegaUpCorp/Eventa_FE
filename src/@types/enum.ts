@@ -1,5 +1,5 @@
 export enum UserRole {
-  ADMIN = 'Admin',
+  ADMIN = 'ADMIN',
   MEMBER = 'Member'
 }
 export enum UserVerifyStatus {
