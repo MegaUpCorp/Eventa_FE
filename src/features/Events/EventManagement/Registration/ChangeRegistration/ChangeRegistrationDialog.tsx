@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from 'src/components/ui/button'
 import { Switch } from 'src/components/ui/switch'
 import { Label } from 'src/components/ui/label'
+import { DialogClose, DialogFooter } from 'src/components/ui/dialog'
 
 interface ChangeRegistrationDialogProps {
   trigger?: React.ReactNode
@@ -28,7 +29,11 @@ const ChangeRegistrationDialog = ({ trigger, asChild = false, className }: Chang
             </Label>
             <Switch id='accept-registration' />
           </div>
-          <Button className='w-full text-[#fff]'>Confirm</Button>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button className='w-full text-[#fff] w-full'>Confirm</Button>
+            </DialogClose>
+          </DialogFooter>
         </div>
       }
       topIcon={

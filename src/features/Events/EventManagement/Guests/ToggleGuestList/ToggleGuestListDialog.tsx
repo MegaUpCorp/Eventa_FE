@@ -2,6 +2,7 @@ import DialogButton from 'src/components/DialogButton'
 import { ScrollText } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from 'src/components/ui/button'
+import { DialogClose, DialogFooter } from 'src/components/ui/dialog'
 
 interface ToggleGuestListDialogProps {
   trigger?: React.ReactNode
@@ -18,7 +19,13 @@ const ToggleGuestListDialog = ({ trigger, asChild = false, className }: ToggleGu
       setOpen={setOpen}
       triggerClassName={className}
       asChild={asChild}
-      content={<Button className='mt-auto text-[#fff]'>Hide Guest List</Button>}
+      content={
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button className='mt-auto text-[#fff] w-full'>Hide Guest List</Button>
+          </DialogClose>
+        </DialogFooter>
+      }
       topIcon={
         <div className='p-3 mr-auto rounded-full glass text-muted-foreground'>
           <ScrollText size={32} className='text-muted-foreground' />

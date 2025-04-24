@@ -2,6 +2,7 @@ import DialogButton from 'src/components/DialogButton'
 import { QrCode } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from 'src/components/ui/button'
+import { DialogClose, DialogFooter } from 'src/components/ui/dialog'
 
 interface CheckInGuestsDialogProps {
   trigger?: React.ReactNode
@@ -25,7 +26,13 @@ const CheckInGuestsDialog = ({ trigger, asChild = false, className }: CheckInGue
           <QrCode size={32} className='text-muted-foreground' />
         </div>
       }
-      content={<Button className='mt-auto text-[#fff]'>Open Web Scanner</Button>}
+      content={
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button className='mt-auto text-[#fff] w-full'>Open Web Scanner</Button>
+          </DialogClose>
+        </DialogFooter>
+      }
     >
       {trigger}
     </DialogButton>
