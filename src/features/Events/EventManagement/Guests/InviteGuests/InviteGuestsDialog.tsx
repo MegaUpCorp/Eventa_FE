@@ -9,6 +9,7 @@ import { Label } from 'src/components/ui/label'
 import { Separator } from 'src/components/ui/separator'
 import { Textarea } from 'src/components/ui/textarea'
 import { cn } from 'src/lib/utils'
+import { DialogClose, DialogFooter } from 'src/components/ui/dialog'
 
 interface InviteGuestsDialogProps {
   trigger?: React.ReactNode
@@ -108,10 +109,14 @@ const InviteGuestsDialog = ({ trigger, asChild = false, className }: InviteGuest
                   <ChevronLeft />
                   Back
                 </Button>
-                <Button className='text-[#fff]'>
-                  <Send />
-                  Send Invites
-                </Button>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button className='text-[#fff]'>
+                      <Send />
+                      Send Invites
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
               </div>
             </div>
           )}

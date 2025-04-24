@@ -7,6 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from 'src/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 import { cn } from 'src/lib/utils'
 import { useChangeVisibility } from './useChangeVisibility'
+import { DialogFooter } from 'src/components/ui/dialog'
+import { DialogClose } from '@radix-ui/react-dialog'
 
 interface ChangeVisibilityDialogProps {
   trigger: React.ReactNode
@@ -74,9 +76,13 @@ const ChangeVisibilityDialog = ({ trigger, asChild = false, className, visibilit
                 </FormItem>
               )}
             />
-            <Button type='submit' className='text-[#fff]'>
-              Update Visibility
-            </Button>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type='submit' className='text-[#fff]'>
+                  Update Visibility
+                </Button>
+              </DialogClose>
+            </DialogFooter>
           </form>
         </Form>
       }

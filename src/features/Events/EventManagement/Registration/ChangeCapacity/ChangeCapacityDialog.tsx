@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from 'src/component
 import { SubmitHandler } from 'react-hook-form'
 import { Input } from 'src/components/ui/input'
 import { Button } from 'src/components/ui/button'
+import { DialogClose, DialogFooter } from 'src/components/ui/dialog'
 
 interface ChangeCapacityDialogProps {
   trigger?: React.ReactNode
@@ -43,13 +44,17 @@ const ChangeCapacityDialog = ({ trigger, asChild = false, className }: ChangeCap
                 </FormItem>
               )}
             />
-            <div className='flex justify-between items-center gap-3'>
-              <Button type='submit' className='text-[#fff] w-full'>
-                Set Limit
-              </Button>
-              <Button type='submit' className='text-[#fff] w-full' variant='secondary'>
-                Remove Limit
-              </Button>
+            <div className='flex items-center gap-3 w-full'>
+              <DialogFooter className='w-full'>
+                <DialogClose asChild>
+                  <Button type='submit' className='text-[#fff] w-full'>
+                    Set Limit
+                  </Button>
+                </DialogClose>
+                <Button type='submit' className='text-[#fff] w-full' variant='secondary'>
+                  Remove Limit
+                </Button>
+              </DialogFooter>
             </div>
           </form>
         </Form>

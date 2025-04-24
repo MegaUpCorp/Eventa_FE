@@ -7,6 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from 'src/component
 import { Input } from 'src/components/ui/input'
 import { Textarea } from 'src/components/ui/textarea'
 import { useSendABlast } from './useSendABlast'
+import { DialogFooter } from 'src/components/ui/dialog'
+import { DialogClose } from '@radix-ui/react-dialog'
 
 interface SendABlastDialogProps {
   trigger?: React.ReactNode
@@ -63,10 +65,14 @@ const SendABlastDialog = ({ trigger, asChild = false, className }: SendABlastDia
                 </FormItem>
               )}
             />
-            <Button type='submit' className='text-[#fff]'>
-              <Send />
-              Send
-            </Button>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type='submit' className='text-[#fff] w-full'>
+                  <Send />
+                  Send
+                </Button>
+              </DialogClose>
+            </DialogFooter>
           </form>
         </Form>
       }

@@ -95,10 +95,6 @@ const NavBar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-44 mt-2' align='end'>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/me')}>
-                    <CircleUserRound size={16} />
-                    <p className='font-medium'>View Profile</p>
-                  </DropdownMenuItem>
                   <DropdownMenuItem className='cursor-pointer' onClick={() => navigate('/events/my-events')}>
                     <Tickets size={16} />
                     <p className='font-medium'>My Event</p>
