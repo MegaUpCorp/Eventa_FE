@@ -28,7 +28,7 @@ const SepayCallback = () => {
       } = data
       localStorage.removeItem('oauth-state')
       sePayLogin(access_token, refresh_token)
-      navigate(-1)
+      navigate('/')
     }
   }, [data, navigate, isValid])
 
