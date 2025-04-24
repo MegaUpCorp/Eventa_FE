@@ -19,6 +19,7 @@ import {
 } from 'src/pages'
 import AdminDashboard from 'src/pages/Admin/Dashboard'
 import EventsManagement from 'src/pages/Admin/EventsManagement'
+import TransactionManagementPage from 'src/pages/Admin/TransactionManagementPage'
 import UsersManagementPage from 'src/pages/Admin/UsersManagementPage'
 import { EventDetail } from 'src/pages/Event/EventDetail'
 import EventPayment from 'src/pages/Event/EventPayment'
@@ -62,28 +63,28 @@ const publicRoutes: RouteType[] = [
     path: '/discover',
     element: <DiscoverPage />
   },
-  {
-    path: '/admin',
-    element: <AdminLayout />,
-    children: [
-      {
-        path: '',
-        element: <AdminDashboard />
-      },
-      {
-        path: 'users',
-        element: <UsersManagementPage />
-      },
-      {
-        path: 'events',
-        element: <EventsManagement />
-      },
-      {
-        path: 'eventadmin',
-        element: <ViewEventsManagementAdmin />
-      }
-    ]
-  }
+  // {
+  //   path: '/admin',
+  //   element: <AdminLayout />,
+  //   children: [
+  //     {
+  //       path: '',
+  //       element: <AdminDashboard />
+  //     },
+  //     {
+  //       path: 'users',
+  //       element: <UsersManagementPage />
+  //     },
+  //     {
+  //       path: 'events',
+  //       element: <EventsManagement />
+  //     },
+  //     {
+  //       path: 'eventadmin',
+  //       element: <ViewEventsManagementAdmin />
+  //     }
+  //   ]
+  // }
 ]
 //
 const authenicatedRoutes: RouteType[] = [
@@ -156,6 +157,10 @@ const adminRoutes: RouteType[] = [
       {
         path: 'eventadmin',
         element: <ViewEventsManagementAdmin />
+      },
+      {
+        path: 'transactions',
+        element: <TransactionManagementPage />
       }
     ]
   }
@@ -164,13 +169,12 @@ const adminRoutes: RouteType[] = [
 const staffRoutes: RouteType[] = []
 
 const Router = () => {
-  const { isAuthenticated } = useUserStore()
-  const user = JSON.parse(localStorage.getItem('profile') || '{}')
+  const { isAuthenticated, user } = useUserStore()
   const router = [
     ...publicRoutes,
     ...(isAuthenticated ? authenicatedRoutes : unAuthenticatedRoute),
-    ...(['ADMIN'].includes(user.scope) ? adminRoutes : []),
-    ...(['STAFF'].includes(user.scope) ? staffRoutes : []),
+    ...(['ADMIN'].includes(user?.role || '') ? adminRoutes : []),
+    ...(['STAFF'].includes(user?.role || '') ? staffRoutes : []),
     {
       path: 'events/:slug',
       element: <EventDetail />

@@ -4,7 +4,10 @@ import adminAPI from "src/apis/api.admin"
 export const useGetListUser = () => {
 
   return useQuery({
-    queryKey: ['getMyCalendars'],
-    queryFn: adminAPI.getUsers,
+    queryKey: ['getListUser'],
+    queryFn: async () => {
+      const data = await adminAPI.getUsers()
+      return data
+    },
   })
 }
