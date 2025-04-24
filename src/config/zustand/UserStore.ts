@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { jwtDecode } from 'jwt-decode'
 import { DecodedUserToken } from 'src/@types/users.type'
+import { redirect } from 'react-router-dom'
 
 interface UserStoreState {
   isAuthenticated: boolean

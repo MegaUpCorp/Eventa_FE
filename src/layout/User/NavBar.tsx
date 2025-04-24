@@ -109,7 +109,13 @@ const NavBar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='cursor-pointer focus:text-[#ff0000]' onClick={logout}>
+                <DropdownMenuItem
+                  className='cursor-pointer focus:text-[#ff0000]'
+                  onClick={() => {
+                    logout()
+                    navigate('/')
+                  }}
+                >
                   <CircleArrowOutUpRight size={16} />
                   <p className='font-medium'>Log out</p>
                 </DropdownMenuItem>
